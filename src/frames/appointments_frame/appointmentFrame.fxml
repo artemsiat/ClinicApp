@@ -22,11 +22,11 @@
       </HBox>
       <TableView fx:id="patientAppsTable" layoutX="14.0" layoutY="58.0" prefHeight="230.0" prefWidth="828.0">
         <columns>
-          <TableColumn prefWidth="156.0" text="Doctor" />
-          <TableColumn prefWidth="208.0" text="Appointment Date" />
-            <TableColumn prefWidth="179.0" text="Appointment time" />
-            <TableColumn prefWidth="157.0" text="Appointment length" />
-            <TableColumn prefWidth="127.0" text="if passed or future" />
+          <TableColumn fx:id="doctorAppTableColl" prefWidth="156.0" text="Doctor" />
+          <TableColumn fx:id="patientAppTableColl" prefWidth="208.0" text="Patient" />
+            <TableColumn fx:id="dayAppTableColl" prefWidth="179.0" text="Day" />
+            <TableColumn fx:id="timeAppTableColl" prefWidth="157.0" text="time" />
+            <TableColumn fx:id="lengthAppTableColl" prefWidth="127.0" text="length" />
         </columns>
       </TableView>
       <GridPane hgap="15.0" layoutX="870.0" layoutY="54.0" prefHeight="140.0" prefWidth="546.0" vgap="15.0">

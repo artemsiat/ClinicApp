@@ -1,5 +1,8 @@
 package instances;
 
+import javafx.beans.property.SimpleStringProperty;
+import programm.helper_classes.FormatDate;
+
 /**
  * Created by Artem Siatchinov on 8/4/2016.
  */
@@ -9,10 +12,37 @@ public class Appointment extends DateInstance{
     private int patientId;
     private int doctorId;
 
+    //Table Properties
+
+    SimpleStringProperty doctorProperty;
+    SimpleStringProperty patientProperty;
+    SimpleStringProperty dayProperty;
+    SimpleStringProperty timeProperty;
+    SimpleStringProperty lengthPropety;
+
+    public Appointment(){
+        super();
+
+        doctorProperty = new SimpleStringProperty();
+        patientProperty = new SimpleStringProperty();
+        dayProperty = new SimpleStringProperty();
+        timeProperty = new SimpleStringProperty();
+        lengthPropety = new SimpleStringProperty();
+    }
+
 
     @Override
     public void generateProperties() {
 
+    }
+    public void generateProperties(String doctor, String patient) {
+        System.out.println("Properties generated Appointment. genereate Properties method");
+
+        doctorProperty.setValue(doctor);
+        patientProperty.setValue(patient);
+        dayProperty.setValue(FormatDate.convertDateToMyFormat(getDate()));
+        timeProperty.setValue("From 00 to 00");
+        lengthPropety.setValue("1 hour");
     }
 
     //Setters
@@ -41,5 +71,39 @@ public class Appointment extends DateInstance{
 
     public int getDoctorId() {
         return doctorId;
+    }
+
+
+    //Properties
+
+    public String getDoctorProperty() {
+        return doctorProperty.get();
+    }
+    public void setDoctorProperty(String doctorProperty) {
+        this.doctorProperty.set(doctorProperty);
+    }
+    public String getPatientProperty() {
+        return patientProperty.get();
+    }
+    public void setPatientProperty(String patientProperty) {
+        this.patientProperty.set(patientProperty);
+    }
+    public String getDayProperty() {
+        return dayProperty.get();
+    }
+    public void setDayProperty(String dayProperty) {
+        this.dayProperty.set(dayProperty);
+    }
+    public String getTimeProperty() {
+        return timeProperty.get();
+    }
+    public void setTimeProperty(String timeProperty) {
+        this.timeProperty.set(timeProperty);
+    }
+    public String getLengthPropety() {
+        return lengthPropety.get();
+    }
+    public void setLengthPropety(String lengthPropety) {
+        this.lengthPropety.set(lengthPropety);
     }
 }

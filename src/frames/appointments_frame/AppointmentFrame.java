@@ -1,7 +1,6 @@
 package frames.appointments_frame;
 
 import frames.FrameModel;
-import frames.frame_controllers.AppointmentFrameController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;

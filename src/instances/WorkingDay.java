@@ -1,6 +1,8 @@
 package instances;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import programm.helper_classes.FormatDate;
 import programm.helper_classes.WorkingDayFormat;
 import programm.texts.FrameLabelText;
@@ -14,8 +16,10 @@ public class WorkingDay extends DateInstance implements Comparable<WorkingDay>{
     private int lunchStart;
     private int lunchEnd;
 
+    private ObservableList<Appointment> appointmentObservableList;
+
     //Properties Day , Working hours, break , no of appointments
-    SimpleStringProperty workingDayProperty;
+    private SimpleStringProperty workingDayProperty;
     SimpleStringProperty workingHoursProperty;
     SimpleStringProperty lunchProperty;
     SimpleStringProperty noOfAppointments;
@@ -27,6 +31,8 @@ public class WorkingDay extends DateInstance implements Comparable<WorkingDay>{
         workingHoursProperty = new SimpleStringProperty();
         lunchProperty = new SimpleStringProperty();
         noOfAppointments = new SimpleStringProperty();
+
+        appointmentObservableList = FXCollections.observableArrayList();
 
     }
 
@@ -126,4 +132,8 @@ public class WorkingDay extends DateInstance implements Comparable<WorkingDay>{
     }
 
 
+    public void setAppointments(ObservableList<Appointment> appointments) {
+        appointmentObservableList.clear();
+        appointmentObservableList.setAll(appointments);
+    }
 }

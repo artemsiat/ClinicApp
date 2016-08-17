@@ -1,9 +1,8 @@
-package frames.frame_controllers;
+package frames.appointments_frame;
 
 import data_base.Appointments;
 import data_base.DataBase;
 import data_base.Doctors;
-import frames.appointments_frame.AppointmentFrame;
 import instances.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import programm.FrameColor;
 import programm.Programm;
@@ -37,6 +37,7 @@ public class AbstractAppFrameController {
 
     private Patient selectedPatient;
     private ObservableList<Appointment> patientAppointmentsList;
+    private ObservableList<Appointment> doctorAppointmentsList;
 
     private Doctor selectedDoctor;
     private WorkingDay selectedWorkingDay;
@@ -44,6 +45,14 @@ public class AbstractAppFrameController {
     private Integer selectedAppMinutes;
     private Integer selectedAppLength;
 
+    //Patient Appointments Table
+    @FXML private TableView<Appointment> patientAppsTable;
+
+    @FXML private TableColumn<Appointment, String> doctorAppTableColl;
+    @FXML private TableColumn<Appointment, String> patientAppTableColl;
+    @FXML private TableColumn<Appointment, String> dayAppTableColl;
+    @FXML private TableColumn<Appointment, String> timeAppTableColl;
+    @FXML private TableColumn<Appointment, String> lengthAppTableColl;
 
     //Patient
     @FXML private Label patientLabelInfo;
@@ -90,6 +99,9 @@ public class AbstractAppFrameController {
         this.dataBase = programm.getDATA_BASE();
         this.appointments = programm.getDATA_BASE().getAppointments();
         this.doctors = dataBase.getDoctors();
+
+        patientAppointmentsList = null;
+        doctorAppointmentsList = null;
     }
 
     //Initialization
@@ -108,9 +120,19 @@ public class AbstractAppFrameController {
         selectedAppMinutes = null;
         doctorSelected();
 
-
+        initPatientAppsTable();
     }
 
+    //Tables
+    private void initPatientAppsTable() {
+        doctorAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("doctorProperty"));
+        patientAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("patientProperty"));
+        dayAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("dayProperty"));
+        timeAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("timeProperty"));
+        lengthAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("lengthPropety"));
+
+        patientAppsTable.setItems(patientAppointmentsList);
+    }
 
 
     //Doctor
@@ -255,6 +277,12 @@ public class AbstractAppFrameController {
 
             setWorkingDayPickerInfo();
             setHoursComboBox();
+
+            //load appointments for that day
+            if (dataBase.getAppointments().loadWorkingDayAppointments(selectedWorkingDay)){
+
+            }
+
             return;
         }
 
@@ -415,6 +443,7 @@ public class AbstractAppFrameController {
 
         //Get Appointments list
         patientAppointmentsList = selectedPatient.getAppointmentsList();
+        patientAppsTable.setItems(patientAppointmentsList);
     }
 
 

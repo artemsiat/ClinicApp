@@ -66,6 +66,10 @@ public class Person extends DataBaseInstance{
                 ", создал: " + "(" + getCreator() + ").";
     }
 
+    public String getFullName(){
+        return LAST_NAME + " " + FIRST_NAME + " " + MIDDLE_NAME;
+    }
+
     //Properties
     /**
      * Reformats all necessary fields to the necessary types

@@ -273,7 +273,7 @@ public class Patients extends DBSecondLayer{
         patient.addAppointment(appointment);
     }
 
-    private Patient getPatientById(int patientId){
+    public Patient getPatientById(int patientId){
         Patient patient = null;
 
         for (Person currPatient : patients){

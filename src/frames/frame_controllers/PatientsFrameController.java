@@ -3,7 +3,9 @@ package frames.frame_controllers;
 import data_base.DBSecondLayer;
 import data_base.Patients;
 import frames.FrameModel;
+import frames.appointments_frame.AppointmentFrameController;
 import frames.patient_frame.PatientsFrame;
+import instances.Appointment;
 import instances.Patient;
 import instances.Person;
 import javafx.collections.ObservableList;
@@ -11,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import programm.Programm;
 
 import java.net.URL;
@@ -27,15 +30,17 @@ public class PatientsFrameController extends AbstractPersonController implements
 
     private AppointmentFrameController appointmentController;
 
+    private ObservableList<Appointment> appointmentsList;
+
     //Appointment Table
 
-    @FXML private TableView<?> appointmentsTable;
+    @FXML private TableView<Appointment> appointmentsTable;
 
-    @FXML private TableColumn<?, ?> doctorAppTableColl;
-    @FXML private TableColumn<?, ?> patientAppTableColl;
-    @FXML private TableColumn<?, ?> dayAppTableColl;
-    @FXML private TableColumn<?, ?> timeAppTableColl;
-    @FXML private TableColumn<?, ?> lengthAppTableColl;
+    @FXML private TableColumn<Appointment, String> doctorAppTableColl;
+    @FXML private TableColumn<Appointment, String> patientAppTableColl;
+    @FXML private TableColumn<Appointment, String> dayAppTableColl;
+    @FXML private TableColumn<Appointment, String> timeAppTableColl;
+    @FXML private TableColumn<Appointment, String> lengthAppTableColl;
 
     //Constructor
 
@@ -46,6 +51,8 @@ public class PatientsFrameController extends AbstractPersonController implements
         this.programm = programm;
         this.PATIENTS_FRAME = patientsFrame;
         this.PATIENTS = this.programm.getDATA_BASE().getPatients();
+
+        this.appointmentsList = null;
 
         this.appointmentController = null;
     }
@@ -59,8 +66,21 @@ public class PatientsFrameController extends AbstractPersonController implements
         if (programm.getSelectedPatient() != null){
             selectPerson(programm.getSelectedPatient());
         }
+
+        setAppointmentsTable();
     }
 
+    private void setAppointmentsTable() {
+
+        doctorAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("doctorProperty"));
+        patientAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("patientProperty"));
+        dayAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("dayProperty"));
+        timeAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("timeProperty"));
+        lengthAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("lengthPropety"));
+
+        appointmentsTable.setItems(appointmentsList);
+
+    }
 
 
     @Override protected void clearObjectFields() {
@@ -74,6 +94,7 @@ public class PatientsFrameController extends AbstractPersonController implements
     @Override protected void personDeselected() {
 
         programm.setSelectedPatient(null);
+        appointmentsList = null;
 
         if (appointmentController != null){
             appointmentController.patientSelected(null);
@@ -89,7 +110,10 @@ public class PatientsFrameController extends AbstractPersonController implements
         if (appointmentController != null){
             appointmentController.patientSelected((Patient) SELECTED_PERSON);
         }
+        appointmentsList = ((Patient) SELECTED_PERSON).getAppointmentsList();
 
+        appointmentsTable.setItems(appointmentsList);
+        System.out.println("Appointments list Size : " + appointmentsList.size());
     }
 
 

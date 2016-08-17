@@ -1,6 +1,8 @@
 package data_base;
 
 import instances.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import programm.Programm;
 
 import java.sql.PreparedStatement;
@@ -83,6 +85,21 @@ public class Appointments extends DBSecondLayer{
             return false;
         }
 
+        ObservableList<Appointment> appointmentObservableList = FXCollections.observableArrayList();
+
+        for (DataBaseInstance dataBaseInstance : objects){
+
+            Appointment appointment = (Appointment)dataBaseInstance;
+            System.out.println(appointment.toString() + " Appointments.loadWorkingDayAppointments");
+
+            String doctorsName = dataBase.getDoctors().getDoctorByID(appointment.getDoctorId()).getFullName();
+            String patientsName = dataBase.getPatients().getPatientById(appointment.getPatientId()).getFullName();
+            appointment.generateProperties(doctorsName, patientsName);
+
+            appointmentObservableList.add(appointment);
+        }
+
+        workingDay.setAppointments(appointmentObservableList);
 
         return true;
     }
@@ -101,7 +118,9 @@ public class Appointments extends DBSecondLayer{
         for (DataBaseInstance dataBaseInstance : objects){
             Appointment appointment = (Appointment)dataBaseInstance;
             System.out.println(appointment.toString() + " Appointments.loadPatientAppointments");
-            appointment.generateProperties();
+            String doctorsName = dataBase.getDoctors().getDoctorByID(appointment.getDoctorId()).getFullName();
+            String patientsName = patient.getFullName();
+            appointment.generateProperties(doctorsName, patientsName);
             patient.resetAppointments();
             patient.addAppointment(appointment);
         }

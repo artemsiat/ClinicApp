@@ -1,7 +1,6 @@
-package frames.frame_controllers;
+package frames.appointments_frame;
 
 import data_base.DataBase;
-import frames.appointments_frame.AppointmentFrame;
 import instances.*;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,9 +58,7 @@ public class AppointmentFrameController extends AbstractAppFrameController imple
     @FXML private ComboBox<?> appLengthComboBox;
 
 
-    //Patient Appointments Table
 
-    @FXML private TableView<?> patientAppsTable;
 
     //Doctor Appointments Table
 
@@ -122,9 +119,7 @@ public class AppointmentFrameController extends AbstractAppFrameController imple
     private void initDoctorAppsTable() {
 
     }
-    private void initPatientAppsTable() {
 
-    }
 
     private void initLabels() {
 

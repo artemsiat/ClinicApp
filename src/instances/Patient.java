@@ -21,7 +21,7 @@ public class Patient extends Person{
     }
 
     public ObservableList<Appointment> getAppointmentsList() {
-        return null;
+        return appointments;
     }
 
     public void addAppointment(Appointment appointment) {

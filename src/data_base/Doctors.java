@@ -360,7 +360,7 @@ public class Doctors extends DBSecondLayer{
      * Helper method for AssignWorkingDays
      * finds a doctor by its own id in an ObservableList
      */
-    private Doctor getDoctorByID(int id){
+    public Doctor getDoctorByID(int id){
 
         Doctor doctor = null;
 
