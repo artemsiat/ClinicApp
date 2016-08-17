@@ -7,7 +7,10 @@ import frames.patient_frame.PatientsFrame;
 import instances.Patient;
 import instances.Person;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import programm.Programm;
 
 import java.net.URL;
@@ -23,6 +26,16 @@ public class PatientsFrameController extends AbstractPersonController implements
     private Patients PATIENTS;
 
     private AppointmentFrameController appointmentController;
+
+    //Appointment Table
+
+    @FXML private TableView<?> appointmentsTable;
+
+    @FXML private TableColumn<?, ?> doctorAppTableColl;
+    @FXML private TableColumn<?, ?> patientAppTableColl;
+    @FXML private TableColumn<?, ?> dayAppTableColl;
+    @FXML private TableColumn<?, ?> timeAppTableColl;
+    @FXML private TableColumn<?, ?> lengthAppTableColl;
 
     //Constructor
 
@@ -50,21 +63,14 @@ public class PatientsFrameController extends AbstractPersonController implements
 
 
 
-    @Override
-    protected void clearObjectFields() {
+    @Override protected void clearObjectFields() {
 
     }
-
-    @Override
-    protected void clearObjectFieldsInfo() {
+    @Override protected void clearObjectFieldsInfo() {
+    }
+    @Override protected void setObjectFields(Person person) {
 
     }
-
-    @Override
-    protected void setObjectFields(Person person) {
-
-    }
-
     @Override protected void personDeselected() {
 
         programm.setSelectedPatient(null);
@@ -77,6 +83,7 @@ public class PatientsFrameController extends AbstractPersonController implements
 
         programm.setSelectedPatient((Patient) SELECTED_PERSON);
 
+        //Load appointments for selected person
         programm.getDATA_BASE().getAppointments().loadPatientAppointments((Patient)SELECTED_PERSON);
 
         if (appointmentController != null){
@@ -96,8 +103,7 @@ public class PatientsFrameController extends AbstractPersonController implements
         return PATIENTS.getPatientsRemoved();
     }
 
-    @Override
-    protected void createNewObject(Person person) {
+    @Override protected void createNewObject(Person person) {
 
     }
 

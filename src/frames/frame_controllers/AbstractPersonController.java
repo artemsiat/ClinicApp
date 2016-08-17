@@ -357,6 +357,8 @@ public abstract class AbstractPersonController {
         SELECTED_PERSON = PERSON_LIST.get(TABLE_PERSON.getSelectionModel().getSelectedIndex());
         setSelectedPersonFields();
         personSelected();
+
+
     }
 
     protected void selectPerson(Person person){

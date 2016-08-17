@@ -93,10 +93,13 @@
             </font></TextArea>
         <CheckBox fx:id="SHOW_REMOVED_CHECKBOX" layoutX="861.0" layoutY="373.0" mnemonicParsing="false" text="Show Deleted" />
       <Separator layoutX="2.0" layoutY="513.0" prefHeight="8.0" prefWidth="1328.0" />
-      <TableView layoutX="17.0" layoutY="253.0" prefHeight="158.0" prefWidth="829.0">
+      <TableView fx:id="appointmentsTable" layoutX="17.0" layoutY="253.0" prefHeight="158.0" prefWidth="829.0">
          <columns>
-            <TableColumn prefWidth="153.00003051757812" text="C1" />
-            <TableColumn minWidth="0.0" prefWidth="888.0" text="C2" />
+            <TableColumn fx:id="doctorAppTableColl" prefWidth="149.0" text="Doctor" />
+            <TableColumn fx:id="patientAppTableColl" prefWidth="188.0" text="Patient" />
+            <TableColumn fx:id="dayAppTableColl" prefWidth="182.0" text="Day" />
+            <TableColumn fx:id="timeAppTableColl" prefWidth="157.0" text="Time" />
+            <TableColumn fx:id="lengthAppTableColl" prefWidth="152.0" text="Length" />
          </columns>
       </TableView>
     </children>
