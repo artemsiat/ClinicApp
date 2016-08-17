@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="840.0" prefWidth="1519.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="TABLE_PERSON" layoutX="14.0" layoutY="26.0" onMouseClicked="#personTableClicked" prefHeight="412.0" prefWidth="829.0">
+        <columns>
+          <TableColumn fx:id="FULL_NAME_COL" prefWidth="296.0" text="FullName" />
+          <TableColumn fx:id="PHONE_COL" prefWidth="173.0" text="Telephon" />
+            <TableColumn fx:id="DOB_COL" prefWidth="176.0" text="DOB" />
+            <TableColumn fx:id="EMAIL_COL" prefWidth="183.0" text="Email" />
+        </columns>
+      </TableView>
+      <GridPane hgap="10.0" layoutX="861.0" layoutY="26.0" vgap="10.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label fx:id="LAST_NAME_LABEL" text="LastName" />
+            <Label fx:id="FIRST_NAME_LABEL" text="FirstName" GridPane.rowIndex="1" />
+            <Label fx:id="MIDDLE_NAME_LABEL" text="MiddleName" GridPane.rowIndex="2" />
+            <TextField fx:id="LAST_NAME_FIELD" GridPane.columnIndex="1" />
+            <TextField fx:id="FIRST_NAME_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="MIDDLE_NAME_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="LAST_NAME_INFO_LABEL" text="Label" GridPane.columnIndex="2" />
+         </children>
+      </GridPane>
+      <GridPane hgap="10.0" layoutX="861.0" layoutY="146.0" vgap="10.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label fx:id="DOB_LABEL" text="DOB" />
+            <Label fx:id="PHONE_LABEL" text="Phone" GridPane.rowIndex="1" />
+            <Label fx:id="EMAIL_LABEL" text="Email" GridPane.rowIndex="2" />
+            <DatePicker fx:id="DOB_DATE_PICKER" GridPane.columnIndex="1" />
+            <TextField fx:id="PHONE_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="EMAIL_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="DOB_INFO_LABEL" text="Label" GridPane.columnIndex="2" />
+         </children>
+      </GridPane>
+      <GridPane hgap="10.0" layoutX="861.0" layoutY="266.0" vgap="10.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label fx:id="USER_NAME_LABEL" text="UserName" />
+            <Label fx:id="PASSWORD_LABEL" text="Password" GridPane.rowIndex="1" />
+            <Label fx:id="PASSWORD_RE_LABEL" text="PasswordRe" GridPane.rowIndex="2" />
+            <TextField fx:id="USER_NAME_FIELD" GridPane.columnIndex="1" />
+            <PasswordField fx:id="PASSWORD_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <PasswordField fx:id="PASSWORD_RE_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label fx:id="USER_NAME_INFO_LABEL" text="Label" GridPane.columnIndex="2" />
+            <Label fx:id="PASSWORD_INFO_LABEL" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+      <HBox layoutX="861.0" layoutY="420.0" spacing="10.0">
+         <children>
+            <Button fx:id="ADD_PERSON_BUTTON" mnemonicParsing="false" onAction="#addBtnAction" text="add" />
+            <Button fx:id="UPDATE_PERSON_BUTTON" mnemonicParsing="false" onAction="#updateBtnAction" text="update" />
+            <Button fx:id="DELETE_PERSON_BUTTON" mnemonicParsing="false" onAction="#removeBtnAction" text="delete" />
+            <Button fx:id="RESTORE_PERSON_BUTTON" mnemonicParsing="false" onAction="#restoreBtnAction" text="restore" />
+            <Button fx:id="CLEAR_FIELDS_BUTTON" mnemonicParsing="false" onAction="#clearFieldsBtnAcion" text="clear fields" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="18.0" layoutY="453.0" spacing="15.0">
+         <children>
+            <Label fx:id="TABLE_IS_CREATED_LABEL" text="Label" />
+            <Label fx:id="TABLE_CREATE_STATUS_LABEL" text="Label" />
+            <Button fx:id="CHECK_TABLE_BUTTON" mnemonicParsing="false" onAction="#checkTableBtnAction" text="check table" />
+            <Button fx:id="CREATE_TABLE_BUTTON" mnemonicParsing="false" onAction="#createTableBtnAction" text="create table" />
+            <Button fx:id="DROP_TABLE_BUTTON" mnemonicParsing="false" onAction="#dropTableBtnAction" text="drop table" />
+         </children>
+      </HBox>
+      <Button fx:id="EXIT_BUTTON" layoutX="1249.0" layoutY="793.0" mnemonicParsing="false" onAction="#exitBtnAction" text="Exit" />
+      <TextArea fx:id="LOG_TEXT_AREA" editable="false" layoutX="18.0" layoutY="519.0" prefHeight="261.0" prefWidth="1270.0">
+         <font>
+            <Font size="10.0" />
+         </font></TextArea>
+      <CheckBox fx:id="SHOW_REMOVED_CHECKBOX" layoutX="861.0" layoutY="373.0" mnemonicParsing="false" text="Show Deleted" />
+   </children>
+</AnchorPane>

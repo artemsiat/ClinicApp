@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="ANCHOR_PANE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="943.0" prefWidth="1411.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TableView fx:id="TABLE_PERSON" layoutX="14.0" layoutY="26.0" onMouseClicked="#personTableClicked" prefHeight="227.0" prefWidth="799.0">
+            <columns>
+                <TableColumn fx:id="FULL_NAME_COL" prefWidth="296.0" text="FullName" />
+                <TableColumn fx:id="PHONE_COL" prefWidth="173.0" text="Telephon" />
+                <TableColumn fx:id="DOB_COL" prefWidth="176.0" text="DOB" />
+                <TableColumn fx:id="EMAIL_COL" prefWidth="183.0" text="Email" />
+            </columns>
+        </TableView>
+      <GridPane hgap="10.0" layoutX="861.0" layoutY="26.0" vgap="10.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+                <Label fx:id="LAST_NAME_LABEL" text="LastName" />
+                <Label fx:id="FIRST_NAME_LABEL" text="FirstName" GridPane.rowIndex="1" />
+                <Label fx:id="MIDDLE_NAME_LABEL" text="MiddleName" GridPane.rowIndex="2" />
+                <TextField fx:id="LAST_NAME_FIELD" GridPane.columnIndex="1" />
+                <TextField fx:id="FIRST_NAME_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <TextField fx:id="MIDDLE_NAME_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label fx:id="LAST_NAME_INFO_LABEL" text="Label" GridPane.columnIndex="2" />
+                <Label fx:id="DOB_LABEL" text="DOB" GridPane.rowIndex="3" />
+                <Label fx:id="PHONE_LABEL" text="Phone" GridPane.rowIndex="4" />
+                <Label fx:id="EMAIL_LABEL" text="Email" GridPane.rowIndex="5" />
+                <DatePicker fx:id="DOB_DATE_PICKER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <TextField fx:id="PHONE_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <TextField fx:id="EMAIL_FIELD" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <Label fx:id="DOB_INFO_LABEL" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+              <CheckBox fx:id="SHOW_REMOVED_CHECKBOX" mnemonicParsing="false" text="Show Deleted" GridPane.rowIndex="6" />
+         </children>
+      </GridPane>
+        <HBox layoutX="861.0" layoutY="273.0" spacing="10.0">
+            <children>
+                <Button fx:id="ADD_PERSON_BUTTON" mnemonicParsing="false" onAction="#addBtnAction" text="add" />
+                <Button fx:id="UPDATE_PERSON_BUTTON" mnemonicParsing="false" onAction="#updateBtnAction" text="update" />
+                <Button fx:id="DELETE_PERSON_BUTTON" mnemonicParsing="false" onAction="#removeBtnAction" text="delete" />
+                <Button fx:id="RESTORE_PERSON_BUTTON" mnemonicParsing="false" onAction="#restoreBtnAction" text="restore" />
+                <Button fx:id="CLEAR_FIELDS_BUTTON" mnemonicParsing="false" onAction="#clearFieldsBtnAcion" text="clear fields" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" layoutX="18.0" layoutY="273.0" spacing="15.0">
+            <children>
+                <Label fx:id="TABLE_IS_CREATED_LABEL" text="Label" />
+                <Label fx:id="TABLE_CREATE_STATUS_LABEL" text="Label" />
+                <Button fx:id="CHECK_TABLE_BUTTON" mnemonicParsing="false" onAction="#checkTableBtnAction" text="check table" />
+                <Button fx:id="CREATE_TABLE_BUTTON" mnemonicParsing="false" onAction="#createTableBtnAction" text="create table" />
+                <Button fx:id="DROP_TABLE_BUTTON" mnemonicParsing="false" onAction="#dropTableBtnAction" text="drop table" />
+            </children>
+        </HBox>
+        <Button fx:id="EXIT_BUTTON" layoutX="1362.0" layoutY="904.0" mnemonicParsing="false" onAction="#exitBtnAction" text="Exit" />
+        <TextArea fx:id="LOG_TEXT_AREA" editable="false" layoutX="15.0" layoutY="832.0" prefHeight="85.0" prefWidth="1045.0">
+            <font>
+                <Font size="10.0" />
+            </font></TextArea>
+      <Separator layoutX="2.0" layoutY="343.0" prefHeight="17.0" prefWidth="1411.0" />
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="55.0" prefWidth="119.0" />
+      <TableView fx:id="WD_TABLE" layoutX="14.0" layoutY="360.0" prefHeight="389.0" prefWidth="692.0">
+        <columns>
+          <TableColumn fx:id="WD_DAY_COLUMN" prefWidth="153.0" text="Day" />
+          <TableColumn fx:id="WD_TIME_COLUMN" prefWidth="158.0" text="Time" />
+            <TableColumn fx:id="WD_BREAK_COLUMN" prefWidth="189.0" text="Break" />
+            <TableColumn fx:id="WD_NO_APP_COLUMN" prefWidth="191.0" text="NoAppointments" />
+        </columns>
+      </TableView>
+      <HBox alignment="CENTER" layoutX="14.0" layoutY="760.0" spacing="15.0">
+         <children>
+            <Label fx:id="TABLE_WD_IS_CREATED_LABEL" text="Label" />
+            <Label fx:id="TABLE_WD_STATUS_LABEL" text="Label" />
+            <Button fx:id="CHECK_WD_TABLE_BUTTON" mnemonicParsing="false" onAction="#checkWdTableBtnAction" text="check table" />
+            <Button fx:id="CREATE_WD_TABLE_BUTTON1" mnemonicParsing="false" onAction="#createWdTableBtnAction" text="create table" />
+            <Button fx:id="DROP_WD_TABLE_BUTTON1" mnemonicParsing="false" onAction="#dropWdTableBtnAction" text="drop table" />
+         </children>
+      </HBox>
+      <GridPane layoutX="723.0" layoutY="373.0" vgap="25.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="508.0" spacing="10.0">
+               <children>
+                  <Label fx:id="WD_LABEL" contentDisplay="TOP" text="Working Day" />
+                  <DatePicker fx:id="WD_PICKER" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#wdDatePickerAction" />
+                  <Button fx:id="PREV_WD_BUTTON" mnemonicParsing="false" onAction="#prevDateBtnAction" text="prev." />
+                  <Button fx:id="NEXT_WD_BUTTON" mnemonicParsing="false" onAction="#nextDateBtnAction" text="next." />
+                  <Label fx:id="WD_DATE_PICKER_INFO" text="day" />
+               </children>
+            </HBox>
+            <GridPane hgap="10.0" vgap="10.0" GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label fx:id="START_WD_TIME_LABEL" text="Start time" GridPane.rowIndex="1" />
+                  <Label fx:id="END_WD_TIME_LABEL" text="End Time" GridPane.rowIndex="2" />
+                  <Slider fx:id="START_WD_TIME_SLIDER" prefHeight="14.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="START_WD_TIME_INFO" text="Start time" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label fx:id="END_WD_TIME_INFO" text="End time" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Slider fx:id="END_WD_TIME_SLIDER" prefHeight="14.0" prefWidth="513.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="WD_TIME_LABEL" text="Time " />
+               </children>
+            </GridPane>
+            <GridPane hgap="10.0" vgap="10.0" GridPane.rowIndex="2">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Slider fx:id="START_LUNCH_SLIDER" prefHeight="14.0" prefWidth="500.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Slider fx:id="END_LUNCH_SLIDER" prefHeight="14.0" prefWidth="436.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="START_LUNCH_TIME_LABEL" text="Start time" GridPane.rowIndex="1" />
+                  <Label fx:id="END_LUNCH_TIME_LABEL" text="End Time" GridPane.rowIndex="2" />
+                  <Label fx:id="START_LUNCH_TIME_INFO" text="Start time" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                  <Label fx:id="END_LUNCH_TIME_INFO" text="End Time" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                  <Label fx:id="WD_LUNCH_TIME_LABEL" text="Lunch" />
+               </children>
+            </GridPane>
+            <HBox spacing="10.0" GridPane.rowIndex="4">
+               <children>
+                  <Button fx:id="ADD_WD_BUTTON" mnemonicParsing="false" onAction="#addWDBtnAction" text="add" />
+                  <Button fx:id="UPDATE_WD_BUTTON" mnemonicParsing="false" onAction="#updateWdBtnAction" text="update" />
+                  <Button fx:id="DELETE_WD_BUTTON" mnemonicParsing="false" onAction="#deleteWdBtnAction" text="delete" />
+               </children>
+            </HBox>
+            <CheckBox fx:id="WD_PASSED_CHECK" mnemonicParsing="false" text="Show passed days" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+    </children>
+</AnchorPane>
