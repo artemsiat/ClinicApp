@@ -18,3 +18,5 @@ SQL statement = SELECT * FROM patients LIMIT 5; (Limits the result set to patien
 
 Short cuts
 SHIFT + ENTER - starts new line
+
+Test Change!!!
