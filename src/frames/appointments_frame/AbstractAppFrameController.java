@@ -10,7 +10,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import programm.FrameColor;
 import programm.Programm;
@@ -22,11 +21,13 @@ import programm.texts.FrameLabelText;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by Artem Siatchinov on 8/15/2016.
  */
-public class AbstractAppFrameController {
+public class AbstractAppFrameController extends DoctorAppointmentTable{
 
     private Programm programm;
     private DataBase dataBase;
@@ -36,23 +37,15 @@ public class AbstractAppFrameController {
     private AppointmentFrame appointmentFrame;
 
     private Patient selectedPatient;
-    private ObservableList<Appointment> patientAppointmentsList;
-    private ObservableList<Appointment> doctorAppointmentsList;
+
 
     private Doctor selectedDoctor;
     private WorkingDay selectedWorkingDay;
+
+    HashMap<Integer, ArrayList<Integer>> hoursAndMinutes;
     private Integer selectedAppHour;
     private Integer selectedAppMinutes;
     private Integer selectedAppLength;
-
-    //Patient Appointments Table
-    @FXML private TableView<Appointment> patientAppsTable;
-
-    @FXML private TableColumn<Appointment, String> doctorAppTableColl;
-    @FXML private TableColumn<Appointment, String> patientAppTableColl;
-    @FXML private TableColumn<Appointment, String> dayAppTableColl;
-    @FXML private TableColumn<Appointment, String> timeAppTableColl;
-    @FXML private TableColumn<Appointment, String> lengthAppTableColl;
 
     //Patient
     @FXML private Label patientLabelInfo;
@@ -100,12 +93,14 @@ public class AbstractAppFrameController {
         this.appointments = programm.getDATA_BASE().getAppointments();
         this.doctors = dataBase.getDoctors();
 
-        patientAppointmentsList = null;
-        doctorAppointmentsList = null;
     }
 
     //Initialization
     protected void initializeAppController(){
+        initializePatientAppController();
+        initializeDoctorAppController();
+        initButtons();
+
         patientSelected(programm.getSelectedPatient());
         setCreateDropTableButtonsLabels();
 
@@ -115,24 +110,16 @@ public class AbstractAppFrameController {
         initAppLabels();
 
         setDoctorComboBox();
-        selectedDoctor = null;
-        selectedAppHour = null;
-        selectedAppMinutes = null;
+
+        this.hoursAndMinutes = null;
+        this.selectedDoctor = null;
+        this.selectedAppHour = null;
+        this.selectedAppMinutes = null;
+
         doctorSelected();
-
-        initPatientAppsTable();
     }
 
-    //Tables
-    private void initPatientAppsTable() {
-        doctorAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("doctorProperty"));
-        patientAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("patientProperty"));
-        dayAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("dayProperty"));
-        timeAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("timeProperty"));
-        lengthAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("lengthPropety"));
 
-        patientAppsTable.setItems(patientAppointmentsList);
-    }
 
 
     //Doctor
@@ -179,7 +166,6 @@ public class AbstractAppFrameController {
 
     private void doctorSelected(){
 
-        System.out.println("Doctor selected: " + selectedDoctor);
 
         if (selectedDoctor ==null){
             doctorLabelInfo.setTextFill(FrameColor.getColorError());
@@ -215,17 +201,35 @@ public class AbstractAppFrameController {
      */
     private void setHoursComboBox() {
 
-        appHoursComboBox.setDisable(false);
         appHoursComboBox.setPromptText(FrameAppointmentText.getHoursComboBoxText());
 
-        //Obtain list
-
-        appHoursComboBox.getItems().add(new Integer(9));
-
+        if (selectedWorkingDay == null){
+            /*Disable combo box*/
+            appHoursComboBox.setDisable(true);
+            /*Clear items in combo box*/
+            appHoursComboBox.getItems().clear();
+            /*Set map of available time*/
+            hoursAndMinutes = null;
+        }
+        else {
+            /*Enable combo box*/
+            appHoursComboBox.setDisable(false);
+            /*Set map of available time*/
+            hoursAndMinutes = selectedWorkingDay.getAvailableTime();
+            /*Assign hours to the combo box*/
+            for (HashMap.Entry<Integer, ArrayList<Integer>> entry : hoursAndMinutes.entrySet()){
+                Integer key = entry.getKey();
+                ArrayList<Integer> values = entry.getValue();
+                if (values.isEmpty()){
+                    continue;
+                }
+                appHoursComboBox.getItems().add(key);
+            }
+        }
     }
 
     private void appHoursSelected(){
-        System.out.println("Hour selected: " + selectedAppHour);
+
         if (selectedAppHour == null){
 
         }
@@ -256,18 +260,16 @@ public class AbstractAppFrameController {
      */
     private void workingDaySelected(){
 
-        System.out.println("Working day selected: " + selectedWorkingDay);
-
-/*        if (selectedDoctor == null){
-            return;
-        }*/
-
 
         if (selectedWorkingDay == null){
+
+
             setWorkingDayPickerInfo();
             //Check that hours combo box is deselected
             appHoursComboBox.setValue(null);
             appHoursComboBox.getItems().clear();
+
+            doctorAppsTable.setItems(null);
             return;
         }
 
@@ -276,17 +278,16 @@ public class AbstractAppFrameController {
             //load list of appointments
 
             setWorkingDayPickerInfo();
+
             setHoursComboBox();
 
             //load appointments for that day
             if (dataBase.getAppointments().loadWorkingDayAppointments(selectedWorkingDay)){
-
+                doctorAppsTable.setItems(selectedWorkingDay.getAppointmentObservableList());
             }
 
             return;
         }
-
-
     }
 
 
@@ -314,7 +315,6 @@ public class AbstractAppFrameController {
             datePickerLabelInfo.setText(formatedDate + (" Рабочий день."));
             datePickerLabelInfo.setTextFill(FrameColor.getIsWorkingDayColor());
 
-            System.out.println("Start time : " + selectedWorkingDay.getStartTime() + " End time : " + selectedWorkingDay.getEndTime());
 
 
             //Todo populate appointments table
@@ -435,15 +435,15 @@ public class AbstractAppFrameController {
             patientLabelInfo.setTextFill(FrameColor.getColorError());
             patientLabelInfo.setText(FrameAppointmentText.getNoPatientChosenText());
 
-            patientAppointmentsList = null;
+            patientAppsTable.setItems(null);
             return;
         }
         patientLabelInfo.setTextFill(FrameColor.getColorSucess());
         patientLabelInfo.setText(selectedPatient.getFULL_NAME_PROPERTY());
 
         //Get Appointments list
-        patientAppointmentsList = selectedPatient.getAppointmentsList();
-        patientAppsTable.setItems(patientAppointmentsList);
+
+        patientAppsTable.setItems(selectedPatient.getAppointmentsList());
     }
 
 
@@ -468,7 +468,7 @@ public class AbstractAppFrameController {
     }
 
     //Initialization
-    protected void intiButtons() {
+    protected void initButtons() {
 
         createAppBtn.setText(FrameButtonText.getCreateButtonText());
         removeAppBtn.setText(FrameButtonText.getRemoveButtonText());
@@ -486,10 +486,7 @@ public class AbstractAppFrameController {
         appLengthLabelInfo.setText("");
 
     }
-
-
     //Buttons Table
-
     @FXML void createTableBtnAction(ActionEvent event) {
 
         boolean status = appointments.createTable();
@@ -499,7 +496,6 @@ public class AbstractAppFrameController {
         //displayLog();
 
     }
-
     @FXML void dropTableBtnAction(ActionEvent event) {
         boolean status = appointments.dropTable();
         //LOG_INFO = PEOPLE_DATA_BASE.getStatus() + "\n" + "\n" + LOG_INFO;
@@ -507,7 +503,6 @@ public class AbstractAppFrameController {
         setTableCreatedStatus(appointments.isTableCreated());
         //displayLog();
     }
-
     @FXML void checkTableBtnAction(ActionEvent event) {
         boolean status = appointments.checkTable();
         //LOG_INFO = PEOPLE_DATA_BASE.getStatus() + "\n" + "\n" + LOG_INFO;

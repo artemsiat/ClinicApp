@@ -30,8 +30,6 @@ public class PatientsFrameController extends AbstractPersonController implements
 
     private AppointmentFrameController appointmentController;
 
-    private ObservableList<Appointment> appointmentsList;
-
     //Appointment Table
 
     @FXML private TableView<Appointment> appointmentsTable;
@@ -51,8 +49,6 @@ public class PatientsFrameController extends AbstractPersonController implements
         this.programm = programm;
         this.PATIENTS_FRAME = patientsFrame;
         this.PATIENTS = this.programm.getDATA_BASE().getPatients();
-
-        this.appointmentsList = null;
 
         this.appointmentController = null;
     }
@@ -78,7 +74,7 @@ public class PatientsFrameController extends AbstractPersonController implements
         timeAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("timeProperty"));
         lengthAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("lengthPropety"));
 
-        appointmentsTable.setItems(appointmentsList);
+        appointmentsTable.setItems(null);
 
     }
 
@@ -94,7 +90,7 @@ public class PatientsFrameController extends AbstractPersonController implements
     @Override protected void personDeselected() {
 
         programm.setSelectedPatient(null);
-        appointmentsList = null;
+        appointmentsTable.setItems(null);
 
         if (appointmentController != null){
             appointmentController.patientSelected(null);
@@ -110,10 +106,8 @@ public class PatientsFrameController extends AbstractPersonController implements
         if (appointmentController != null){
             appointmentController.patientSelected((Patient) SELECTED_PERSON);
         }
-        appointmentsList = ((Patient) SELECTED_PERSON).getAppointmentsList();
 
-        appointmentsTable.setItems(appointmentsList);
-        System.out.println("Appointments list Size : " + appointmentsList.size());
+        appointmentsTable.setItems(((Patient) SELECTED_PERSON).getAppointmentsList());
     }
 
 

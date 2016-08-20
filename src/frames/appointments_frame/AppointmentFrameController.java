@@ -9,7 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import programm.FrameColor;
 import programm.Programm;
 import programm.texts.FrameAppointmentText;
@@ -60,9 +59,7 @@ public class AppointmentFrameController extends AbstractAppFrameController imple
 
 
 
-    //Doctor Appointments Table
 
-    @FXML private TableView<?> doctorAppsTable;
 
     //Constructor
 
@@ -71,48 +68,12 @@ public class AppointmentFrameController extends AbstractAppFrameController imple
         super(programm, appointmentFrame);
 
         this.programm = programm;
-
-
-
-        //this.dataBase = programm.getDATA_BASE();
-
-/*
-        this.selectedPatient = programm.getSelectedPatient();
-
-        if (selectedDoctor != null){
-            this.doctorsWorkingDayList = selectedDoctor.getWorkingDays();
-        }
-        else {
-            this.doctorsWorkingDayList = null;
-        }
-        if (selectedPatient != null){
-            this.patientAppointmentsList = selectedPatient.getAppointmentsList();
-        }
-        else {
-            this.patientAppointmentsList = null;
-        }*/
     }
-
-
-
-
 
     //Initialization
 
     @Override public void initialize (URL location, ResourceBundle resources){
-
         initializeAppController();
-
-
-/*        intiButtons();
-        initLabels();
-
-        initPatientAppsTable();
-        initDoctorAppsTable();*/
-
-        //initDoctorDatePickerListener();
-
-        //setDoctorDatePickerInfo();
     }
 
 
@@ -132,34 +93,19 @@ public class AppointmentFrameController extends AbstractAppFrameController imple
 
     //Selectors
     private void selectDoctor(Person person) {
-
-
         Doctor doctor = (Doctor)person;
         selectedDoctor = doctor;
-
-        //doctorsWorkingDayList = doctor.getWorkingDays();
-        //setDoctorDatePickerFactory();
-        //setDoctorDatePickerInfo();
-
     }
 
     //Deselectors
 
     private void deselectDoctor() {
-
         selectedDoctor = null;
-        //doctorsWorkingDayList = null;
         selectedWorkingDay = null;
         setDoctorsLabel();
-        //setDoctorDatePickerFactory();
-        //setDoctorDatePickerInfo();
     }
 
-
-
     //Setters
-
-
     private void setDoctorsLabel() {
         if (selectedDoctor == null){
 
@@ -172,20 +118,16 @@ public class AppointmentFrameController extends AbstractAppFrameController imple
     }
 
     private void setAppointmentsFieldLabels() {
-
         setAppStartTimeFields();
         setAppLengthFields();
-
     }
 
     private void setAppStartTimeFields()
     {
-        if (selectedWorkingDay == null)
-        {
-            //appHoursComboBox.setDisable(true);
-            //appMinutesComboBox.setDisable(true);
-            //startTimeLabelInfo.setText("");
+        if (selectedWorkingDay == null){
+
         }
+
         else
         {
 
@@ -214,14 +156,5 @@ public class AppointmentFrameController extends AbstractAppFrameController imple
             e.printStackTrace();
         }
     }
-
-
-
-
-
-
-
-
-
 
 }

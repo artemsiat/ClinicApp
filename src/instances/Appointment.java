@@ -36,8 +36,6 @@ public class Appointment extends DateInstance{
 
     }
     public void generateProperties(String doctor, String patient) {
-        System.out.println("Properties generated Appointment. genereate Properties method");
-
         doctorProperty.setValue(doctor);
         patientProperty.setValue(patient);
         dayProperty.setValue(FormatDate.convertDateToMyFormat(getDate()));

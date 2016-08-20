@@ -87,10 +87,12 @@ public class Appointments extends DBSecondLayer{
 
         ObservableList<Appointment> appointmentObservableList = FXCollections.observableArrayList();
 
+        System.out.println("Printing loaded appointments  Appointments.loadWorkingDayAppointments");
+
         for (DataBaseInstance dataBaseInstance : objects){
 
             Appointment appointment = (Appointment)dataBaseInstance;
-            System.out.println(appointment.toString() + " Appointments.loadWorkingDayAppointments");
+            System.out.println("Запись пациента : " + appointment.toString());
 
             String doctorsName = dataBase.getDoctors().getDoctorByID(appointment.getDoctorId()).getFullName();
             String patientsName = dataBase.getPatients().getPatientById(appointment.getPatientId()).getFullName();
