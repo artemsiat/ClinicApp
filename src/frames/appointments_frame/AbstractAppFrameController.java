@@ -194,7 +194,13 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
         if (selectedAppMinutes != null){
             setLengthComboBox();
             startTimeLabelInfo.setTextFill(FrameColor.getColorSucess());
-            startTimeLabelInfo.setText("в " + selectedAppHour + ":" + selectedAppMinutes);
+            if (selectedAppMinutes == 0 ){
+                startTimeLabelInfo.setText("в " + selectedAppHour + ":00");
+            }
+            else {
+                startTimeLabelInfo.setText("в " + selectedAppHour + ":" + selectedAppMinutes);
+            }
+
         }
         if (selectedAppMinutes == null){
             startTimeLabelInfo.setTextFill(FrameColor.getColorError());
@@ -202,6 +208,17 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
         }
     }
 
+    private void appLengthSelected() {
+        if (selectedAppLength != null){
+
+            appLengthLabelInfo.setTextFill(FrameColor.getColorSucess());
+            appLengthLabelInfo.setText(selectedAppLength +  " минут. до ");
+        }
+        else {
+            appLengthLabelInfo.setTextFill(FrameColor.getColorError());
+            appLengthLabelInfo.setText("");
+        }
+    }
 
 
     private void doctorSelected(){
@@ -320,6 +337,9 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
         appLengthComboBox.getItems().clear();
         if (selectedAppMinutes != null){
             System.err.println("Start time: " + selectedAppHour+ "  :  " + selectedAppMinutes);
+            ArrayList<Integer> lengths = selectedWorkingDay.getAppointmentLengths(selectedAppHour, selectedAppMinutes);
+
+            lengths.stream().forEach(length -> {appLengthComboBox.getItems().add(length);});
         }
     }
 
@@ -384,17 +404,30 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
                 if (newValue == null){
                     selectedAppMinutes = null;
                     appMinutesSelected();
-                    return;
                 }
-                selectedAppMinutes = newValue;
-                appMinutesSelected();
+                else {
+                    selectedAppMinutes = newValue;
+                    appMinutesSelected();
+                }
             }
         });
     }
 
     private void setLengthComboBoxListener() {
-
-
+        appLengthComboBox.setPromptText(FrameAppointmentText.getLengthComboBoxText());
+        appLengthComboBox.valueProperty().addListener(new ChangeListener<Integer>() {
+            @Override
+            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+                if (newValue == null){
+                    selectedAppLength = null;
+                    appLengthSelected();
+                }
+                else {
+                    selectedAppLength = newValue;
+                    appLengthSelected();
+                }
+            }
+        });
     }
 
 

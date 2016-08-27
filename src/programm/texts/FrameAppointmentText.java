@@ -20,6 +20,7 @@ public class FrameAppointmentText {
 
     private static String HOURS_COMBO_BOX_TEXT = "часы";
     private static String MINUTES_COMBO_BOX_TEXT = "минуты";
+    private static String LENGTH_COMBO_BOX_TEXT = "минуты";
 
     private static String _15_MINUTES = "15 минут";
     private static String _30_MINUTES = "30 минут";
@@ -106,5 +107,9 @@ public class FrameAppointmentText {
 
     public static String getAppStartTimeLabel() {
         return APP_START_TIME_LABEL;
+    }
+
+    public static String getLengthComboBoxText() {
+        return LENGTH_COMBO_BOX_TEXT;
     }
 }

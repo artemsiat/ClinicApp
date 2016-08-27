@@ -228,12 +228,33 @@ public class WorkingDay extends DateInstance implements Comparable<WorkingDay>{
 
     public ArrayList<Integer> getAppointmentLengths(int startHour, int startMinutes){
         ArrayList<Integer> lengths = new ArrayList<>();
+        HashMap<Integer, ArrayList<Integer>> timeMap = getAvailableTime();
 
+        int length = 0;
+        lengths.add(length);
 
+        while(isLengthValid(timeMap, startHour, startMinutes)){
+            if (startMinutes == 45){ startMinutes = 0; startHour +=1; }
+            else {startMinutes += 15;}
+            length += 15;
+            lengths.add(length);
+        }
 
-
+        //System.err.println("Time map: " + timeMap);
+        //System.err.println("Available lengths: " + lengths);
         return lengths;
     }
+    private boolean isLengthValid(HashMap<Integer, ArrayList<Integer>> timeMap, int startHour, int startMinutes){
 
+        if (startMinutes == 45){ startMinutes = 0; startHour +=1; }
+        else {startMinutes += 15;}
 
+        ArrayList<Integer> minutes = timeMap.get(startHour);
+
+        if (minutes == null){return false;}
+        if (minutes.contains(startMinutes)){return true;}
+        else if (minutes.isEmpty() && startMinutes == 0){return true;}
+
+        return false;
+    }
 }
