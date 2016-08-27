@@ -226,4 +226,14 @@ public class WorkingDay extends DateInstance implements Comparable<WorkingDay>{
         }
     }
 
+    public ArrayList<Integer> getAppointmentLengths(int startHour, int startMinutes){
+        ArrayList<Integer> lengths = new ArrayList<>();
+
+
+
+
+        return lengths;
+    }
+
+
 }

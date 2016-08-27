@@ -65,6 +65,7 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
     @FXML private Label startTimeLabelInfo;
 
     @FXML private Label appLengthLabel;
+    @FXML private ComboBox<Integer> appLengthComboBox;
     @FXML private Label appLengthLabelInfo;
 
 
@@ -106,6 +107,8 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
 
         setWorkingDayPickerListener();
         setHoursComboBoxListener();
+        setMinutesComboBoxListener();
+        setLengthComboBoxListener();
 
         initAppLabels();
 
@@ -120,9 +123,118 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
     }
 
 
+    /*Selectors*/
+    public void patientSelected(Patient patient) {
+
+        this.selectedPatient = patient;
+
+        if (selectedPatient == null){
+            patientLabelInfo.setTextFill(FrameColor.getColorError());
+            patientLabelInfo.setText(FrameAppointmentText.getNoPatientChosenText());
+
+            patientAppsTable.setItems(null);
+            return;
+        }
+        patientLabelInfo.setTextFill(FrameColor.getColorSucess());
+        patientLabelInfo.setText(selectedPatient.getFULL_NAME_PROPERTY());
+
+        //Get Appointments list
+
+        patientAppsTable.setItems(selectedPatient.getAppointmentsList());
+    }
+    /**
+     * 1.Doctor was deselected
+     * 2.New Working day Selected is null
+     * 3.New Working day is not null - proceed
+     */
+    private void workingDaySelected(){
 
 
-    //Doctor
+        if (selectedWorkingDay == null){
+
+
+            setWorkingDayPickerInfo();
+            //Check that hours combo box is deselected
+            appHoursComboBox.setValue(null);
+            appHoursComboBox.getItems().clear();
+
+            doctorAppsTable.setItems(null);
+            return;
+        }
+
+
+        if (selectedWorkingDay != null){
+            //load list of appointments
+
+            setWorkingDayPickerInfo();
+
+            setHoursComboBox();
+
+            //load appointments for that day
+            if (dataBase.getAppointments().loadWorkingDayAppointments(selectedWorkingDay)){
+                doctorAppsTable.setItems(selectedWorkingDay.getAppointmentObservableList());
+            }
+
+            return;
+        }
+    }
+
+    private void appHoursSelected(){
+        //Todo
+        //When hours selected
+        if (selectedAppHour == null){
+            setMinutesComboBox();
+        }
+        if (selectedAppHour != null){
+            setMinutesComboBox();
+        }
+    }
+    private void appMinutesSelected() {
+        /*Set startTimeLabelInfo displaying starting time in positive color*/
+        if (selectedAppMinutes != null){
+            setLengthComboBox();
+            startTimeLabelInfo.setTextFill(FrameColor.getColorSucess());
+            startTimeLabelInfo.setText("в " + selectedAppHour + ":" + selectedAppMinutes);
+        }
+        if (selectedAppMinutes == null){
+            startTimeLabelInfo.setTextFill(FrameColor.getColorError());
+            startTimeLabelInfo.setText("");
+        }
+    }
+
+
+
+    private void doctorSelected(){
+
+
+        if (selectedDoctor ==null){
+            doctorLabelInfo.setTextFill(FrameColor.getColorError());
+            doctorLabelInfo.setText(FrameAppointmentText.getNoDoctorChosenText());
+
+            //Date picker info
+            datePickerLabelInfo.setTextFill(FrameColor.getColorError());
+            datePickerLabelInfo.setText(DatePickerText.getNoDoctorPicked());
+
+            //Make sure the date picker is disabled
+            appDatePicker.setValue(null);
+            appDatePicker.setDisable(true);
+
+            return;
+        }
+
+        doctorLabelInfo.setTextFill(FrameColor.getColorSucess());
+        doctorLabelInfo.setText(selectedDoctor.getFULL_NAME_PROPERTY() + ". Тел: " + selectedDoctor.getPHONE());
+
+        //create date picker factory and enable date picker
+
+        appDatePicker.setDisable(false);
+        appDatePicker.setValue(null);
+        setWorkingDayPickerFactory();
+        setWorkingDayPickerInfo();
+    }
+
+
+    /*Setters*/
     private void setDoctorComboBox() {
 
         chooseDoctorComboBox.setPromptText(FrameAppointmentText.getChooseDoctorText());
@@ -164,44 +276,7 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
         });
     }
 
-    private void doctorSelected(){
-
-
-        if (selectedDoctor ==null){
-            doctorLabelInfo.setTextFill(FrameColor.getColorError());
-            doctorLabelInfo.setText(FrameAppointmentText.getNoDoctorChosenText());
-
-            //Date picker info
-            datePickerLabelInfo.setTextFill(FrameColor.getColorError());
-            datePickerLabelInfo.setText(DatePickerText.getNoDoctorPicked());
-
-            //Make sure the date picker is disabled
-            appDatePicker.setValue(null);
-            appDatePicker.setDisable(true);
-
-            return;
-        }
-
-        doctorLabelInfo.setTextFill(FrameColor.getColorSucess());
-        doctorLabelInfo.setText(selectedDoctor.getFULL_NAME_PROPERTY() + ". Тел: " + selectedDoctor.getPHONE());
-
-        //create date picker factory and enable date picker
-
-        appDatePicker.setDisable(false);
-        appDatePicker.setValue(null);
-        setWorkingDayPickerFactory();
-        setWorkingDayPickerInfo();
-    }
-
-    //Working Hours
-
-    /**
-     * Initializes Hours ComboBox
-     * Called when working day selected
-     */
     private void setHoursComboBox() {
-
-        appHoursComboBox.setPromptText(FrameAppointmentText.getHoursComboBoxText());
 
         if (selectedWorkingDay == null){
             /*Disable combo box*/
@@ -228,69 +303,28 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
         }
     }
 
-    private void appHoursSelected(){
+    private void setMinutesComboBox() {
 
-        if (selectedAppHour == null){
+        appMinutesComboBox.getItems().clear();
+        if (selectedAppHour != null){
+            System.out.println(hoursAndMinutes.get(selectedAppHour));
+            ArrayList<Integer> minutes = hoursAndMinutes.get(selectedAppHour);
 
-        }
-    }
-
-    private void setHoursComboBoxListener() {
-
-        appHoursComboBox.valueProperty().addListener(new ChangeListener<Integer>() {
-            @Override
-            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-                if (newValue == null){
-                    selectedAppHour = null;
-                    appHoursSelected();
-                    return;
-                }
-                selectedAppHour = newValue;
-                appHoursSelected();
+            for (Integer minute : minutes){
+                appMinutesComboBox.getItems().add(minute);
             }
-        });
-    }
-
-    //Working Day
-
-    /**
-     * 1.Doctor was deselected
-     * 2.New Working day Selected is null
-     * 3.New Working day is not null - proceed
-     */
-    private void workingDaySelected(){
-
-
-        if (selectedWorkingDay == null){
-
-
-            setWorkingDayPickerInfo();
-            //Check that hours combo box is deselected
-            appHoursComboBox.setValue(null);
-            appHoursComboBox.getItems().clear();
-
-            doctorAppsTable.setItems(null);
-            return;
         }
+    }
+    private void setLengthComboBox() {
 
-
-        if (selectedWorkingDay != null){
-            //load list of appointments
-
-            setWorkingDayPickerInfo();
-
-            setHoursComboBox();
-
-            //load appointments for that day
-            if (dataBase.getAppointments().loadWorkingDayAppointments(selectedWorkingDay)){
-                doctorAppsTable.setItems(selectedWorkingDay.getAppointmentObservableList());
-            }
-
-            return;
+        appLengthComboBox.getItems().clear();
+        if (selectedAppMinutes != null){
+            System.err.println("Start time: " + selectedAppHour+ "  :  " + selectedAppMinutes);
         }
     }
 
 
+    /*Info labels setters*/
     private void setWorkingDayPickerInfo() {
 
         LocalDate datePickerValue = appDatePicker.getValue();
@@ -323,6 +357,47 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
         }
     }
 
+
+
+    /*Listeners*/
+    private void setHoursComboBoxListener() {
+        appHoursComboBox.setPromptText(FrameAppointmentText.getHoursComboBoxText());
+        appHoursComboBox.valueProperty().addListener(new ChangeListener<Integer>() {
+            @Override
+            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+                if (newValue == null){
+                    selectedAppHour = null;
+                    appHoursSelected();
+                    return;
+                }
+                selectedAppHour = newValue;
+                appHoursSelected();
+            }
+        });
+    }
+
+    private void setMinutesComboBoxListener() {
+        appMinutesComboBox.setPromptText(FrameAppointmentText.getMinutesComboBoxText());
+        appMinutesComboBox.valueProperty().addListener(new ChangeListener<Integer>() {
+            @Override
+            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
+                if (newValue == null){
+                    selectedAppMinutes = null;
+                    appMinutesSelected();
+                    return;
+                }
+                selectedAppMinutes = newValue;
+                appMinutesSelected();
+            }
+        });
+    }
+
+    private void setLengthComboBoxListener() {
+
+
+    }
+
+
     private void setWorkingDayPickerListener(){
 
         appDatePicker.valueProperty().addListener(new ChangeListener<LocalDate>() {
@@ -342,6 +417,8 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
         });
 
     }
+
+
 
     private void setWorkingDayPickerFactory(){
 
@@ -406,7 +483,7 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
 
     }
 
-    //Buttons
+    /*Buttons*/
     @FXML void createAppBtnAction(ActionEvent event) {
         appointments.addObject(createAppointment());
     }
@@ -425,26 +502,6 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
 
     }
 
-    //Patient
-
-    public void patientSelected(Patient patient) {
-
-        this.selectedPatient = patient;
-
-        if (selectedPatient == null){
-            patientLabelInfo.setTextFill(FrameColor.getColorError());
-            patientLabelInfo.setText(FrameAppointmentText.getNoPatientChosenText());
-
-            patientAppsTable.setItems(null);
-            return;
-        }
-        patientLabelInfo.setTextFill(FrameColor.getColorSucess());
-        patientLabelInfo.setText(selectedPatient.getFULL_NAME_PROPERTY());
-
-        //Get Appointments list
-
-        patientAppsTable.setItems(selectedPatient.getAppointmentsList());
-    }
 
 
     //Helper
