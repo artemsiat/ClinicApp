@@ -144,6 +144,4 @@ public class WorkingDayFormat {
 
         return availableDate;
     }
-
-
 }

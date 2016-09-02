@@ -200,19 +200,36 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
             else {
                 startTimeLabelInfo.setText("в " + selectedAppHour + ":" + selectedAppMinutes);
             }
-
         }
         if (selectedAppMinutes == null){
             startTimeLabelInfo.setTextFill(FrameColor.getColorError());
             startTimeLabelInfo.setText("");
+            setLengthComboBox();
         }
     }
 
     private void appLengthSelected() {
         if (selectedAppLength != null){
 
+            /*Todo Place inside method*/
+            int plusHours = selectedAppLength / 60 ;
+            int plusMinutes = selectedAppLength % 60;
+            System.err.println("Adding hours: " + plusHours);
+            int startHour = selectedAppHour + plusHours;
+            int startMinutes = selectedAppMinutes + plusMinutes;
+            if (startMinutes >= 60){
+                int plusHour = startMinutes/60;
+                startMinutes = startMinutes%60;
+                startHour += plusHour;
+            }
+
             appLengthLabelInfo.setTextFill(FrameColor.getColorSucess());
-            appLengthLabelInfo.setText(selectedAppLength +  " минут. до ");
+            if (startMinutes == 0){
+                appLengthLabelInfo.setText(selectedAppLength + " минут. до " + startHour + ":00");
+            }
+            else {
+                appLengthLabelInfo.setText(selectedAppLength + " минут. до " + startHour + ":" + startMinutes);
+            }
         }
         else {
             appLengthLabelInfo.setTextFill(FrameColor.getColorError());
@@ -518,7 +535,12 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
 
     /*Buttons*/
     @FXML void createAppBtnAction(ActionEvent event) {
-        appointments.addObject(createAppointment());
+
+        System.err.println("Selected Patient : " + selectedPatient + " . Selected App Length " + selectedAppLength);
+        if (selectedPatient != null && selectedAppLength != null) {
+
+            //appointments.addObject(createAppointment());
+        }
     }
 
 
