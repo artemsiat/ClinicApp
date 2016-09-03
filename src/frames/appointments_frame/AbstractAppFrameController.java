@@ -538,7 +538,7 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
 
         System.err.println("Selected Patient : " + selectedPatient + " . Selected App Length " + selectedAppLength);
         if (selectedPatient != null && selectedAppLength != null) {
-
+            System.err.println("New apointment, start time: " + selectedAppHour + " : " + selectedAppMinutes + " . Length: " + selectedAppLength);
             //appointments.addObject(createAppointment());
         }
     }

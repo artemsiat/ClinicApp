@@ -144,4 +144,23 @@ public class WorkingDayFormat {
 
         return availableDate;
     }
+
+    /*Input is Hours from 0 to 23, Minutes from 0 to 59
+    * Output is time 900, 1100 or 1145*/
+    public static int getTimeFromHourAndMinutes(int startHour, int startMinutes){
+        int startTime = 0;
+
+        return startTime;
+
+    }
+
+    /*Input is Start time 900 , 1115, 1745
+    * and Length in minutes 15 minutes, 30, 45, 60 etc.
+    * out put is new time with added minutes 915, 1145, 1900*/
+    public static int getEndTimeFromLength(int startTime, int lengthMinutes){
+        int endTime = 0;
+
+        return endTime;
+    }
+
 }
