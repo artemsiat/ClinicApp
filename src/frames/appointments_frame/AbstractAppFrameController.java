@@ -14,6 +14,7 @@ import javafx.util.Callback;
 import programm.FrameColor;
 import programm.Programm;
 import programm.helper_classes.FormatDate;
+import programm.helper_classes.WorkingDayFormat;
 import programm.texts.DatePickerText;
 import programm.texts.FrameAppointmentText;
 import programm.texts.FrameButtonText;
@@ -214,7 +215,6 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
             /*Todo Place inside method*/
             int plusHours = selectedAppLength / 60 ;
             int plusMinutes = selectedAppLength % 60;
-            System.err.println("Adding hours: " + plusHours);
             int startHour = selectedAppHour + plusHours;
             int startMinutes = selectedAppMinutes + plusMinutes;
             if (startMinutes >= 60){
@@ -341,7 +341,6 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
 
         appMinutesComboBox.getItems().clear();
         if (selectedAppHour != null){
-            System.out.println(hoursAndMinutes.get(selectedAppHour));
             ArrayList<Integer> minutes = hoursAndMinutes.get(selectedAppHour);
 
             for (Integer minute : minutes){
@@ -353,7 +352,6 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
 
         appLengthComboBox.getItems().clear();
         if (selectedAppMinutes != null){
-            System.err.println("Start time: " + selectedAppHour+ "  :  " + selectedAppMinutes);
             ArrayList<Integer> lengths = selectedWorkingDay.getAppointmentLengths(selectedAppHour, selectedAppMinutes);
 
             lengths.stream().forEach(length -> {appLengthComboBox.getItems().add(length);});
@@ -536,10 +534,8 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
     /*Buttons*/
     @FXML void createAppBtnAction(ActionEvent event) {
 
-        System.err.println("Selected Patient : " + selectedPatient + " . Selected App Length " + selectedAppLength);
-        if (selectedPatient != null && selectedAppLength != null) {
-            System.err.println("New apointment, start time: " + selectedAppHour + " : " + selectedAppMinutes + " . Length: " + selectedAppLength);
-            //appointments.addObject(createAppointment());
+        if (selectedPatient != null && selectedAppLength != null && selectedDoctor != null) {
+            appointments.addObject(createAppointment());
         }
     }
 
@@ -562,9 +558,8 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
     //Helper
     private DataBaseInstance createAppointment() {
 
-        if (selectedDoctor == null || selectedPatient == null || selectedWorkingDay == null){
-            return null;
-        }
+        int startTime = WorkingDayFormat.getTimeFromHourAndMinutes(selectedAppHour, selectedAppMinutes);
+        int endTime = WorkingDayFormat.getEndTimeFromLength(startTime, selectedAppLength);
 
         Appointment appointment = new Appointment();
         appointment.setCreator(programm.getCurrentAdmin().getID());
@@ -572,8 +567,8 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
         appointment.setWokringDayId(selectedWorkingDay.getID());
         appointment.setPatientId(selectedPatient.getID());
         appointment.setDate(selectedWorkingDay.getDate());
-        appointment.setStartTime(900);
-        appointment.setEndTime(1015);
+        appointment.setStartTime(startTime);
+        appointment.setEndTime(endTime);
         appointment.setwhencreated(LocalDateTime.now());
 
         return appointment;

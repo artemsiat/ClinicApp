@@ -148,8 +148,7 @@ public class WorkingDayFormat {
     /*Input is Hours from 0 to 23, Minutes from 0 to 59
     * Output is time 900, 1100 or 1145*/
     public static int getTimeFromHourAndMinutes(int startHour, int startMinutes){
-        int startTime = 0;
-
+        int startTime = startHour * 100 + startMinutes;
         return startTime;
 
     }
@@ -158,7 +157,17 @@ public class WorkingDayFormat {
     * and Length in minutes 15 minutes, 30, 45, 60 etc.
     * out put is new time with added minutes 915, 1145, 1900*/
     public static int getEndTimeFromLength(int startTime, int lengthMinutes){
-        int endTime = 0;
+        int plusHours = lengthMinutes / 60;
+        int plusMinutes = lengthMinutes % 60;
+        int startMinutes = startTime % 100;
+        int startHours = startTime / 100;
+
+        if (startMinutes + plusMinutes >= 60){
+            plusHours += 1;
+            plusMinutes = (startMinutes + plusMinutes) % 60;
+        }
+        int endTime = ((startHours + plusHours)*100) + plusMinutes;
+        System.err.println("Start time " + startTime + " . End time " + endTime + ". WorkingDayFormat.getEndTimeFromLength()");
 
         return endTime;
     }

@@ -9,6 +9,7 @@ import frames.patient_frame.PatientsFrame;
 import instances.*;
 
 
+
 /**
  * Main programm class that hold important info
  *
@@ -19,6 +20,7 @@ import instances.*;
  * Created by Artem Siatchinov on 7/14/2016.
  */
 public class Programm {
+
 
     private DataBase DATA_BASE;
 
