@@ -172,4 +172,16 @@ public class WorkingDayFormat {
         return endTime;
     }
 
+    public static String getAppointmentLength(int startTime, int endTime) {
+
+        int hours = endTime/100 - startTime/100;
+        int minutes = 0;
+        if (hours != 0){
+            minutes = hours * 60;
+        }
+        minutes += endTime%100 - startTime%100;
+
+
+        return minutes + " минут";
+    }
 }

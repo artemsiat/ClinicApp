@@ -2,6 +2,7 @@ package instances;
 
 import javafx.beans.property.SimpleStringProperty;
 import programm.helper_classes.FormatDate;
+import programm.helper_classes.WorkingDayFormat;
 
 /**
  * Created by Artem Siatchinov on 8/4/2016.
@@ -39,8 +40,8 @@ public class Appointment extends DateInstance{
         doctorProperty.setValue(doctor);
         patientProperty.setValue(patient);
         dayProperty.setValue(FormatDate.convertDateToMyFormat(getDate()));
-        timeProperty.setValue("From 00 to 00");
-        lengthPropety.setValue("1 hour");
+        timeProperty.setValue(WorkingDayFormat.getHoursProperty(getStartTime(), getEndTime()));
+        lengthPropety.setValue(WorkingDayFormat.getAppointmentLength(getStartTime(), getEndTime()));
     }
 
     //Setters

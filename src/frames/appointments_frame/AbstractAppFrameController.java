@@ -535,7 +535,11 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
     @FXML void createAppBtnAction(ActionEvent event) {
 
         if (selectedPatient != null && selectedAppLength != null && selectedDoctor != null) {
-            appointments.addObject(createAppointment());
+            if (appointments.addObject(createAppointment())){
+                System.out.println("Successfully added new appointment to Data Base. Create App Btn Action in AbstractAppFrameController");
+            }else{
+                System.out.println("Error while adding new appointment to Data Base. Create App Btn Action in AbstractAppFrameController");
+            }
         }
     }
 

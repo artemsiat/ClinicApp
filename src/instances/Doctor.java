@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Created by Artem Siatchinov on 8/4/2016.
@@ -93,6 +94,18 @@ public class Doctor extends Person{
     public WorkingDayHours generateWorkingDayHours(){
 
         //getAppoitments();
+        return null;
+    }
+
+    public WorkingDay getWorkingDayByID(int id){
+
+        Optional<WorkingDay> wd = workingDays.stream().filter(workingDay -> workingDay.getID() == id).findFirst();
+        if (!wd.isPresent()){
+            wd= workingDaysPast.stream().findAny().filter(workingDay -> workingDay.getID() == id);
+        }
+        if (wd.isPresent()){
+            return wd.get();
+        }
         return null;
     }
 

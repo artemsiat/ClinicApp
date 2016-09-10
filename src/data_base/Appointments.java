@@ -108,6 +108,8 @@ public class Appointments extends DBSecondLayer{
 
     public boolean loadPatientAppointments(Patient patient){
 
+        //Todo only one appointment gets added to the patients list of appointments
+
         int patientId = patient.getID();
 
         String sqlStatement = "select * from " + TABLE_NAME + " where patient_id = " + patientId +";";
@@ -116,17 +118,16 @@ public class Appointments extends DBSecondLayer{
         if (objects == null){
             return false;
         }
-
+        patient.resetAppointments();
         for (DataBaseInstance dataBaseInstance : objects){
             Appointment appointment = (Appointment)dataBaseInstance;
             System.out.println(appointment.toString() + " Appointments.loadPatientAppointments");
             String doctorsName = dataBase.getDoctors().getDoctorByID(appointment.getDoctorId()).getFullName();
             String patientsName = patient.getFullName();
             appointment.generateProperties(doctorsName, patientsName);
-            patient.resetAppointments();
+
             patient.addAppointment(appointment);
         }
-
         return true;
     }
 
@@ -219,6 +220,7 @@ public class Appointments extends DBSecondLayer{
         //Add appointment to patient appointments List
         dataBase.getPatients().addNewAppointment(appointment);
         //Add appointment to Working day appointments List
+        dataBase.getDoctors().addNewAppointment(appointment);
     }
 
     @Override

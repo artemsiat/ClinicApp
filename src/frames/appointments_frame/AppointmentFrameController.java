@@ -6,12 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import programm.FrameColor;
 import programm.Programm;
-import programm.texts.FrameAppointmentText;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -35,27 +30,6 @@ public class AppointmentFrameController extends AbstractAppFrameController imple
     private ObservableList<WorkingDay> doctorsWorkingDayList; //Todo probably not needed
     private ObservableList<WorkingDayHours> doctorsWorkingHoursList;
 
-    //Choosing Patient
-
-
-
-
-    //Choose Doctor
-
-
-    @FXML private Label doctorLabelInfo;
-
-    //Appointment Fields
-
-
-    @FXML private DatePicker appDatePicker;
-
-
-    @FXML private Label startTimeLabelInfo;
-
-
-    @FXML private ComboBox<?> appLengthComboBox;
-
 
 
 
@@ -75,74 +49,6 @@ public class AppointmentFrameController extends AbstractAppFrameController imple
     @Override public void initialize (URL location, ResourceBundle resources){
         initializeAppController();
     }
-
-
-    private void initDoctorAppsTable() {
-
-    }
-
-
-    private void initLabels() {
-
-
-        setDoctorsLabel();
-        setAppointmentsFieldLabels();
-
-    }
-
-
-    //Selectors
-    private void selectDoctor(Person person) {
-        Doctor doctor = (Doctor)person;
-        selectedDoctor = doctor;
-    }
-
-    //Deselectors
-
-    private void deselectDoctor() {
-        selectedDoctor = null;
-        selectedWorkingDay = null;
-        setDoctorsLabel();
-    }
-
-    //Setters
-    private void setDoctorsLabel() {
-        if (selectedDoctor == null){
-
-            doctorLabelInfo.setTextFill(FrameColor.getColorError());
-            doctorLabelInfo.setText(FrameAppointmentText.getNoDoctorChosenText());
-            return;
-        }
-        doctorLabelInfo.setTextFill(FrameColor.getColorSucess());
-        doctorLabelInfo.setText(selectedDoctor.getFULL_NAME_PROPERTY() + ". Тел: " + selectedDoctor.getPHONE());
-    }
-
-    private void setAppointmentsFieldLabels() {
-        setAppStartTimeFields();
-        setAppLengthFields();
-    }
-
-    private void setAppStartTimeFields()
-    {
-        if (selectedWorkingDay == null){
-
-        }
-
-        else
-        {
-
-        }
-    }
-
-    private void setAppLengthFields() {
-        if (selectedWorkingDay == null){
-            appLengthComboBox.setDisable(true);
-
-        }
-    }
-
-
-
 
     //Buttons
 
