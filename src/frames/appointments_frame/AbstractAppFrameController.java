@@ -149,33 +149,24 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
      * 3.New Working day is not null - proceed
      */
     private void workingDaySelected(){
-
-
         if (selectedWorkingDay == null){
-
-
             setWorkingDayPickerInfo();
             //Check that hours combo box is deselected
             appHoursComboBox.setValue(null);
             appHoursComboBox.getItems().clear();
 
-            doctorAppsTable.setItems(null);
+            doctorsAppointments.clear();
             return;
         }
 
-
         if (selectedWorkingDay != null){
             //load list of appointments
-
             setWorkingDayPickerInfo();
-
             setHoursComboBox();
-
             //load appointments for that day
             if (dataBase.getAppointments().loadWorkingDayAppointments(selectedWorkingDay)){
-                doctorAppsTable.setItems(selectedWorkingDay.getAppointmentObservableList());
+                doctorsAppointments.setAll(selectedWorkingDay.getAppointmentObservableList());
             }
-
             return;
         }
     }
@@ -533,10 +524,15 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
 
     /*Buttons*/
     @FXML void createAppBtnAction(ActionEvent event) {
-
+        System.err.println("Doctors appointment list " + selectedWorkingDay.getAppointmentObservableList().size());
         if (selectedPatient != null && selectedAppLength != null && selectedDoctor != null) {
             if (appointments.addObject(createAppointment())){
                 System.out.println("Successfully added new appointment to Data Base. Create App Btn Action in AbstractAppFrameController");
+                System.err.println("Doctors appointment list " + selectedWorkingDay.getAppointmentObservableList().size());
+
+                /*Update table list*/
+                doctorsAppointments.clear();
+                doctorsAppointments.setAll(selectedWorkingDay.getAppointmentObservableList());
             }else{
                 System.out.println("Error while adding new appointment to Data Base. Create App Btn Action in AbstractAppFrameController");
             }

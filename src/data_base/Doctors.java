@@ -378,6 +378,7 @@ public class Doctors extends DBSecondLayer{
         int wdId = appointment.getWokringDayId();
         Doctor doctor = getDoctorByID(doctorId);
         WorkingDay workingDay = doctor.getWorkingDayByID(wdId);
+        workingDay.addNewAppointment(appointment);
         System.out.println("Found Working Day : " + workingDay.toString());
 
 

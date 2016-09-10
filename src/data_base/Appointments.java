@@ -216,6 +216,9 @@ public class Appointments extends DBSecondLayer{
     protected void addNewObjectToList(DataBaseInstance dataBaseInstance) {
 
         Appointment appointment = (Appointment) dataBaseInstance;
+        String doctorsName = dataBase.getDoctors().getDoctorByID(appointment.getDoctorId()).getFullName();
+        String patientsName = dataBase.getPatients().getPatientById(appointment.getPatientId()).getFullName();
+        appointment.generateProperties(doctorsName, patientsName);
 
         //Add appointment to patient appointments List
         dataBase.getPatients().addNewAppointment(appointment);

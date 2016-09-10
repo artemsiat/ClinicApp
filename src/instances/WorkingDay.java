@@ -257,4 +257,8 @@ public class WorkingDay extends DateInstance implements Comparable<WorkingDay>{
 
         return false;
     }
+
+    public void addNewAppointment(Appointment appointment) {
+        appointmentObservableList.add(appointment);
+    }
 }

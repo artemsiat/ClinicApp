@@ -1,6 +1,8 @@
 package frames.appointments_frame;
 
 import instances.Appointment;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -12,7 +14,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class DoctorAppointmentTable extends PatientAppointmentTable{
     //Doctor Appointments Table
 
-    @FXML protected TableView<Appointment> doctorAppsTable;
+    @FXML private TableView<Appointment> doctorAppsTable;
+
+    protected ObservableList<Appointment> doctorsAppointments;
 
     @FXML private TableColumn<Appointment, String> wdDoctorAppTableColl;
     @FXML private TableColumn<Appointment, String> wdPatientAppTableColl;
@@ -25,7 +29,7 @@ public class DoctorAppointmentTable extends PatientAppointmentTable{
     }
 
     protected void initializeDoctorAppController() {
-
+        doctorsAppointments = FXCollections.observableArrayList();
         initDoctorsAppsTable();
     }
 
@@ -37,5 +41,8 @@ public class DoctorAppointmentTable extends PatientAppointmentTable{
         wdTimeAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("timeProperty"));
         wdLengthAppTableColl.setCellValueFactory(new PropertyValueFactory<Appointment, String>("lengthPropety"));
 
+        doctorAppsTable.setItems(doctorsAppointments);
     }
+
+
 }
