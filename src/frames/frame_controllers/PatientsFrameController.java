@@ -11,6 +11,7 @@ import instances.Person;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -39,6 +40,9 @@ public class PatientsFrameController extends AbstractPersonController implements
     @FXML private TableColumn<Appointment, String> dayAppTableColl;
     @FXML private TableColumn<Appointment, String> timeAppTableColl;
     @FXML private TableColumn<Appointment, String> lengthAppTableColl;
+
+    /*Todo to be finished*/
+    @FXML private CheckBox showPassedAppsCheckBox;
 
     //Constructor
 

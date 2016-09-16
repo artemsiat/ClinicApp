@@ -68,7 +68,7 @@
                 <Label fx:id="DOB_INFO_LABEL" text="Label" GridPane.columnIndex="2" />
             </children>
         </GridPane>
-        <HBox layoutX="861.0" layoutY="420.0" spacing="10.0">
+        <HBox layoutX="861.0" layoutY="287.0" spacing="10.0">
             <children>
                 <Button fx:id="ADD_PERSON_BUTTON" mnemonicParsing="false" onAction="#addBtnAction" text="add" />
                 <Button fx:id="UPDATE_PERSON_BUTTON" mnemonicParsing="false" onAction="#updateBtnAction" text="update" />
@@ -77,23 +77,23 @@
                 <Button fx:id="CLEAR_FIELDS_BUTTON" mnemonicParsing="false" onAction="#clearFieldsBtnAcion" text="clear fields" />
             </children>
         </HBox>
-        <HBox alignment="CENTER" layoutX="18.0" layoutY="453.0" spacing="15.0">
+        <HBox alignment="CENTER" layoutX="21.0" layoutY="249.0" spacing="15.0">
             <children>
                 <Label fx:id="TABLE_IS_CREATED_LABEL" text="Label" />
                 <Label fx:id="TABLE_CREATE_STATUS_LABEL" text="Label" />
-                <Button fx:id="CHECK_TABLE_BUTTON" mnemonicParsing="false" onAction="#checkTableBtnAction" text="check table" />
+                <Button fx:id="CHECK_TABLE_BUTTON" mnemonicParsing="false" onAction="#checkTableBtnAction" prefHeight="25.0" prefWidth="84.0" text="check table" />
                 <Button fx:id="CREATE_TABLE_BUTTON" mnemonicParsing="false" onAction="#createTableBtnAction" text="create table" />
                 <Button fx:id="DROP_TABLE_BUTTON" mnemonicParsing="false" onAction="#dropTableBtnAction" text="drop table" />
             </children>
         </HBox>
         <Button fx:id="EXIT_BUTTON" layoutX="1248.0" layoutY="723.0" mnemonicParsing="false" onAction="#exitBtnAction" text="Exit" />
-        <TextArea fx:id="LOG_TEXT_AREA" editable="false" layoutX="18.0" layoutY="543.0" prefHeight="115.0" prefWidth="1042.0">
+        <TextArea fx:id="LOG_TEXT_AREA" editable="false" layoutX="14.0" layoutY="642.0" prefHeight="115.0" prefWidth="1042.0">
             <font>
                 <Font size="10.0" />
             </font></TextArea>
-        <CheckBox fx:id="SHOW_REMOVED_CHECKBOX" layoutX="861.0" layoutY="373.0" mnemonicParsing="false" text="Show Deleted" />
-      <Separator layoutX="2.0" layoutY="513.0" prefHeight="8.0" prefWidth="1328.0" />
-      <TableView fx:id="appointmentsTable" layoutX="17.0" layoutY="253.0" prefHeight="158.0" prefWidth="829.0">
+        <CheckBox fx:id="SHOW_REMOVED_CHECKBOX" layoutX="861.0" layoutY="253.0" mnemonicParsing="false" text="Show Deleted" />
+      <Separator layoutY="620.0" prefHeight="8.0" prefWidth="1328.0" />
+      <TableView fx:id="appointmentsTable" layoutX="21.0" layoutY="454.0" prefHeight="158.0" prefWidth="829.0">
          <columns>
             <TableColumn fx:id="doctorAppTableColl" prefWidth="149.0" text="Doctor" />
             <TableColumn fx:id="patientAppTableColl" prefWidth="188.0" text="Patient" />
@@ -102,5 +102,6 @@
             <TableColumn fx:id="lengthAppTableColl" prefWidth="152.0" text="Length" />
          </columns>
       </TableView>
+      <CheckBox fx:id="showPassedAppsCheckBox" layoutX="861.0" layoutY="454.0" mnemonicParsing="false" text="Show past appointments" />
     </children>
 </AnchorPane>

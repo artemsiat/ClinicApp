@@ -160,13 +160,13 @@ public class AbstractAppFrameController extends DoctorAppointmentTable{
         }
 
         if (selectedWorkingDay != null){
-            //load list of appointments
-            setWorkingDayPickerInfo();
-            setHoursComboBox();
             //load appointments for that day
+            System.out.println("Loading appointments for doctor: " + selectedDoctor.getFullName() + ". on " + selectedWorkingDay.getDate() + ". AbstractAppFrameController  - WorkingDaySelected()");
             if (dataBase.getAppointments().loadWorkingDayAppointments(selectedWorkingDay)){
                 doctorsAppointments.setAll(selectedWorkingDay.getAppointmentObservableList());
             }
+            setWorkingDayPickerInfo();
+            setHoursComboBox();
             return;
         }
     }
