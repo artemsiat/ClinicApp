@@ -28,6 +28,7 @@ public class Patients extends DBSecondLayer{
     private String LOAD_TABLE_STATEMENT;
     private String ADD_OBJECT_STATEMENT;
 
+    /*Constructor*/
     public Patients(DataBase dataBase, Programm programm){
 
         super(programm, dataBase);

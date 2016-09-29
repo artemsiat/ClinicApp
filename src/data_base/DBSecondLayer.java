@@ -149,6 +149,23 @@ public abstract class DBSecondLayer extends DBFirstLayer {
 
     }
 
+    /*Loads Limited amount of objects*/
+    public boolean loadObjectsLimited(int limit) {
+        String sqlStatement = getLoadTableStatement(limit);
+        String operation = DataBaseOperationText.getLoadObjectsOperation();
+
+        if (!TABLE_CREATED) {
+            setStatus(operation + DataBaseErrorText.getTableNotCreatedError());
+            return false;
+        }
+
+        ArrayList<DataBaseInstance> objects = loadObjectsOperation(sqlStatement, operation);
+
+        objectLoaded(objects);
+
+        return true;
+    }
+
     //Add Object
 
     /**
@@ -299,6 +316,12 @@ public abstract class DBSecondLayer extends DBFirstLayer {
     private String getLoadTableStatement(){
         String tableName = getTableName();
         String sqlStatement = "select * from " + tableName;
+        return sqlStatement;
+    }
+    /*Creates select statement with limited amount of results*/
+    private String getLoadTableStatement(int limit){
+        String tableName = getTableName();
+        String sqlStatement = "select * from " + tableName + " LIMIT " + limit;
         return sqlStatement;
     }
     //Only for Working Days
