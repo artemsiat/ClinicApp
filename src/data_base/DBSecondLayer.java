@@ -150,8 +150,8 @@ public abstract class DBSecondLayer extends DBFirstLayer {
     }
 
     /*Loads Limited amount of objects*/
-    public boolean loadObjectsLimited(int limit) {
-        String sqlStatement = getLoadTableStatement(limit);
+    public boolean loadObjectsLimited(int limit, boolean deleted) {
+        String sqlStatement = getLoadTableStatement(limit, deleted);
         String operation = DataBaseOperationText.getLoadObjectsOperation();
 
         if (!TABLE_CREATED) {
@@ -319,9 +319,9 @@ public abstract class DBSecondLayer extends DBFirstLayer {
         return sqlStatement;
     }
     /*Creates select statement with limited amount of results*/
-    private String getLoadTableStatement(int limit){
+    private String getLoadTableStatement(int limit, boolean deleted){
         String tableName = getTableName();
-        String sqlStatement = "select * from " + tableName + " LIMIT " + limit;
+        String sqlStatement = "select * from " + tableName + " where deleted = " + deleted + " LIMIT " + limit;
         return sqlStatement;
     }
     //Only for Working Days
