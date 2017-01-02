@@ -201,6 +201,11 @@ public class Appointments extends DBSecondLayer{
     }
 
     @Override
+    protected void limitedObjectsLoaded(ArrayList<DataBaseInstance> objects) {
+
+    }
+
+    @Override
     protected String getUpdateObjectStatement(DataBaseInstance oldObject, DataBaseInstance newObject) {
         return null;
     }

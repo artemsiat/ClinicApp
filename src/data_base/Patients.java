@@ -8,6 +8,7 @@ import programm.Programm;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Artem Siatchinov on 8/4/2016.
@@ -20,6 +21,7 @@ public class Patients extends DBSecondLayer{
     //ArrayList
     private ObservableList<Person> patients;
     private ObservableList<Person> patientsRemoved;
+    private ObservableList<Person> patientsLimited;
 
 
     //Statements
@@ -41,6 +43,7 @@ public class Patients extends DBSecondLayer{
         //Initializes new list of administrators
         patients = FXCollections.observableArrayList();
         patientsRemoved = FXCollections.observableArrayList();
+        patientsLimited = FXCollections.observableArrayList();
 
         //Check table if created
         checkTable();
@@ -83,6 +86,7 @@ public class Patients extends DBSecondLayer{
     protected void resetList() {
         patients.clear();
         patientsRemoved.clear();
+        patientsLimited.clear();
     }
 
     @Override protected String getUpdateObjectStatement(DataBaseInstance oldObject, DataBaseInstance newObject) {
@@ -188,6 +192,24 @@ public class Patients extends DBSecondLayer{
     }
 
     @Override
+    protected void limitedObjectsLoaded(ArrayList<DataBaseInstance> objects) {
+        if (objects == null){
+            return;
+        }
+
+        resetList();
+        System.out.println();
+        System.out.println("Printing Patients in data_base.Patients.processLoadResultSet");
+        for (DataBaseInstance dataBaseInstance : objects){
+            Patient patient = (Patient)dataBaseInstance;
+            patient.generateProperties();
+            patientsLimited.add(patient);
+            System.out.println(patient.toString());
+        }
+        System.out.println();
+    }
+
+    @Override
     protected ArrayList<DataBaseInstance> processLoadResultSet(ResultSet resultSet) throws SQLException {
 
         ArrayList<DataBaseInstance> objects = new ArrayList<>();
@@ -257,6 +279,10 @@ public class Patients extends DBSecondLayer{
 
     public ObservableList<Person> getPatientsRemoved() {
         return patientsRemoved;
+    }
+
+    public ObservableList<Person> getPatientsLimited() {
+        return patientsLimited;
     }
 
     //Appointments

@@ -164,6 +164,11 @@ public class WorkingDays extends DBSecondLayer{
     }
 
     @Override
+    protected void limitedObjectsLoaded(ArrayList<DataBaseInstance> objects) {
+
+    }
+
+    @Override
     protected ArrayList<DataBaseInstance> processLoadResultSet(ResultSet resultSet) throws SQLException {
 
         ArrayList<DataBaseInstance> objects = new ArrayList<>();

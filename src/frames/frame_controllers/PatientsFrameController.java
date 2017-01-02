@@ -117,15 +117,22 @@ public class PatientsFrameController extends AbstractPersonController implements
 
     @Override
     protected ObservableList<Person> getPersonList() {
-        return PATIENTS.getPatients();
+        System.out.println("Called getPersonList() " + PATIENTS.getPatientsLimited().size());
+        PATIENTS.loadObjectsLimited(10, false);
+        System.out.println("Called getPersonList() " + PATIENTS.getPatientsLimited().size());
+        return PATIENTS.getPatientsLimited();
+        //return PATIENTS.getPatients(); /*Old Implementation*/
     }
 
     @Override
     protected ObservableList<Person> getRemovedPersonList() {
-        return PATIENTS.getPatientsRemoved();
+        PATIENTS.loadObjectsLimited(10, true);
+        return PATIENTS.getPatientsLimited();
+        //return PATIENTS.getPatientsRemoved();/*Old Implementation*/
     }
 
-    @Override protected void createNewObject(Person person) {
+    @Override
+    protected void createNewObject(Person person) {
 
     }
 

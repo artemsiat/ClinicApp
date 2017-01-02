@@ -340,6 +340,7 @@ public abstract class DBSecondLayer extends DBFirstLayer {
 
     //Load
     protected abstract void objectLoaded(ArrayList<DataBaseInstance> objects);
+    protected abstract void limitedObjectsLoaded(ArrayList<DataBaseInstance> objects);
     //update
     protected abstract String getUpdateObjectStatement(DataBaseInstance oldObject, DataBaseInstance newObject);
     protected abstract void updateObjectsInList(DataBaseInstance oldObject, DataBaseInstance newObject);

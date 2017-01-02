@@ -5,26 +5,31 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import programm.Programm;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-
+import ru.clinic.application.java.service.AppService;
+@Component
 public class WelcomeFrame extends Application {
+
+    private final static Logger LOGGER = Logger.getLogger(WelcomeFrame.class.getName());
 
     private Programm PROGRAMM;
     private WelcomeFrameController CONTROLLER;
     private Stage PRIMARY_STAGE;
 
+    @Autowired
+    private AppService applicationService;
+
+    public WelcomeFrame(){
+        LOGGER.debug("[WelcomeFrame] WelcomeFrame constructor!");
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        //Test
-        //testingMyServer();
+        //applicationService.test();
 
 
         this.PRIMARY_STAGE = primaryStage;
@@ -41,39 +46,10 @@ public class WelcomeFrame extends Application {
         PRIMARY_STAGE.setTitle("\"ООО\" Классическая гомеопатия");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
-
-    }
-
-    private void testingMyServer(){
-        URL url;
-
-        try {
-            // get URL content
-            url = new URL("http://localhost:8085/messenger/webapi/messages");
-            URLConnection conn = url.openConnection();
-
-            // open the stream and put it into BufferedReader
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream()));
-
-            System.out.println(br.readLine());
-
-            br.close();
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public void stop(){
         PRIMARY_STAGE.close();
     }
 
-
-    public static void main(String[] args) {
-        launch(args);
-    }
 }

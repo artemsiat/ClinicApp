@@ -133,6 +133,11 @@ public class Administrators extends DBSecondLayer {
 
     }
 
+    @Override
+    protected void limitedObjectsLoaded(ArrayList<DataBaseInstance> objects) {
+
+    }
+
 
     //Object Methods
 

@@ -50,8 +50,8 @@ public class DataBase {
         patients = new Patients(this, programm);
         patients.loadObjects();
 
-        System.out.println("Loading patients limited .DataBase.loadMainDB()");
-        patients.loadObjectsLimited(30, false);
+        //System.out.println("Loading patients limited .DataBase.loadMainDB()");
+        //patients.loadObjectsLimited(30, false);
 
         long timePatients = System.nanoTime()-startTime;
         startTime = System.nanoTime();
