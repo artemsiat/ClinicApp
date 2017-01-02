@@ -2,33 +2,28 @@ package ru.clinic.application.java.fx.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Button;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.fx.frames.FrameAdmins;
-import ru.clinic.application.java.fx.frames.FrameDbTables;
 
 /**
  * Created by Artem Siatchinov on 1/2/2017.
  */
 
 @Component
-public class ControllerMain {
+public class ControllerAdmins {
 
     @Autowired
     FrameAdmins frameAdmins;
 
-    @Autowired
-    FrameDbTables frameDbTables;
-
-
+    @FXML
+    private Button closeBtn;
 
     @FXML
-    private MenuItem menuAddAdmin;
-
-    @FXML
-    private MenuItem menuDbTables;
-
+    void closeBtnAction(ActionEvent event) {
+        frameAdmins.stop();
+    }
 
     public void startController() {
 
@@ -38,13 +33,4 @@ public class ControllerMain {
 
     }
 
-    @FXML
-    void menuAddAdminAction(ActionEvent event) {
-        frameAdmins.start();
-    }
-
-    @FXML
-    void menuDbTablesAction(ActionEvent event) {
-        frameDbTables.start();
-    }
 }

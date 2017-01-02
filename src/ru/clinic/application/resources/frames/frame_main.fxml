@@ -12,12 +12,12 @@
         <menus>
           <Menu mnemonicParsing="false" text="Добавить">
             <items>
-              <MenuItem mnemonicParsing="false" text="Администратора" />
+              <MenuItem fx:id="menuAddAdmin" mnemonicParsing="false" onAction="#menuAddAdminAction" text="Администратора" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Настройки">
             <items>
-              <MenuItem mnemonicParsing="false" text="База данных" />
+              <MenuItem fx:id="menuDbTables" mnemonicParsing="false" onAction="#menuDbTablesAction" text="База данных" />
             </items>
           </Menu>
         </menus>

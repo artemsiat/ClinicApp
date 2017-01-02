@@ -22,13 +22,17 @@ public class DataBaseDao {
             "fio varchar(125),"+
             "dob date,"+
             "phone varchar(25),"+
+            "phone2 varchar(25),"+
+            "phone3 varchar(25),"+
             "email varchar(25),"+
             "user_name varchar(25),"+
             "password varchar(25),"+
             "creator int,"+
             "created timestamp,"+
+            "who_modified int,"+
             "modified timestamp,"+
-            "deleted boolean)";
+            "who_removed int,"+
+            "removed boolean)";
 
     @Autowired
     JdbcTemplate jdbcTemplate;

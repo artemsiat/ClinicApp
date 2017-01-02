@@ -43,14 +43,6 @@ public class DataBaseService {
                 return false;
             }
         }
-
         return true;
-/*        boolean checkAdminTable = dataBaseDao.checkAdminTable();
-        boolean checkDoctorsTable = dataBaseDao.checkDoctorsTable();
-        boolean checkPatientsTable = dataBaseDao.checkPatientsTable();
-        boolean checkAppointmentTable = dataBaseDao.checkAppointmentTable();
-        boolean checkSettingsTable = dataBaseDao.checkSettingsTable();
-
-        return  (checkAdminTable && checkAppointmentTable && checkDoctorsTable && checkPatientsTable && checkSettingsTable);*/
     }
 }
