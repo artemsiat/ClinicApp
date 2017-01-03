@@ -21,9 +21,9 @@ public class DataBaseDao {
             "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
             "fio varchar(125),"+
             "dob date,"+
-            "phone varchar(25),"+
-            "phone2 varchar(25),"+
-            "phone3 varchar(25),"+
+            "cellphone varchar(25),"+
+            "cellphone2 varchar(25),"+
+            "homephone varchar(25),"+
             "email varchar(25),"+
             "user_name varchar(25),"+
             "password varchar(25),"+
@@ -32,6 +32,7 @@ public class DataBaseDao {
             "who_modified int,"+
             "modified timestamp,"+
             "who_removed int,"+
+            "when_removed timestamp,"+
             "removed boolean)";
 
     @Autowired

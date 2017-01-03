@@ -17,6 +17,7 @@ public class AppService {
 
     private final ObservableList<Admin> admins;
     private final Admin mainAdmin;
+    private Admin currentAdmin;
 
     @Autowired
     AppDao appDao;
@@ -29,6 +30,7 @@ public class AppService {
     private Admin setMainAdmin() {
         Admin admin = new Admin();
         admin.setFio("administrator");
+        admin.setId(0);
         return admin;
     }
 
@@ -53,5 +55,12 @@ public class AppService {
         return null;
     }
 
+    public Admin getCurrentAdmin() {
+        return currentAdmin;
+    }
+
+    public void setCurrentAdmin(Admin currentAdmin) {
+        this.currentAdmin = currentAdmin;
+    }
 }
 

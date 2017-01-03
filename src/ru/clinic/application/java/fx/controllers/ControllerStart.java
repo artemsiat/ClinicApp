@@ -26,7 +26,7 @@ import ru.clinic.application.java.service.DataBaseService;
 @Component
 public class ControllerStart {
 
-    boolean TESTING = true;
+    boolean TESTING = false;
 
     private final static Logger LOGGER = Logger.getLogger(ControllerStart.class.getName());
     private final static String PASSWORD_REQUIRED = "пароль";
@@ -114,6 +114,7 @@ public class ControllerStart {
     void enterBtnAction(ActionEvent event) {
         LOGGER.debug("[ControllerStart][enterBtnAction]");
         if (checkAuthorization()){
+            appService.setCurrentAdmin(adminSelected);
             LOGGER.debug("[ControllerStart][enterBtnAction] admin is authorized. Checking if dataBase tables are set");
             if (dataBaseService.checkTables()){
                 LOGGER.debug("[ControllerStart][enterBtnAction] All DataBase tables are set. Starting Main Frame");
