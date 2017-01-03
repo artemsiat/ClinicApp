@@ -2,6 +2,7 @@ package ru.clinic.application.java.fx.controllers;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,7 +17,7 @@ import ru.clinic.application.java.dao.entity.Admin;
 import ru.clinic.application.java.fx.frames.FrameDbTables;
 import ru.clinic.application.java.fx.frames.FrameMain;
 import ru.clinic.application.java.fx.frames.FrameStart;
-import ru.clinic.application.java.service.AppService;
+import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DataBaseService;
 
 /**
@@ -45,10 +46,10 @@ public class ControllerStart {
     FrameDbTables frameDbTables;
 
     @Autowired
-    AppService appService;
+    DataBaseService dataBaseService;
 
     @Autowired
-    DataBaseService dataBaseService;
+    AdminService adminService;
 
     @FXML
     private Button enterButton;
@@ -66,7 +67,7 @@ public class ControllerStart {
     private Label authLabel;
 
     public ControllerStart(){
-        LOGGER.debug("[ControllerStart][constructor]");
+
     }
 
     public void starController(){
@@ -91,15 +92,7 @@ public class ControllerStart {
 
     @FXML
     void adminDropBoxAction(ActionEvent event) {
-        LOGGER.debug("[ControllerStart][adminDropBoxAction] Admin chosen [" + adminDropBox.getSelectionModel().getSelectedItem() + "]");
-        Admin admin = appService.getAdminByFio(adminDropBox.getSelectionModel().getSelectedItem());
-        adminSelected = admin;
-        if (admin == null){
-        }else if (admin.getPassword() != null && !admin.getPassword().isEmpty()){
-            passwordTextField.setPromptText(PASSWORD_REQUIRED);
-        }else {
-            passwordTextField.setPromptText(PASSWORD_NOT_REQUIRED);
-        }
+
     }
 
     @FXML
@@ -114,7 +107,7 @@ public class ControllerStart {
     void enterBtnAction(ActionEvent event) {
         LOGGER.debug("[ControllerStart][enterBtnAction]");
         if (checkAuthorization()){
-            appService.setCurrentAdmin(adminSelected);
+            adminService.setCurrentAdmin(adminSelected);
             LOGGER.debug("[ControllerStart][enterBtnAction] admin is authorized. Checking if dataBase tables are set");
             if (dataBaseService.checkTables()){
                 LOGGER.debug("[ControllerStart][enterBtnAction] All DataBase tables are set. Starting Main Frame");
@@ -150,15 +143,35 @@ public class ControllerStart {
     }
 
     private void initDropBox(){
-        adminDropBox.getItems().add(appService.getMainAdmin().getFio());
-        for (Admin admin : appService.getAdminsList()){
+
+        adminDropBox.getItems().add(adminService.getMainAdmin().getFio());
+
+        ObservableList<Admin> admins = adminService.loadAdmins();
+        admins.forEach(admin ->{
             adminDropBox.getItems().add(admin.getFio());
-        }
+        });
 
         adminDropBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 authLabel.setText("");
+
+                if (newValue != null) {
+                    Admin admin = adminService.getAdminByFio(adminDropBox.getSelectionModel().getSelectedItem());
+                    LOGGER.debug("[ControllerStart][adminDropBoxAction] Admin chosen [" + newValue + "].");
+                    adminSelected = admin;
+                    if (admin != null) {
+                        if (admin.getPassword() != null && !admin.getPassword().isEmpty()) {
+                            passwordTextField.setPromptText(PASSWORD_REQUIRED);
+                        } else {
+                            passwordTextField.setPromptText(PASSWORD_NOT_REQUIRED);
+                        }
+                    }else {
+                        passwordTextField.setPromptText(PASSWORD_REQUIRED);
+                    }
+                }else {
+                    passwordTextField.setPromptText(PASSWORD_REQUIRED);
+                }
             }
         });
     }

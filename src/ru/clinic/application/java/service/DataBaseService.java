@@ -27,7 +27,7 @@ public class DataBaseService {
     DataBaseDao dataBaseDao;
 
     public DataBaseService(){
-        LOGGER.debug("[DataBaseService][constructor]");
+
     }
 
     @PostConstruct

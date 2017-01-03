@@ -22,7 +22,7 @@ public class AppDao {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public AppDao(){
-        LOGGER.debug("[AppDao][constructor]");
+
     }
 
 

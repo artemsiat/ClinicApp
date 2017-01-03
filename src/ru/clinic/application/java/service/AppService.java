@@ -2,7 +2,6 @@ package ru.clinic.application.java.service;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.AppDao;
@@ -34,25 +33,14 @@ public class AppService {
         return admin;
     }
 
+
+
     public ObservableList<Admin> getAdminsList() {
         return admins;
     }
 
     public Admin getMainAdmin(){
         return mainAdmin;
-    }
-
-    public Admin getAdminByFio(String selectedFio) {
-        if (mainAdmin.getFio().equals(selectedFio)){
-            return mainAdmin;
-        }
-
-        for (Admin admin : admins){
-            if (StringUtils.equals(admin.getFio(), selectedFio)){
-                return admin;
-            }
-        }
-        return null;
     }
 
     public Admin getCurrentAdmin() {

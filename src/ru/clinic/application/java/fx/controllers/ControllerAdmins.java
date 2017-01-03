@@ -20,6 +20,7 @@ import ru.clinic.application.java.service.AdminService;
 public class ControllerAdmins {
 
     private final static Logger LOGGER = Logger.getLogger(ControllerAdmins.class.getName());
+    private Admin selectedAdmin = null;
 
     @Autowired
     FrameAdmins frameAdmins;
@@ -125,14 +126,46 @@ public class ControllerAdmins {
         clearFields();
         clearLabels();
         setTable();
+        setTableListener();
+    }
 
+    private void setTableListener() {
+        adminTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null){
+                adminCleared();
+            }else{
+                adminSelected();
+            }
+        });
+    }
+
+    private void adminCleared() {
+        selectedAdmin = null;
+        clearFields();
+        clearLabels();
+    }
+
+    private void setSelectedAdmin() {
+        fioField.setText(selectedAdmin.getFio());
+        dobDatePicker.setValue(selectedAdmin.getDob());
+        cellPhoneField.setText(selectedAdmin.getCellPhone());
+        cellPhoneField2.setText(selectedAdmin.getCellPhoneTwo());
+        homePhoneField.setText(selectedAdmin.getHomePhone());
+        emailField.setText(selectedAdmin.getEmail());
+        loginField.setText(selectedAdmin.getUserName());
+        passField.setText(selectedAdmin.getPassword());
+    }
+
+    private void adminSelected() {
+        selectedAdmin = adminService.getAdmins().get(adminTable.getSelectionModel().getSelectedIndex());
+        setSelectedAdmin();
     }
 
     private void setTable(){
-        fioCol.setCellValueFactory(new PropertyValueFactory<Admin, String>("fio"));
-        cellPhoneCol.setCellValueFactory(new PropertyValueFactory<Admin, String>(""));
-        homePhoneCol.setCellValueFactory(new PropertyValueFactory<Admin, String>(""));
-        emailCol.setCellValueFactory(new PropertyValueFactory<Admin, String>(""));
+        fioCol.setCellValueFactory(new PropertyValueFactory<Admin, String>("fioProp"));
+        cellPhoneCol.setCellValueFactory(new PropertyValueFactory<Admin, String>("cellPhoneProp"));
+        homePhoneCol.setCellValueFactory(new PropertyValueFactory<Admin, String>("homePhonePro"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<Admin, String>("emailProp"));
         ObservableList<Admin> admins = adminService.loadAdmins();
 
         adminTable.setItems(admins);
@@ -163,6 +196,5 @@ public class ControllerAdmins {
     public void stopController() {
         clearFields();
         clearLabels();
-
     }
 }

@@ -11,18 +11,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="876.0" prefWidth="1300.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1531.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane dividerPositions="0.5385208012326657" prefHeight="961.0" prefWidth="1497.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.6023544800523217" prefHeight="961.0" prefWidth="1497.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TableView fx:id="adminTable" layoutY="-2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="adminTable" layoutY="-2.0" prefHeight="874.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="fioCol" prefWidth="258.0" text="ФИО" />
-                      <TableColumn fx:id="cellPhoneCol" minWidth="0.0" prefWidth="151.0" text="Моб. телефон" />
-                        <TableColumn fx:id="homePhoneCol" prefWidth="155.0" text="Дом. телефон" />
-                        <TableColumn fx:id="emailCol" prefWidth="133.0" text="E-mail" />
+                      <TableColumn fx:id="fioCol" prefWidth="289.6666717529297" text="ФИО" />
+                      <TableColumn fx:id="cellPhoneCol" minWidth="0.0" prefWidth="185.33334350585938" text="Моб. телефон" />
+                        <TableColumn fx:id="homePhoneCol" prefWidth="161.33331298828125" text="Дом. телефон" />
+                        <TableColumn fx:id="emailCol" prefWidth="301.66668701171875" text="E-mail" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -70,13 +70,23 @@ public class AdminDao {
                     Admin admin = new Admin();
                     admin.setId(rs.getInt("id"));
                     admin.setFio(rs.getString("fio"));
+                    admin.setCellPhone(rs.getString("cellphone"));
+                    admin.setCellPhoneTwo(rs.getString("cellphone2"));
+                    admin.setHomePhone(rs.getString("homephone"));
+                    admin.setEmail(rs.getString("email"));
+                    admin.setUserName(rs.getString("user_name"));
+                    admin.setPassword(rs.getString("password"));
+
+                    Date dob = rs.getDate("dob");
+                    if (dob != null){
+                        admin.setDob(dob.toLocalDate());
+                    }
+
                     admins.add(admin);
                 }
-
                 return admins;
             }
         });
-        System.out.println(admins.size());
         return admins;
     }
 }

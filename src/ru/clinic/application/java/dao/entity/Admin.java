@@ -9,23 +9,6 @@ import java.time.LocalDate;
  */
 public class Admin {
 
-    public String  s =             "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
-            "fio varchar(125),"+
-            "dob date,"+
-            "cellphone varchar(25),"+
-            "cellphone2 varchar(25),"+
-            "homephone varchar(25),"+
-            "email varchar(25),"+
-            "user_name varchar(25),"+
-            "password varchar(25),"+
-            "creator int,"+
-            "created timestamp,"+
-            "who_modified int,"+
-            "modified timestamp,"+
-            "who_removed int,"+
-            "when_removed timestamp,"+
-            "removed boolean)";
-
     private int id;
     private String fio;
     private LocalDate dob;
@@ -34,7 +17,9 @@ public class Admin {
     private String homePhone;
     private String email;
 
+    private String userName;
     private String password;
+
 
     private SimpleStringProperty fioProp = new SimpleStringProperty();
     private SimpleStringProperty cellPhoneProp = new SimpleStringProperty();
@@ -111,7 +96,14 @@ public class Admin {
         setEmailProp(email);
     }
 
-    /*Properties*/
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+/*Properties*/
 
     public String getFioProp() {
         return fioProp.get();

@@ -42,7 +42,7 @@ public class DataBaseDao {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public DataBaseDao(){
-        LOGGER.debug("[DataBaseDao][constructor]");
+
     }
 
     public boolean checkAdminTable(){

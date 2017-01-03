@@ -5,10 +5,9 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="988.0" prefWidth="1696.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <MenuBar layoutX="209.0" layoutY="21.0" prefHeight="25.0" prefWidth="731.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <MenuBar layoutX="209.0" layoutY="21.0" prefHeight="25.0" prefWidth="731.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Добавить">
             <items>

@@ -1,6 +1,7 @@
 package ru.clinic.application.java.service;
 
 import javafx.collections.ObservableList;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,8 @@ import java.time.LocalDate;
 public class AdminService {
 
     private static final Logger LOGGER = Logger.getLogger(AdminService.class.getName());
+    private final Admin mainAdmin;
+    private Admin currentAdmin;
     private ObservableList<Admin> admins;
 
     @Autowired
@@ -24,6 +27,26 @@ public class AdminService {
 
     @Autowired
     AppService appService;
+
+    public AdminService(){
+        mainAdmin = initMainAdmin();
+    }
+
+    private Admin initMainAdmin() {
+
+        Admin admin = new Admin();
+        admin.setFio("administrator");
+        admin.setId(0);
+        admin.setPassword("admin");
+
+        LOGGER.debug("[AdminService][initMainAdmin] Initializing Main Admin Instance [" + admin.getFio() + "]");
+
+        return admin;
+    }
+
+    public Admin getMainAdmin() {
+        return mainAdmin;
+    }
 
     public void addCreateAdmin(String fio, LocalDate dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password) {
         Date dobDate = null;
@@ -34,8 +57,35 @@ public class AdminService {
     }
 
     public ObservableList<Admin> loadAdmins() {
+        LOGGER.debug("[AdminService][loadAdmins] Loading admins from data base");
         ObservableList<Admin> adminObservableList = adminDao.selectAllAdmins();
         admins = adminObservableList;
+        LOGGER.debug("[AdminService][loadAdmins] Successfully loaded ["+ adminObservableList.size() + "] administrators" );
         return admins;
+    }
+
+    public ObservableList<Admin> getAdmins() {
+        return admins;
+    }
+
+    public Admin getAdminByFio(String selectedFio) {
+        if (mainAdmin.getFio().equals(selectedFio)){
+            return mainAdmin;
+        }
+
+        for (Admin admin : admins){
+            if (StringUtils.equals(admin.getFio(), selectedFio)){
+                return admin;
+            }
+        }
+        return null;
+    }
+
+    public Admin getCurrentAdmin() {
+        return currentAdmin;
+    }
+
+    public void setCurrentAdmin(Admin currentAdmin) {
+        this.currentAdmin = currentAdmin;
     }
 }
