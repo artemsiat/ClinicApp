@@ -31,6 +31,12 @@ public class AdminDao {
             "created) " +
             "VALUES(?,?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
 
+    private final static String UPDATE_ADMIN = "UPDATE admin SET " +
+            "fio=?, dob=?, cellphone=?, cellphone2=?, homephone=?, email=?, user_name=?, password=?, who_modified=?, modified=CURRENT_TIMESTAMP " +
+            "WHERE id = ?";
+
+    private final static String REMOVE_ADMIN = "UPDATE admin SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
+
     public String tabl = "CREATE TABLE IF NOT EXISTS ADMIN("+
             "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
             "fio varchar(125),"+
@@ -88,5 +94,13 @@ public class AdminDao {
             }
         });
         return admins;
+    }
+
+    public void updateAdmin(int selectedAdminId, int whoModified, String fio, Date dobDate, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password) {
+        jdbcTemplate.update(UPDATE_ADMIN, fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, login, password, whoModified, selectedAdminId);
+    }
+
+    public void deleteAdmin(int selectedAdminId, int whoRemoved) {
+        jdbcTemplate.update(REMOVE_ADMIN, whoRemoved, selectedAdminId);
     }
 }

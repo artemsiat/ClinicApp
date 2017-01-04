@@ -12,6 +12,8 @@ import ru.clinic.application.java.dao.entity.Admin;
 import ru.clinic.application.java.fx.frames.FrameAdmins;
 import ru.clinic.application.java.service.AdminService;
 
+import java.util.Optional;
+
 /**
  * Created by Artem Siatchinov on 1/2/2017.
  */
@@ -21,6 +23,21 @@ public class ControllerAdmins {
 
     private final static Logger LOGGER = Logger.getLogger(ControllerAdmins.class.getName());
     private Admin selectedAdmin = null;
+
+    /*Information Dialog not authorised*/
+    private static final String INFORMATION_TITLE = "Информационное окно";
+    private static final String INFORMATION_CONTEXT = "У Вас не хватает прав для выполнения данной операции. \nЗайдите под главным администратором.";
+
+    /*Information Dialog no admin chosen*/
+    private static final String INFORMATION_CONTEXT_NOT_SELECTED = "Вы не выбрали администратора для выполнения данной операции.";
+
+    /*Information Dialog no admin chosen*/
+    private static final String INFORMATION_CONTEXT_NOT_FIO = "Для создания нового администратора нужно заполнить поле ФИО.";
+
+    /*Confirmation Diaolog removing admin*/
+    private final static String CONFIRMATION_TITLE = "Подтверждение";
+    private final static String CONFIRMATION_HEADER = "Вы собираетесь удалить администратора. ";
+    private final static String CONFIRMATION_CONTENT = "Вы уверены, что хотите продолжить?";
 
     @Autowired
     FrameAdmins frameAdmins;
@@ -108,18 +125,103 @@ public class ControllerAdmins {
     @FXML
     void createBtnAction(ActionEvent event) {
         LOGGER.debug("[ControllerAdmins][createBtnAction] create Btn clicked");
-        adminService.addCreateAdmin(fioField.getText(), dobDatePicker.getValue(), cellPhoneField.getText(),
-                cellPhoneField2.getText(), homePhoneField.getText(), emailField.getText(), loginField.getText(), passField.getText());
+        if (fioField.getText() != null && !fioField.getText().isEmpty()) {
+            adminService.addNewAdmin(fioField.getText(), dobDatePicker.getValue(), cellPhoneField.getText(),
+                    cellPhoneField2.getText(), homePhoneField.getText(), emailField.getText(), loginField.getText(), passField.getText());
+            adminTable.setItems(adminService.loadAdmins());
+        }else {
+            LOGGER.debug("[ControllerAdmins][createBtnAction] Fio field is empty.");
+            alertNoFio();
+        }
     }
 
     @FXML
     void deleteBtnAction(ActionEvent event) {
+        LOGGER.debug("[ControllerAdmins][deleteBtnAction] Delete Button Clicked. ");
+        if (selectedAdmin != null) {
+            if (adminService.getCurrentAdmin().getId() == 0 || adminService.getCurrentAdmin().getId() == selectedAdmin.getId()) {
+                LOGGER.debug("[ControllerAdmins][deleteBtnAction] Current Administrator [" +
+                        adminService.getCurrentAdmin().getFio() + "] is authorised to perform delete on this Administrator [" + selectedAdmin.getFio() + "]");
 
+                if (confirmAction()) {
+                    LOGGER.debug("[ControllerAdmins][deleteBtnAction] Operation confirmed by current Administrator");
+                    adminService.deleteAdmin(selectedAdmin.getId(), adminService.getCurrentAdmin().getId());
+                    adminTable.setItems(adminService.loadAdmins());
+                } else {
+                    LOGGER.debug("[ControllerAdmins][deleteBtnAction] Operation was not confirmed by current Administrator");
+                }
+            } else {
+                LOGGER.debug("[ControllerAdmins][updateBtnAction] Current Administrator [" +
+                        adminService.getCurrentAdmin().getFio() + "] is not authorised to perform delete on this Administrator [" + selectedAdmin.getFio() + "]");
+                alertNoAuth();
+            }
+        }else{
+            LOGGER.debug("[ControllerAdmins][updateBtnAction] No Administrator selected");
+            alertNotSelected();
+        }
+    }
+
+    private boolean confirmAction() {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle(CONFIRMATION_TITLE);
+            alert.setHeaderText(CONFIRMATION_HEADER);
+            alert.setContentText(CONFIRMATION_CONTENT);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK){
+                return true;
+            }
+            return false;
     }
 
     @FXML
     void updateBtnAction(ActionEvent event) {
+        LOGGER.debug("[ControllerAdmins][updateBtnAction] Update Button Clicked. ");
+        if (selectedAdmin != null) {
+            if (adminService.getCurrentAdmin().getId() == 0 || adminService.getCurrentAdmin().getId() == selectedAdmin.getId()) {
 
+                LOGGER.debug("[ControllerAdmins][updateBtnAction] Current Administrator [" +
+                        adminService.getCurrentAdmin().getFio() + "] is authorised to perform update on this Administrator [" + selectedAdmin.getFio() + "]");
+
+                adminService.updateAdmin(selectedAdmin.getId(), fioField.getText(), dobDatePicker.getValue(), cellPhoneField.getText(),
+                        cellPhoneField2.getText(), homePhoneField.getText(), emailField.getText(), loginField.getText(), passField.getText());
+                adminTable.setItems(adminService.loadAdmins());
+            } else {
+                LOGGER.debug("[ControllerAdmins][updateBtnAction] Current Administrator [" +
+                        adminService.getCurrentAdmin().getFio() + "] is not authorised to perform update on this Administrator [" + selectedAdmin.getFio() + "]");
+                alertNoAuth();
+            }
+        }else{
+            LOGGER.debug("[ControllerAdmins][updateBtnAction] No Administrator selected");
+            alertNotSelected();
+        }
+    }
+
+    private void alertNoAuth() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(INFORMATION_TITLE);
+        alert.setHeaderText(null);
+        alert.setContentText(INFORMATION_CONTEXT);
+
+        alert.showAndWait();
+    }
+
+    private void alertNotSelected() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(INFORMATION_TITLE);
+        alert.setHeaderText(null);
+        alert.setContentText(INFORMATION_CONTEXT_NOT_SELECTED);
+
+        alert.showAndWait();
+    }
+
+    private void alertNoFio() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(INFORMATION_TITLE);
+        alert.setHeaderText(null);
+        alert.setContentText(INFORMATION_CONTEXT_NOT_FIO);
+
+        alert.showAndWait();
     }
 
     public void startController() {
@@ -152,8 +254,17 @@ public class ControllerAdmins {
         cellPhoneField2.setText(selectedAdmin.getCellPhoneTwo());
         homePhoneField.setText(selectedAdmin.getHomePhone());
         emailField.setText(selectedAdmin.getEmail());
-        loginField.setText(selectedAdmin.getUserName());
-        passField.setText(selectedAdmin.getPassword());
+
+
+
+        if (adminService.getCurrentAdmin().getId() == 0 || adminService.getCurrentAdmin().getId() == selectedAdmin.getId()){
+            loginField.setText(selectedAdmin.getUserName());
+            passField.setText(selectedAdmin.getPassword());
+        }else {
+            loginField.setText("");
+            passField.setText("");
+        }
+
     }
 
     private void adminSelected() {

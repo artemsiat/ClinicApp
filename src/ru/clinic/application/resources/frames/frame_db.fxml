@@ -31,15 +31,15 @@
                <children>
                   <HBox spacing="15.0">
                      <children>
-                        <Label text="Докторы :" />
-                        <Label text="status" />
+                        <Label text="Врачи" />
+                        <Label fx:id="doctorStatus" text="status" />
                      </children>
                   </HBox>
                   <HBox spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Создать" />
-                        <Button mnemonicParsing="false" text="Удалить" />
-                        <Button mnemonicParsing="false" text="Обновить" />
+                        <Button fx:id="createDoctor" mnemonicParsing="false" onAction="#createDoctorAction" text="Создать" />
+                        <Button fx:id="dropDoctor" mnemonicParsing="false" onAction="#dropDoctorAction" text="Удалить" />
+                        <Button fx:id="updateDoctor" mnemonicParsing="false" onAction="#updateDoctorAction" text="Обновить" />
                      </children>
                   </HBox>
                </children>

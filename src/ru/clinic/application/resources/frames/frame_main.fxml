@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -11,6 +12,8 @@
         <menus>
           <Menu mnemonicParsing="false" text="Добавить">
             <items>
+                  <MenuItem fx:id="menuAddPatient" mnemonicParsing="false" onAction="#menuAddPatientAction" text="Пациенты" />
+                  <MenuItem fx:id="menuAddDoctor" mnemonicParsing="false" onAction="#menuAddDoctorAction" text="Врачи" />
               <MenuItem fx:id="menuAddAdmin" mnemonicParsing="false" onAction="#menuAddAdminAction" text="Администратора" />
             </items>
           </Menu>
@@ -21,5 +24,6 @@
           </Menu>
         </menus>
       </MenuBar>
+      <Label fx:id="currAdminLabel" alignment="CENTER_RIGHT" layoutX="1363.0" layoutY="28.0" prefHeight="17.0" prefWidth="397.0" text="Администратор:" textAlignment="RIGHT" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0" />
    </children>
 </AnchorPane>

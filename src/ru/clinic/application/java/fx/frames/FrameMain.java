@@ -59,6 +59,7 @@ public class FrameMain extends FrameClass{
         scene.getStylesheets().add(CSS_PATH);
         stage.setScene(scene);
         controller.startController();
+        setIcon(stage);
         stage.show();
     }
 

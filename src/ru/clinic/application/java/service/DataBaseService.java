@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.DataBaseDao;
 import ru.clinic.application.java.service.dataBaseModel.TableAdmins;
+import ru.clinic.application.java.service.dataBaseModel.TableDoctors;
 import ru.clinic.application.java.service.dataBaseModel.TableStatus;
 
 import javax.annotation.PostConstruct;
@@ -21,6 +22,9 @@ public class DataBaseService {
     @Autowired
     TableAdmins tableAdmins;
 
+    @Autowired
+    TableDoctors tableDoctors;
+
     private TableStatus[] tables;
 
     @Autowired
@@ -32,7 +36,7 @@ public class DataBaseService {
 
     @PostConstruct
     public void init(){
-        tables = new TableStatus[]{this.tableAdmins};
+        tables = new TableStatus[]{this.tableAdmins, this.tableDoctors};
     }
 
     public boolean checkTables() {
@@ -40,8 +44,10 @@ public class DataBaseService {
         for (TableStatus tableStatus : tables){
 
             if (!tableStatus.checkIfCreated()){
+                LOGGER.debug("[DataBaseService][checkTables] Table ["+ tableStatus.getTableName()  + "] is not created");
                 return false;
             }
+            LOGGER.debug("[DataBaseService][checkTables] Table [" + tableStatus.getTableName()  + "] is created");
         }
         return true;
     }

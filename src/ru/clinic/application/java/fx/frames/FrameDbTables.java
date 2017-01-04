@@ -58,6 +58,7 @@ public class FrameDbTables extends FrameClass{
         scene.getStylesheets().add(CSS_PATH);
         stage.setScene(scene);
         controller.startController();
+        setIcon(stage);
         stage.show();
     }
 

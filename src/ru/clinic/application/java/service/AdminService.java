@@ -28,6 +28,9 @@ public class AdminService {
     @Autowired
     AppService appService;
 
+    @Autowired
+    AdminService adminService;
+
     public AdminService(){
         mainAdmin = initMainAdmin();
     }
@@ -35,7 +38,7 @@ public class AdminService {
     private Admin initMainAdmin() {
 
         Admin admin = new Admin();
-        admin.setFio("administrator");
+        admin.setFio("Main Administrator");
         admin.setId(0);
         admin.setPassword("admin");
 
@@ -48,12 +51,26 @@ public class AdminService {
         return mainAdmin;
     }
 
-    public void addCreateAdmin(String fio, LocalDate dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password) {
+    public void addNewAdmin(String fio, LocalDate dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password) {
         Date dobDate = null;
         if (dob != null){
             dobDate = Date.valueOf(dob);
         }
-        adminDao.insertAdmin(fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, login, password, appService.getCurrentAdmin().getId());
+        adminDao.insertAdmin(fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, login, password, adminService.getCurrentAdmin().getId());
+    }
+
+    public void updateAdmin(int selectedAdminId, String fio, LocalDate dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password) {
+        LOGGER.debug("[AdminService][updateAdmin] Updating Administrator");
+        Date dobDate = null;
+        if (dob != null){
+            dobDate = Date.valueOf(dob);
+        }
+        adminDao.updateAdmin(selectedAdminId, currentAdmin.getId(), fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, login, password);
+    }
+
+    public void deleteAdmin(int selectedAdminId, int whoRemoved) {
+        LOGGER.debug("[AdminService][deleteAdmin] Removing Administrator");
+        adminDao.deleteAdmin(selectedAdminId, whoRemoved);
     }
 
     public ObservableList<Admin> loadAdmins() {
@@ -88,4 +105,7 @@ public class AdminService {
     public void setCurrentAdmin(Admin currentAdmin) {
         this.currentAdmin = currentAdmin;
     }
+
+
+
 }

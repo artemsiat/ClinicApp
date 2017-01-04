@@ -2,6 +2,7 @@ package ru.clinic.application.java.fx.frames;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
@@ -59,6 +60,7 @@ public class FrameStart extends FrameClass{
         scene.getStylesheets().add(CSS_PATH);
         stage.setScene(scene);
         controllerStart.starController();
+        setIcon(stage);
         stage.show();
         controllerStart.postStart();
     }
