@@ -5,10 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +16,8 @@ import ru.clinic.application.java.fx.frames.FrameMain;
 import ru.clinic.application.java.fx.frames.FrameStart;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DataBaseService;
+
+import java.util.Optional;
 
 /**
  * Created by Artem Siatchinov on 1/1/2017.
@@ -33,6 +32,12 @@ public class ControllerStart {
     private final static String PASSWORD_REQUIRED = "пароль";
     private final static String PASSWORD_NOT_REQUIRED = "пароль не требуется";
     private final static String NOT_AUTHORIZED = "не успешная авторизация";
+
+    /*Confirmation alert to create new db tables*/
+    private final static String CONFIRMATION_TITLE = "Подтверждение";
+    private final static String CONFIRMATION_HEADER = "Не получается установить соединение с базой данной. \nЕсли программа впервые запускается на Вашем компьютере, \n" +
+            "то Вам необходимо создать все необходивые таблицы нажав на ОК.";
+    private final static String CONFIRMATION_CONTENT = "Вы уверены, что хотите продолжить?";
 
     private Admin adminSelected = null;
 
@@ -117,12 +122,27 @@ public class ControllerStart {
             }else {
                 LOGGER.debug("[ControllerStart][enterBtnAction] Some or all database tables are not set. Starting dbTables Frame");
                 //Start Tables Frame
-                frameDbTables.start();
+                if (alertConfirmation()) {
+                    frameDbTables.start();
+                }
             }
         }else {
             LOGGER.debug("[startController][enterBtnAction] admin is not authorized");
             authLabel.setText(NOT_AUTHORIZED);
         }
+    }
+
+    private boolean alertConfirmation() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(CONFIRMATION_TITLE);
+        alert.setHeaderText(CONFIRMATION_HEADER);
+        alert.setContentText(CONFIRMATION_CONTENT);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            return true;
+        }
+        return false;
     }
 
     private boolean checkAuthorization() {
