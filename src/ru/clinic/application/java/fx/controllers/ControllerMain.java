@@ -7,10 +7,7 @@ import javafx.scene.control.MenuItem;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.clinic.application.java.fx.frames.FrameAdmins;
-import ru.clinic.application.java.fx.frames.FrameDbTables;
-import ru.clinic.application.java.fx.frames.FrameDoctors;
-import ru.clinic.application.java.fx.frames.FramePatients;
+import ru.clinic.application.java.fx.frames.*;
 import ru.clinic.application.java.service.AdminService;
 
 /**
@@ -37,6 +34,9 @@ public class ControllerMain {
     @Autowired
     FrameDoctors frameDoctors;
 
+    @Autowired
+    FrameWorkingDays frameWorkingDays;
+
 
 
     @FXML
@@ -50,6 +50,9 @@ public class ControllerMain {
 
     @FXML
     private MenuItem menuAddDoctor;
+
+    @FXML
+    private MenuItem menuWorkingDay;
 
     @FXML
     private Label currAdminLabel;
@@ -92,5 +95,10 @@ public class ControllerMain {
     @FXML
     void menuAddDoctorAction(ActionEvent event) {
         frameDoctors.start();
+    }
+
+    @FXML
+    void menuWorkingDayAction(ActionEvent event) {
+        frameWorkingDays.start();
     }
 }

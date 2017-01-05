@@ -54,6 +54,25 @@ public class DataBaseDao {
             "when_removed timestamp,"+
             "removed boolean)";
 
+    private final static String PATIENT_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'PATIENT'";
+    private final static String DROP_PATIENT_TABLE = "DROP TABLE PATIENT";
+    private final static String PATIENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS PATIENT("+
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
+            "firstName varchar(125),"+
+            "lastName varchar(125),"+
+            "middleName varchar(125),"+
+            "phone varchar(25),"+
+            "phoneTwo varchar(25),"+
+            "email varchar(25),"+
+            "comment varchar(500),"+
+            "creator int,"+
+            "created timestamp,"+
+            "who_modified int,"+
+            "modified timestamp,"+
+            "who_removed int,"+
+            "when_removed timestamp,"+
+            "removed boolean)";
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
@@ -77,7 +96,9 @@ public class DataBaseDao {
     }
 
     public boolean checkPatientsTable() {
-        return false;
+        LOGGER.debug("[DataBaseDao][checkPatientsTable]");
+        Integer count = jdbcTemplate.queryForObject(PATIENT_CHECK_TABLE, Integer.class);
+        return count == 1;
     }
 
     public boolean checkAppointmentTable() {
@@ -103,4 +124,14 @@ public class DataBaseDao {
     public void createDoctorsTable() {
         jdbcTemplate.execute(DOCTOR_CREATE_TABLE);
     }
+
+    public void dropPatientTable() {
+        jdbcTemplate.execute(DROP_PATIENT_TABLE);
+    }
+
+    public void createPatientTable() {
+        jdbcTemplate.execute(PATIENT_CREATE_TABLE);
+    }
+
+
 }

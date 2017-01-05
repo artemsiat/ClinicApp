@@ -49,14 +49,14 @@
                   <HBox spacing="15.0">
                      <children>
                         <Label text="Пациенты :" />
-                        <Label text="status" />
+                        <Label fx:id="patientStatus" text="status" />
                      </children>
                   </HBox>
                   <HBox spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Создать" />
-                        <Button mnemonicParsing="false" text="Удалить" />
-                        <Button mnemonicParsing="false" text="Обновить" />
+                        <Button fx:id="createPatientBtn" mnemonicParsing="false" onAction="#createPatientBtnAction" text="Создать" />
+                        <Button fx:id="dropPatientBtn" mnemonicParsing="false" onAction="#dropPatientBtnAction" text="Удалить" />
+                        <Button fx:id="refreshPatientBtn" mnemonicParsing="false" onAction="#refreshPatientBtnAction" text="Обновить" />
                      </children>
                   </HBox>
                </children>

@@ -14,6 +14,7 @@ import ru.clinic.application.java.fx.frames.FrameDbTables;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.dataBaseModel.TableAdmins;
 import ru.clinic.application.java.service.dataBaseModel.TableDoctors;
+import ru.clinic.application.java.service.dataBaseModel.TablePatients;
 
 import java.util.Optional;
 
@@ -51,6 +52,9 @@ public class ControllerDbTables {
     @Autowired
     AdminService adminService;
 
+    @Autowired
+    TablePatients tablePatients;
+
     @FXML
     private Label adminStatus;
 
@@ -78,12 +82,25 @@ public class ControllerDbTables {
     @FXML
     private Button updateDoctor;
 
+    @FXML
+    private Label patientStatus;
+
+    @FXML
+    private Button createPatientBtn;
+
+    @FXML
+    private Button dropPatientBtn;
+
+    @FXML
+    private Button refreshPatientBtn;
+
 
 
 
     public void startController() {
         setAdminStatus();
         setDoctorsStatus();
+        setPatientStatus();
     }
 
     private void alertNoAuth() {
@@ -183,5 +200,35 @@ public class ControllerDbTables {
     @FXML
     void updateDoctorAction(ActionEvent event) {
         tableDoctors.checkIfCreated();
+    }
+
+
+    public void setPatientStatus() {
+        if (patientStatus != null && createPatientBtn != null && dropPatientBtn != null){
+            setCreatedStatus(tablePatients.isCreated(), patientStatus, createPatientBtn, dropPatientBtn);
+        }
+    }
+
+    @FXML
+    void refreshPatientBtnAction(ActionEvent event) {
+        tablePatients.checkIfCreated();
+    }
+
+    @FXML
+    void dropPatientBtnAction(ActionEvent event) {
+        if (adminService.getCurrentAdmin().getId() == 0) {
+            if (confirmAction()) {
+                tablePatients.dropTable();
+            }
+        }else {
+            alertNoAuth();
+        }
+    }
+
+    @FXML
+    void createPatientBtnAction(ActionEvent event) {
+        if (confirmAction()) {
+            tablePatients.createTable();
+        }
     }
 }

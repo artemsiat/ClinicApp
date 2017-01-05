@@ -36,7 +36,7 @@ public class ControllerStart {
     /*Confirmation alert to create new db tables*/
     private final static String CONFIRMATION_TITLE = "Подтверждение";
     private final static String CONFIRMATION_HEADER = "Не получается установить соединение с базой данной. \nЕсли программа впервые запускается на Вашем компьютере, \n" +
-            "то Вам необходимо создать все необходивые таблицы нажав на ОК.";
+            "то Вам необходимо создать все необходимые таблицы нажав на ОК.";
     private final static String CONFIRMATION_CONTENT = "Вы уверены, что хотите продолжить?";
 
     private Admin adminSelected = null;
