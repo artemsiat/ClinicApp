@@ -84,19 +84,19 @@ public class DataBaseDao {
     }
 
     public boolean checkAdminTable(){
-        LOGGER.debug("[DataBaseDao][checkAdminTable]");
+        LOGGER.debug("[DataBaseDao][checkAdminTable] Checking if Admin table is created");
         Integer count = jdbcTemplate.queryForObject(ADMIN_CHECK_TABLE, Integer.class);
         return count == 1;
     }
 
     public boolean checkDoctorsTable() {
-        LOGGER.debug("[DataBaseDao][checkDoctorsTable]");
+        LOGGER.debug("[DataBaseDao][checkDoctorsTable] Checking if Doctor table is created");
         Integer count = jdbcTemplate.queryForObject(DOCTOR_CHECK_TABLE, Integer.class);
         return count == 1;
     }
 
     public boolean checkPatientsTable() {
-        LOGGER.debug("[DataBaseDao][checkPatientsTable]");
+        LOGGER.debug("[DataBaseDao][checkPatientsTable] Checking if Patient table is created");
         Integer count = jdbcTemplate.queryForObject(PATIENT_CHECK_TABLE, Integer.class);
         return count == 1;
     }

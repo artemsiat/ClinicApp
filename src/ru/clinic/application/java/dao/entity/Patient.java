@@ -77,6 +77,7 @@ public class Patient {
 
     public void setCellPhone(String cellPhone) {
         this.cellPhone = cellPhone;
+        setCellPhoneProp(cellPhone);
     }
 
     public String getCellPhoneTwo() {
@@ -85,6 +86,9 @@ public class Patient {
 
     public void setCellPhoneTwo(String cellPhoneTwo) {
         this.cellPhoneTwo = cellPhoneTwo;
+        if (StringUtils.isEmpty(this.cellPhone)){
+            setCellPhoneProp(cellPhoneTwo);
+        }
     }
 
     public String getEmail() {
@@ -93,6 +97,7 @@ public class Patient {
 
     public void setEmail(String email) {
         this.email = email;
+        setEmailProp(email);
     }
 
     public String getComment() {
