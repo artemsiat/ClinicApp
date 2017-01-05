@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.service.PatientsService;
 
+import java.util.Optional;
+
 /**
  * Created by Artem Siatchinov on 1/3/2017.
  */
@@ -21,6 +23,20 @@ public class ControllerPatients {
     private final static Logger LOGGER = Logger.getLogger(ControllerPatients.class.getName());
 
     private Patient selectedPatient = null;
+
+    /*Information Dialog no patient selected*/
+    private static final String INFORMATION_TITLE = "Информационное окно";
+    private static final String INFORMATION_CONTEXT_NOT_SELECTED = "Вы не выбрали пациента для выполнения данной операции.";
+
+    /*Confirmation Dialog removing patient*/
+    private final static String CONFIRMATION_DELETE_TITLE = "Подтверждение";
+    private final static String CONFIRMATION_DELETE_HEADER = "Вы собираетесь удалить пациента. ";
+    private final static String CONFIRMATION_DELETE_CONTENT = "Вы уверены, что хотите продолжить?";
+
+    /*Confirmation Dialog updating patient*/
+    private final static String CONFIRMATION_UPDATE_TITLE = "Подтверждение";
+    private final static String CONFIRMATION_UPDATE_HEADER = "Вы собираетесь изменить существующего пациента. ";
+    private final static String CONFIRMATION_UPDATE_CONTENT = "Вы уверены, что хотите продолжить?";
 
     @Autowired
     PatientsService patientsService;
@@ -109,7 +125,7 @@ public class ControllerPatients {
             LOGGER.debug("[ControllerPatients][addPatientBtnAction] create Btn clicked");
             patientsService.addNewPatient(lastNameFld.getText(), firstNameFld.getText(), middleNameFld.getText(), phoneNumberFld.getText(), phoneNumberTwoFld.getText(), emailFld.getText(), commentFld.getText());
             patientsTable.setItems(patientsService.loadLastCreatedPatients());
-        }else {
+        } else {
             LOGGER.debug("[ControllerDoctors][createDoctorBtnAction] Fio field is empty.");
             alertAllFieldsEmpty();
         }
@@ -120,6 +136,7 @@ public class ControllerPatients {
     }
 
     private boolean checkInputFields() {
+        //TODO check that mandatory fields are filled
         return true;
     }
 
@@ -135,7 +152,39 @@ public class ControllerPatients {
 
     @FXML
     void updatePatientBtnAction(ActionEvent event) {
+        LOGGER.debug("[ControllerPatients][updatePatientBtnAction] Update Button Clicked. ");
+        if (selectedPatient != null && checkInputFields() && confirmUpdateAction()) {
+            LOGGER.debug("[ControllerPatients][updatePatientBtnAction] Updating patient [" + selectedPatient.getFio() + "] id [" + selectedPatient.getId() + "]");
+            patientsService.updatePatient(selectedPatient.getId(), firstNameFld.getText(), lastNameFld.getText(), middleNameFld.getText(), phoneNumberFld.getText(), phoneNumberTwoFld.getText(),
+                    emailFld.getText(), commentFld.getText());
+            patientsTable.setItems(patientsService.loadLastUpdatedPatients());
+            //Todo set Selected patient as last updated
+        } else {
+            LOGGER.debug("[ControllerPatients][updatePatientBtnAction] No Patient selected");
+            alertNotSelected();
+        }
+    }
 
+    private boolean confirmUpdateAction() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(CONFIRMATION_UPDATE_TITLE);
+        alert.setHeaderText(CONFIRMATION_UPDATE_HEADER);
+        alert.setContentText(CONFIRMATION_UPDATE_CONTENT);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            return true;
+        }
+        return false;
+    }
+
+    private void alertNotSelected() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(INFORMATION_TITLE);
+        alert.setHeaderText(null);
+        alert.setContentText(INFORMATION_CONTEXT_NOT_SELECTED);
+
+        alert.showAndWait();
     }
 
     public void startController() {
@@ -156,7 +205,38 @@ public class ControllerPatients {
     }
 
     private void initListeners() {
+        setTableListener();
+    }
 
+    private void setTableListener() {
+        patientsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                patientCleared();
+            } else {
+                patientSelected();
+            }
+        });
+    }
+
+    private void patientSelected() {
+        selectedPatient = patientsService.getPatients().get(patientsTable.getSelectionModel().getSelectedIndex());
+        setSelectedPatient();
+    }
+
+    private void setSelectedPatient() {
+        lastNameFld.setText(selectedPatient.getLastName());
+        middleNameFld.setText(selectedPatient.getMiddleName());
+        firstNameFld.setText(selectedPatient.getFirstName());
+        phoneNumberFld.setText(selectedPatient.getCellPhone());
+        phoneNumberTwoFld.setText(selectedPatient.getCellPhoneTwo());
+        emailFld.setText(selectedPatient.getEmail());
+        commentFld.setText(selectedPatient.getComment());
+    }
+
+    private void patientCleared() {
+        selectedPatient = null;
+        clearLabels();
+        clearFields();
     }
 
     private void clearFieldsFind() {

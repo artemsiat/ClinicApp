@@ -30,6 +30,9 @@ public class PatientsDao {
             "VALUES(?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
     private final static String SELECT_LAST_CREATED_PATIENTS = "SELECT * FROM (SELECT * FROM patient WHERE removed = false  ORDER BY id DESC) WHERE ROWNUM <= ";
     private final static String SELECT_LAST_UPDATED_PATIENTS = "SELECT * FROM (SELECT * FROM patient WHERE removed = false  ORDER BY modified DESC) WHERE ROWNUM <= ";
+    private final static String UPDATE_PATIENT = "UPDATE patient SET " +
+            "firstName=?, lastName=?, middleName=?, phone=?, phoneTwo=?, email=?, comment=?, who_modified=?, modified=CURRENT_TIMESTAMP " +
+            "WHERE id = ?";
 
     private final static String PATIENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS PATIENT("+
             "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
@@ -79,7 +82,6 @@ public class PatientsDao {
                     patient.setCellPhoneTwo(rs.getString("phoneTwo"));
                     patient.setEmail(rs.getString("email"));
                     patient.setComment(rs.getString("comment"));
-
                     patient.generateFio();
 
                     patients.add(patient);
@@ -92,13 +94,15 @@ public class PatientsDao {
 
     public ObservableList<Patient> selectLastCreatedPatients() {
         String sql = (SELECT_LAST_CREATED_PATIENTS + settingsService.getMaxPatientsLoadCount());
-        System.out.println(sql);
         return selectPatients(sql);
     }
 
     public ObservableList<Patient> selectLastUpdatedPatients() {
         String sql = (SELECT_LAST_UPDATED_PATIENTS + settingsService.getMaxPatientsLoadCount());
-        System.out.println(sql);
         return selectPatients(sql);
+    }
+
+    public void updatePatient(int patientId, int who_modified, String firstName, String lastName, String middleName, String phone, String phoneTwo, String email, String comment) {
+        jdbcTemplate.update(UPDATE_PATIENT, firstName, lastName, middleName, phone, phoneTwo, email, comment, who_modified, patientId);
     }
 }
