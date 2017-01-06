@@ -145,4 +145,6 @@ public class Patient {
     public void setEmailProp(String emailProp) {
         this.emailProp.set(emailProp);
     }
+
+    //Todo add to string method
 }

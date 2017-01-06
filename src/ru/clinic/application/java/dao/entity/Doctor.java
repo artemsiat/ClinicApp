@@ -139,4 +139,6 @@ public class Doctor {
     public void setEmailProp(String emailProp) {
         this.emailProp.set(emailProp);
     }
+
+    //Todo Add to string method
 }

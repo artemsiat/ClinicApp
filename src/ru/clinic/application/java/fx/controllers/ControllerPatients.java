@@ -9,8 +9,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
+import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.PatientsService;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -40,6 +42,9 @@ public class ControllerPatients {
 
     @Autowired
     PatientsService patientsService;
+
+    @Autowired
+    AdminService adminService;
 
     @FXML
     private TextField lastNameFindFld;
@@ -147,7 +152,33 @@ public class ControllerPatients {
 
     @FXML
     void removePatientBtnAction(ActionEvent event) {
+        LOGGER.debug("[ControllerPatients][removePatientBtnAction] Delete Button Clicked. ");
+        if (selectedPatient != null) {
+            if (confirmRemoveAction()) {
+                LOGGER.debug("[ControllerPatients][removePatientBtnAction] Operation confirmed by current Administrator[" + adminService.getCurrentAdmin().getFio() + "] to remove doctor["
+                        + selectedPatient.getFio() + "]");
+                patientsService.deletePatient(selectedPatient.getId(), adminService.getCurrentAdmin().getId());
+                patientsTable.setItems(patientsService.loadLastCreatedPatients());
+            } else {
+                LOGGER.debug("[ControllerDoctors][removeDoctorBtnAction] Operation was not confirmed by current Administrator[" + adminService.getCurrentAdmin().getFio() + "]");
+            }
+        } else {
+            LOGGER.debug("[ControllerDoctors][removeDoctorBtnAction] Delete Button Clicked. No doctor selected");
+            alertNotSelected();
+        }
+    }
 
+    private boolean confirmRemoveAction() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(CONFIRMATION_DELETE_TITLE);
+        alert.setHeaderText(CONFIRMATION_DELETE_HEADER);
+        alert.setContentText(CONFIRMATION_DELETE_CONTENT);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            return true;
+        }
+        return false;
     }
 
     @FXML
@@ -206,6 +237,27 @@ public class ControllerPatients {
 
     private void initListeners() {
         setTableListener();
+        setFioListeners();
+        setPhoneListener();
+        // Todo add find fields listener
+
+    }
+
+    private void setPhoneListener() {
+        HashMap<TextField, Label> phoneFieldToLabel = new HashMap<>();
+        phoneFieldToLabel.put(phoneNumberFld, phoneNumberLabel);
+        phoneFieldToLabel.put(phoneNumberTwoFld, phoneNumberTwoLabel);
+        //Todo Finish Method
+
+    }
+
+    private void setFioListeners() {
+        HashMap<TextField, Label> fioFieldToLabel = new HashMap<>();
+        fioFieldToLabel.put(firstNameFld, firstNameLabel);
+        fioFieldToLabel.put(lastNameFld, lastNameLabel);
+        fioFieldToLabel.put(middleNameFld, middleNameLabel);
+        //Todo Finish Method
+
     }
 
     private void setTableListener() {

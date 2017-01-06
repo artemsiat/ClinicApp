@@ -33,6 +33,7 @@ public class PatientsDao {
     private final static String UPDATE_PATIENT = "UPDATE patient SET " +
             "firstName=?, lastName=?, middleName=?, phone=?, phoneTwo=?, email=?, comment=?, who_modified=?, modified=CURRENT_TIMESTAMP " +
             "WHERE id = ?";
+    private final static String REMOVE_PATIENT = "UPDATE patient SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
 
     private final static String PATIENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS PATIENT("+
             "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
@@ -104,5 +105,9 @@ public class PatientsDao {
 
     public void updatePatient(int patientId, int who_modified, String firstName, String lastName, String middleName, String phone, String phoneTwo, String email, String comment) {
         jdbcTemplate.update(UPDATE_PATIENT, firstName, lastName, middleName, phone, phoneTwo, email, comment, who_modified, patientId);
+    }
+
+    public void deletePatient(int selectedPatientId, int id) {
+        jdbcTemplate.update(REMOVE_PATIENT, id, selectedPatientId);
     }
 }

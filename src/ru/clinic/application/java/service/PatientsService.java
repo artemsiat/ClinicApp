@@ -8,8 +8,6 @@ import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.PatientsDao;
 import ru.clinic.application.java.dao.entity.Patient;
 
-import java.sql.Date;
-
 /**
  * Created by Artem Siatchinov on 1/5/2017.
  */
@@ -48,6 +46,7 @@ public class PatientsService {
     }
 
     public void addNewPatient(String lastName, String firstName, String middleName, String phoneNumber, String phoneNumberTwo, String email, String comment) {
+        LOGGER.debug("[PatientsService][addNewPatient] Adding new Patient");
         patientsDao.addNewPatient(adminService.getCurrentAdmin().getId(), lastName, firstName, middleName, phoneNumber, phoneNumberTwo, email, comment);
     }
 
@@ -58,5 +57,10 @@ public class PatientsService {
     public void updatePatient(int patientId, String firstName, String lastName, String middleName, String phone, String phoneTwo, String email, String comment) {
         LOGGER.debug("[PatientsService][updatePatient] Updating Patient ");
         patientsDao.updatePatient(patientId, adminService.getCurrentAdmin().getId(), firstName, lastName, middleName, phone, phoneTwo, email, comment);
+    }
+
+    public void deletePatient(int selectedPatientId, int id) {
+        LOGGER.debug("[PatientsService][deletePatient] Marking patient as removed");
+        patientsDao.deletePatient(selectedPatientId, id);
     }
 }

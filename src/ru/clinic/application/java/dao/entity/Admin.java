@@ -152,4 +152,6 @@ public class Admin {
     public void setEmailProp(String emailProp) {
         this.emailProp.set(emailProp);
     }
+
+    //Todo Add to String method
 }
