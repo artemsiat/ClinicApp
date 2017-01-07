@@ -185,6 +185,8 @@ public class ControllerDoctors {
         clearLabels();
         setTable();
         setTableListener();
+
+        //TODO Add phone number listeners
     }
 
     private void setTableListener() {

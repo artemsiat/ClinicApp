@@ -10,8 +10,13 @@ import org.springframework.stereotype.Component;
 public class SettingsService {
 
     private int maxPatientsLoadCount = 30;
+    private static boolean testing = true;
 
     public int getMaxPatientsLoadCount() {
         return maxPatientsLoadCount;
+    }
+
+    public static boolean isTesting() {
+        return testing;
     }
 }

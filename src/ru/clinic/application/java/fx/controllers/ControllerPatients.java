@@ -1,10 +1,13 @@
 package ru.clinic.application.java.fx.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +32,10 @@ public class ControllerPatients {
     /*Information Dialog no patient selected*/
     private static final String INFORMATION_TITLE = "Информационное окно";
     private static final String INFORMATION_CONTEXT_NOT_SELECTED = "Вы не выбрали пациента для выполнения данной операции.";
+
+    /*Information Dialog no patient selected*/
+    private static final String INFORMATION_EMPTY_FIO_TITLE = "Информационное окно";
+    private static final String INFORMATION_EMPTY_FIO_CONTEXT_NOT_SELECTED = "Для внесения нового пациента в базу данных необходимо заполнить как минимум одно поле.";
 
     /*Confirmation Dialog removing patient*/
     private final static String CONFIRMATION_DELETE_TITLE = "Подтверждение";
@@ -137,12 +144,19 @@ public class ControllerPatients {
     }
 
     private void alertAllFieldsEmpty() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(INFORMATION_EMPTY_FIO_TITLE);
+        alert.setHeaderText(null);
+        alert.setContentText(INFORMATION_EMPTY_FIO_CONTEXT_NOT_SELECTED);
 
+        alert.showAndWait();
     }
 
     private boolean checkInputFields() {
-        //TODO check that mandatory fields are filled
-        return true;
+        if (StringUtils.length(firstNameFld.getText()) > 1 || StringUtils.length(lastNameFld.getText()) > 1 || StringUtils.length(middleNameFld.getText()) > 1) {
+            return true;
+        }
+        return false;
     }
 
     @FXML
@@ -237,17 +251,43 @@ public class ControllerPatients {
 
     private void initListeners() {
         setTableListener();
-        setFioListeners();
+        //setFioListeners();
         setPhoneListener();
-        // Todo add find fields listener
-
     }
 
     private void setPhoneListener() {
         HashMap<TextField, Label> phoneFieldToLabel = new HashMap<>();
         phoneFieldToLabel.put(phoneNumberFld, phoneNumberLabel);
         phoneFieldToLabel.put(phoneNumberTwoFld, phoneNumberTwoLabel);
-        //Todo Finish Method
+        phoneFieldToLabel.put(phoneFindFld, null);
+        phoneFieldToLabel.forEach(((textField, label) -> {
+
+            if (label != null){
+                label.setText( "+7(" );
+            }
+            textField.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    String labelText = "+ 7(";
+                    if (newValue != null && !newValue.isEmpty()){
+                        String resultDigits = "";
+                        for (int index = 0 ; index < newValue.length(); index ++){
+                            char charAt = newValue.charAt(index);
+                            if (Character.isDigit(charAt)){
+                                resultDigits += charAt;
+                            }
+                        }
+                        textField.setText(resultDigits);
+                        labelText = patientsService.maskPhoneNumber(resultDigits);
+                    }
+
+                    if (label != null){
+                        label.setText(labelText);
+                    }
+                }
+            });
+
+        }));
 
     }
 
@@ -256,8 +296,18 @@ public class ControllerPatients {
         fioFieldToLabel.put(firstNameFld, firstNameLabel);
         fioFieldToLabel.put(lastNameFld, lastNameLabel);
         fioFieldToLabel.put(middleNameFld, middleNameLabel);
-        //Todo Finish Method
-
+        fioFieldToLabel.forEach((key, set) ->{
+            key.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    if (newValue != null && !newValue.isEmpty()){
+                        set.setText(newValue.trim());
+                    }else {
+                        set.setText("");
+                    }
+                }
+            });
+        });
     }
 
     private void setTableListener() {

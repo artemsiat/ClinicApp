@@ -2,10 +2,12 @@ package ru.clinic.application.java.dao.entity;
 
 import javafx.beans.property.SimpleStringProperty;
 import org.apache.commons.lang3.StringUtils;
+import ru.clinic.application.java.service.PatientsService;
 
 /**
  * Created by Artem Siatchinov on 1/5/2017.
  */
+
 public class Patient {
 
     private int id;
@@ -131,7 +133,7 @@ public class Patient {
     }
 
     public void setCellPhoneProp(String cellPhoneProp) {
-        this.cellPhoneProp.set(cellPhoneProp);
+        this.cellPhoneProp.set(PatientsService.maskPhoneNumber(cellPhoneProp));
     }
 
     public String getEmailProp() {
