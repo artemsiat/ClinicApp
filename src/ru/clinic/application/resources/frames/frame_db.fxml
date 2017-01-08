@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="495.0" prefWidth="432.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox layoutX="45.0" layoutY="45.0" spacing="30.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+      <VBox alignment="CENTER" layoutX="45.0" layoutY="45.0" spacing="30.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
          <children>
             <VBox spacing="5.0">
                <children>
@@ -97,6 +97,6 @@
             </VBox>
          </children>
       </VBox>
-      <Button fx:id="closeFrameBtn" layoutX="516.0" layoutY="545.0" mnemonicParsing="false" onAction="#closeFrameAction" text="Закрыть" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
+      <Button fx:id="closeFrameBtn" alignment="CENTER" layoutX="357.0" layoutY="454.0" mnemonicParsing="false" onAction="#closeFrameAction" text="Закрыть" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
    </children>
 </AnchorPane>

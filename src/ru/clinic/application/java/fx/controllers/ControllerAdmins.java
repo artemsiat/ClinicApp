@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Admin;
+import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.fx.frames.FrameAdmins;
 import ru.clinic.application.java.service.AdminService;
 
@@ -19,7 +20,7 @@ import java.util.Optional;
  */
 
 @Component
-public class ControllerAdmins {
+public class ControllerAdmins extends ControllerClass{
 
     private final static Logger LOGGER = Logger.getLogger(ControllerAdmins.class.getName());
     private Admin selectedAdmin = null;
@@ -114,13 +115,6 @@ public class ControllerAdmins {
     @FXML
     private Button deleteBtn;
 
-    @FXML
-    private Button closeBtn;
-
-    @FXML
-    void closeBtnAction(ActionEvent event) {
-        frameAdmins.stop();
-    }
 
     @FXML
     void createBtnAction(ActionEvent event) {

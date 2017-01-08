@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
+import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.PatientsService;
 
@@ -23,7 +24,7 @@ import java.util.Optional;
  */
 
 @Component
-public class ControllerPatients {
+public class ControllerPatients extends ControllerClass {
 
     private final static Logger LOGGER = Logger.getLogger(ControllerPatients.class.getName());
 

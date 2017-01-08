@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Doctor;
+import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.fx.frames.FrameDoctors;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DoctorsService;
@@ -20,7 +21,7 @@ import java.util.Optional;
  */
 
 @Component
-public class ControllerDoctors {
+public class ControllerDoctors extends ControllerClass {
 
     private final static Logger LOGGER = Logger.getLogger(ControllerDoctors.class.getName());
 
@@ -109,14 +110,6 @@ public class ControllerDoctors {
 
     @FXML
     private Label emailLabel;
-
-    @FXML
-    private Button closeBtn;
-
-    @FXML
-    void closeBtnAction(ActionEvent event) {
-        frameDoctors.stop();
-    }
 
     @FXML
     void createDoctorBtnAction(ActionEvent event) {

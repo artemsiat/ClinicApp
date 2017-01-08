@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Admin;
 import ru.clinic.application.java.fx.frames.FrameDbTables;
-import ru.clinic.application.java.fx.frames.FrameMain;
+import ru.clinic.application.java.fx.frames.FrameRoot;
 import ru.clinic.application.java.fx.frames.FrameStart;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DataBaseService;
@@ -42,10 +42,10 @@ public class ControllerStart {
     private Admin adminSelected = null;
 
     @Autowired
-    FrameStart frameStart;
+    FrameRoot frameRoot;
 
     @Autowired
-    FrameMain frameMain;
+    FrameStart frameStart;
 
     @Autowired
     FrameDbTables frameDbTables;
@@ -80,15 +80,6 @@ public class ControllerStart {
         initDropBox();
         adminSelected = null;
     }
-    public void postStart(){
-        if (TESTING)test();
-    }
-
-    private void test() {
-        LOGGER.debug("[ControllerStart] Testing!!!");
-        frameMain.start();
-        frameStart.stop();
-    }
 
     private void stopController(){
         clearFields();
@@ -117,7 +108,7 @@ public class ControllerStart {
             if (dataBaseService.checkTables()){
                 LOGGER.debug("[ControllerStart][enterBtnAction] All DataBase tables are set. Starting Main Frame");
                 //Start Main Frame
-                frameMain.start();
+                frameRoot.start();
                 frameStart.stop();
             }else {
                 LOGGER.debug("[ControllerStart][enterBtnAction] Some or all database tables are not set. Starting dbTables Frame");
@@ -130,6 +121,7 @@ public class ControllerStart {
             LOGGER.debug("[startController][enterBtnAction] admin is not authorized");
             authLabel.setText(NOT_AUTHORIZED);
         }
+
     }
 
     private boolean alertConfirmation() {
@@ -196,4 +188,7 @@ public class ControllerStart {
         });
     }
 
+    public void postStart() {
+
+    }
 }

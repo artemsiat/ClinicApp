@@ -11,15 +11,15 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="908.0" prefWidth="1531.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="610.0" prefWidth="1025.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane dividerPositions="0.6023544800523217" prefHeight="961.0" prefWidth="1497.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.6" prefHeight="961.0" prefWidth="1497.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
                   <TableView fx:id="adminTable" layoutY="-2.0" prefHeight="874.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="fioCol" prefWidth="289.6666717529297" text="ФИО" />
+                      <TableColumn fx:id="fioCol" prefWidth="289.6666717529297" text="ФИО Администратора" />
                       <TableColumn fx:id="cellPhoneCol" minWidth="0.0" prefWidth="185.33334350585938" text="Моб. телефон" />
                         <TableColumn fx:id="homePhoneCol" prefWidth="161.33331298828125" text="Дом. телефон" />
                         <TableColumn fx:id="emailCol" prefWidth="301.66668701171875" text="E-mail" />
@@ -30,49 +30,49 @@
                   </TableView>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="733.0" prefWidth="463.0">
                <children>
-                  <VBox layoutX="15.0" layoutY="15.0" spacing="45.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                  <VBox layoutX="15.0" layoutY="15.0" spacing="25.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
                      <children>
-                        <VBox spacing="15.0">
+                        <VBox spacing="10.0">
                            <children>
                               <HBox alignment="BOTTOM_LEFT" spacing="15.0">
                                  <children>
-                                    <TextField fx:id="fioField" prefHeight="25.0" prefWidth="277.0" promptText="ФИО" />
+                                    <TextField fx:id="fioField" prefHeight="25.0" prefWidth="220.0" promptText="ФИО" />
                                     <Label fx:id="fioLabel" text="Label" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="15.0">
                                  <children>
-                                    <DatePicker fx:id="dobDatePicker" prefHeight="25.0" prefWidth="277.0" promptText="Дата рождения" />
+                                    <DatePicker fx:id="dobDatePicker" prefHeight="25.0" prefWidth="220.0" promptText="Дата рождения" />
                                     <Label fx:id="dobLabel" text="Label" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox spacing="15.0">
+                        <VBox spacing="10.0">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="15.0">
                                  <children>
-                                    <TextField fx:id="cellPhoneField" prefHeight="25.0" prefWidth="277.0" promptText="№ моб. телефона" />
+                                    <TextField fx:id="cellPhoneField" prefHeight="25.0" prefWidth="220.0" promptText="№ моб. телефона" />
                                     <Label fx:id="cellPhoneLabel" text="Label" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="15.0">
                                  <children>
-                                    <TextField fx:id="cellPhoneField2" prefHeight="25.0" prefWidth="277.0" promptText="№ моб. телефона" />
+                                    <TextField fx:id="cellPhoneField2" prefHeight="25.0" prefWidth="220.0" promptText="№ моб. телефона" />
                                     <Label fx:id="cellPhoneLabel2" text="Label" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="15.0">
                                  <children>
-                                    <TextField fx:id="homePhoneField" prefHeight="25.0" prefWidth="277.0" promptText="№ дом. телефона" />
+                                    <TextField fx:id="homePhoneField" prefHeight="25.0" prefWidth="220.0" promptText="№ дом. телефона" />
                                     <Label fx:id="homePhoneLabel" text="Label" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="15.0">
                                  <children>
-                                    <TextField fx:id="emailField" prefHeight="25.0" prefWidth="277.0" promptText="e-mail" />
+                                    <TextField fx:id="emailField" prefHeight="25.0" prefWidth="220.0" promptText="e-mail" />
                                     <Label fx:id="emailLabel" text="Label" />
                                  </children>
                               </HBox>
@@ -82,23 +82,23 @@
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="15.0">
                                  <children>
-                                    <TextField fx:id="loginField" prefHeight="25.0" prefWidth="277.0" promptText="Логин" />
+                                    <TextField fx:id="loginField" prefHeight="25.0" prefWidth="220.0" promptText="Логин" />
                                     <Label fx:id="loginLabel" text="Label" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" spacing="15.0">
                                  <children>
-                                    <TextField fx:id="passField" prefHeight="25.0" prefWidth="277.0" promptText="Пароль" />
+                                    <TextField fx:id="passField" prefHeight="25.0" prefWidth="220.0" promptText="Пароль" />
                                     <Label fx:id="passLabel" text="Label" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="320.0" spacing="15.0">
+                        <HBox alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="320.0" spacing="10.0">
                            <children>
-                              <Button fx:id="createBtn" mnemonicParsing="false" onAction="#createBtnAction" text="Создать" />
-                              <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#updateBtnAction" text="Обновить" />
-                              <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#deleteBtnAction" text="Удалить" />
+                              <Button fx:id="createBtn" mnemonicParsing="false" onAction="#createBtnAction" text="Внести сотрудника" />
+                              <Button fx:id="updateBtn" mnemonicParsing="false" onAction="#updateBtnAction" text="Сохранить изменения" />
+                              <Button fx:id="deleteBtn" mnemonicParsing="false" onAction="#deleteBtnAction" text="Удалить сотрудника" />
                            </children>
                         </HBox>
                      </children>
@@ -107,6 +107,5 @@
             </AnchorPane>
         </items>
       </SplitPane>
-      <Button fx:id="closeBtn" layoutX="1091.0" layoutY="857.0" mnemonicParsing="false" onAction="#closeBtnAction" text="Закрыть" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
    </children>
 </AnchorPane>

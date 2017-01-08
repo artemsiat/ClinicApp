@@ -30,7 +30,7 @@ public class PopulatePatients {
     PatientsDao patientsDao;
 
     public PopulatePatients(){
-        System.out.println("Constructed");
+        System.out.println("Populating patients class");
     }
 
     public void populateRandomPatients(int count){

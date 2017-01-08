@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.fx.FrameClass;
 import ru.clinic.application.java.fx.controllers.ControllerWorkingDays;
 import ru.clinic.application.java.service.AppService;
@@ -65,5 +66,10 @@ public class FrameWorkingDays extends FrameClass{
     public void stop(){
         controller.stopController();
         stage.close();
+    }
+
+    @Override
+    public ControllerClass getFrameController() {
+        return null;
     }
 }

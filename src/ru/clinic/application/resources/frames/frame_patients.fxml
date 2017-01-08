@@ -11,19 +11,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="907.0" prefWidth="1524.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="766.0" prefWidth="1044.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane dividerPositions="0.7491248541423571" layoutX="532.0" layoutY="130.0" orientation="VERTICAL" prefHeight="859.0" prefWidth="1243.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <SplitPane dividerPositions="0.75" layoutX="532.0" layoutY="130.0" orientation="VERTICAL" prefHeight="859.0" prefWidth="1243.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <SplitPane dividerPositions="0.15698587127158556" layoutX="488.0" layoutY="179.0" orientation="VERTICAL" prefHeight="639.0" prefWidth="1241.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.16" layoutX="488.0" layoutY="179.0" orientation="VERTICAL" prefHeight="675.0" prefWidth="1522.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
                               <VBox layoutX="14.0" layoutY="14.0" spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
                                  <children>
-                                    <HBox spacing="15.0">
+                                    <HBox spacing="10.0">
                                        <children>
                                           <TextField fx:id="lastNameFindFld" prefHeight="25.0" prefWidth="220.0" promptText="Фамилия" />
                                           <TextField fx:id="firstNameFindFld" prefHeight="25.0" prefWidth="220.0" promptText="Имя" />
@@ -39,7 +39,7 @@
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <SplitPane dividerPositions="0.5520421607378129" layoutX="412.0" layoutY="150.0" prefHeight="541.0" prefWidth="1239.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <SplitPane dividerPositions="0.6" layoutX="412.0" layoutY="150.0" prefHeight="541.0" prefWidth="1239.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <items>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
@@ -57,7 +57,7 @@
                                     </AnchorPane>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <VBox layoutX="17.0" layoutY="14.0" spacing="35.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                                          <VBox layoutX="17.0" layoutY="14.0" spacing="25.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
                                              <children>
                                                 <VBox spacing="10.0">
                                                    <children>
@@ -104,7 +104,7 @@
                                                    </children>
                                                 </VBox>
                                                 <TextArea fx:id="commentFld" prefHeight="107.0" prefWidth="346.0" promptText="Комментарий" />
-                                                <HBox spacing="15.0">
+                                                <HBox spacing="10.0">
                                                    <children>
                                                       <Button fx:id="addPatientBtn" mnemonicParsing="false" onAction="#addPatientBtnAction" text="Внести пациента" />
                                                       <Button fx:id="updatePatientBtn" mnemonicParsing="false" onAction="#updatePatientBtnAction" text="Сохранить изменения" />

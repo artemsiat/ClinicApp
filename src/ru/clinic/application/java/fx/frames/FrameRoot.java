@@ -2,41 +2,44 @@ package ru.clinic.application.java.fx.frames;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.fx.FrameClass;
-import ru.clinic.application.java.fx.controllers.ControllerDbTables;
+import ru.clinic.application.java.fx.controllers.ControllerRoot;
 import ru.clinic.application.java.service.AppService;
 
 import java.io.IOException;
 
 /**
- * Created by Artem Siatchinov on 1/2/2017.
+ * Created by Artem Siatchinov on 1/8/2017.
  */
+
 @Component
-public class FrameDbTables extends FrameClass{
+public class FrameRoot extends FrameClass {
 
-    private final static Logger LOGGER = Logger.getLogger(FrameDbTables.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(FrameRoot.class.getName());
 
-    private final static String STAGE_TITLE = "\"ООО\" Классическая гомеопатия - Настройка базы данных";
+    private final static String STAGE_TITLE = "\"ООО\" Классическая гомеопатия";
 
-    private final static String FXML_PATH = "/frames/frame_db.fxml";
+    private final static String FXML_PATH = "/frames/frame_root.fxml";
 
-    private final static String CSS_PATH = "/css/frame_db.css";
+    private final static String CSS_PATH = "/css/frame_root.css";
 
     private Stage stage;
 
-    @Autowired
-    private AppService appService;
+    private BorderPane root;
 
     @Autowired
-    private ControllerDbTables controller;
+    AppService appService;
 
-    public FrameDbTables(){
+    @Autowired
+    ControllerRoot controller;
+
+    public FrameRoot() {
         super(STAGE_TITLE, FXML_PATH);
         stage = new Stage();
     }
@@ -44,27 +47,32 @@ public class FrameDbTables extends FrameClass{
     public void start(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PATH));
         loader.setController(controller);
-        AnchorPane root = null;
+        root = null;
 
         try {
             root = loader.load();
         } catch (IOException e) {
-            LOGGER.error("[FrameStart][start] Exception loading fxml");
+            LOGGER.error("[FrameRoot][start] Exception loading fxml");
             e.printStackTrace();
             return;
         }
-
         stage.setTitle(STAGE_TITLE);
         Scene scene = new Scene(root);
         scene.getStylesheets().add(CSS_PATH);
         stage.setScene(scene);
         controller.startController();
         setIcon(stage);
+        stage.setMaximized(true);
         stage.show();
     }
 
     public void stop(){
+        controller.stopController();
         stage.close();
+    }
+
+    public BorderPane getRoot() {
+        return root;
     }
 
     @Override
