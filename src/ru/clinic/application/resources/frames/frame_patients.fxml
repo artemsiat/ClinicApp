@@ -17,11 +17,11 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                <children>
-                  <SplitPane dividerPositions="0.16" layoutX="488.0" layoutY="179.0" orientation="VERTICAL" prefHeight="675.0" prefWidth="1522.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.165" layoutX="488.0" layoutY="179.0" orientation="VERTICAL" prefHeight="675.0" prefWidth="1522.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <VBox layoutX="14.0" layoutY="14.0" spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                              <VBox layoutX="14.0" layoutY="14.0" spacing="10.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
                                  <children>
                                     <HBox spacing="10.0">
                                        <children>
@@ -35,7 +35,7 @@
                                     <HBox alignment="CENTER_LEFT" spacing="15.0">
                                        <children>
                                           <Button fx:id="findBtn" mnemonicParsing="false" onAction="#findBtnAction" text="Найти пациента" />
-                                          <Label text="Всего пациентов:" />
+                                          <Label fx:id="findPatientsLabel" text="Всего пациентов:" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -48,7 +48,7 @@
                                 <items>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                        <children>
-                                          <TableView fx:id="patientsTable" layoutX="292.0" layoutY="56.0" prefHeight="532.0" prefWidth="983.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <TableView fx:id="patientsTable" layoutX="292.0" layoutY="56.0" onMouseClicked="#patientsTableMouseClicked" prefHeight="532.0" prefWidth="983.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <columns>
                                               <TableColumn fx:id="fioCol" prefWidth="75.0" text="ФИО" />
                                               <TableColumn fx:id="phoneCol" prefWidth="75.0" text="Номер телефона" />

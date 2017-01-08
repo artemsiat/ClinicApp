@@ -8,20 +8,29 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <AnchorPane BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="105.0" prefWidth="789.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox layoutX="279.0" layoutY="40.0" spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="45.0">
+            <HBox fx:id="imagesHbox" layoutX="279.0" layoutY="40.0" spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="45.0">
                <children>
-                  <Button fx:id="mainBtn" mnemonicParsing="false" onAction="#mainBtnAction" text="Главная" />
-                  <Button fx:id="patientBtn" mnemonicParsing="false" onAction="#patientBtnAction" text="Пациенты" />
-                  <Button fx:id="doctorsBtn" mnemonicParsing="false" onAction="#doctorsBtnAction" text="Врачи" />
-                  <Button fx:id="adminBtn" mnemonicParsing="false" onAction="#adminBtnAction" text="Администраторы" />
+                  <Button fx:id="mainBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainBtnAction" text="Главная" />
+                  <Button fx:id="patientBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#patientBtnAction" text="Пациенты" />
+                  <Button fx:id="appointmentBtn" contentDisplay="TOP" mnemonicParsing="false" text="Записать пациента" />
+                  <Button fx:id="doctorsBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#doctorsBtnAction" text="Врачи" />
+                  <Button fx:id="scheduleBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#scheduleBtnAction" text="Расписание врачей" />
+                  <Button fx:id="adminBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#adminBtnAction" text="Администраторы" />
                </children>
             </HBox>
-            <Label fx:id="currAdminLabel" layoutX="980.0" layoutY="14.0" text="Администратор:" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0" />
+            <VBox layoutX="695.0" layoutY="35.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0">
+               <children>
+                  <Label fx:id="currAdminLabel" text="Администратор:" />
+                  <Label text="Selected Patient:" />
+                  <Label text="Selected Doctor:" />
+               </children>
+            </VBox>
             <MenuBar layoutX="234.0" layoutY="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <menus>
                   <Menu mnemonicParsing="false" text="Настройки">

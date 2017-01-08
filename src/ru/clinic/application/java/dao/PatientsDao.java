@@ -37,6 +37,7 @@ public class PatientsDao {
             "WHERE id = ?";
     private final static String REMOVE_PATIENT = "UPDATE patient SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
     private final static String FIND_PATIENT = "SELECT * FROM patient WHERE removed = false ";
+    private static final String PATIENTS_COUNT = "SELECT count(*) FROM patient WHERE removed = false ";
 
     private final static String PATIENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS PATIENT("+
             "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
@@ -54,6 +55,7 @@ public class PatientsDao {
             "who_removed int,"+
             "when_removed timestamp,"+
             "removed boolean)";
+
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -176,5 +178,9 @@ public class PatientsDao {
         });
         return patients;
 
+    }
+
+    public int getPatientsCount() {
+        return jdbcTemplate.queryForObject(PATIENTS_COUNT, Integer.class);
     }
 }

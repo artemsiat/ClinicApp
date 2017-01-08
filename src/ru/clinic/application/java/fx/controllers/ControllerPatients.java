@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,11 +141,15 @@ public class ControllerPatients extends ControllerClass {
     private Button removePatientBtn;
 
     @FXML
+    private Label findPatientsLabel;
+
+    @FXML
     void addPatientBtnAction(ActionEvent event) {
         if (checkInputFields()) {
             LOGGER.debug("[ControllerPatients][addPatientBtnAction] create Btn clicked");
             patientsService.addNewPatient(lastNameFld.getText(), firstNameFld.getText(), middleNameFld.getText(), phoneNumberFld.getText(), phoneNumberTwoFld.getText(), emailFld.getText(), commentFld.getText());
             patientsTable.setItems(patientsService.loadLastCreatedPatients());
+            setFindLabel();
         } else {
             LOGGER.debug("[ControllerDoctors][createDoctorBtnAction] Fio field is empty.");
             alertAllFieldsEmpty();
@@ -210,6 +215,7 @@ public class ControllerPatients extends ControllerClass {
                         + selectedPatient.getFio() + "]");
                 patientsService.deletePatient(selectedPatient.getId(), adminService.getCurrentAdmin().getId());
                 patientsTable.setItems(patientsService.loadLastCreatedPatients());
+                setFindLabel();
             } else {
                 LOGGER.debug("[ControllerDoctors][removeDoctorBtnAction] Operation was not confirmed by current Administrator[" + adminService.getCurrentAdmin().getFio() + "]");
             }
@@ -269,12 +275,20 @@ public class ControllerPatients extends ControllerClass {
         alert.showAndWait();
     }
 
+    @FXML
+    void patientsTableMouseClicked(MouseEvent event) {
+        if (event.getClickCount() >= 2){
+            //Todo Display separate window displaying detailed info about the patient
+        }
+    }
+
     public void startController() {
         clearFields();
         clearFieldsFind();
         clearLabels();
         initListeners();
         setTable();
+        setFindLabel();
     }
 
     private void setTable() {
@@ -299,13 +313,10 @@ public class ControllerPatients extends ControllerClass {
         phoneFieldToLabel.put(phoneFindFld, null);
         phoneFieldToLabel.forEach(((textField, label) -> {
 
-            if (label != null){
-                label.setText( "+7(" );
-            }
             textField.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    String labelText = "+ 7(";
+                    String labelText = "";
                     if (newValue != null && !newValue.isEmpty()){
                         String resultDigits = "";
                         for (int index = 0 ; index < newValue.length(); index ++){
@@ -403,6 +414,11 @@ public class ControllerPatients extends ControllerClass {
         phoneNumberTwoFld.setText("");
         emailFld.setText("");
         commentFld.setText("");
+    }
+
+    private void setFindLabel(){
+        int count = patientsService.getPatientsCount();
+        findPatientsLabel.setText("Всего пациентов: " + count);
     }
 
 

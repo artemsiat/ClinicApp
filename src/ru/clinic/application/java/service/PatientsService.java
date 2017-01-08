@@ -2,6 +2,7 @@ package ru.clinic.application.java.service;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -66,7 +67,7 @@ public class PatientsService {
 
     public static String maskPhoneNumber(String digits) {
         String result = "+7(";
-        if (digits != null) {
+        if (!StringUtils.isEmpty(digits)) {
 
             if (digits.length() > 10) {
                 result += digits.substring(0, 3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6, 8) + "-" + digits.substring(8, 10) + " доб.:" + digits.substring(10);
@@ -81,16 +82,20 @@ public class PatientsService {
             } else {
                 result += digits;
             }
+            return result;
         }
-        return result;
+        return "";
     }
 
     public ObservableList<Patient> findPatient(String firstName, String lastName, String middleName, String phone, String email) {
         LOGGER.debug("[PatientsService][findPatient] Looking for patient firstName[" + firstName +
                 "] lastName[" + lastName + "] middleName[" + middleName + "] phone[" + phone + "] email[" + email + "]");
-        System.out.println(firstName.trim().toLowerCase());
         ObservableList<Patient> patientsList = patientsDao.findPatient(firstName, lastName, middleName, phone, email);
         patients = patientsList;
         return patientsList;
+    }
+
+    public int getPatientsCount() {
+        return patientsDao.getPatientsCount();
     }
 }

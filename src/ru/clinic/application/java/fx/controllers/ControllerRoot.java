@@ -2,10 +2,14 @@ package ru.clinic.application.java.fx.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.CacheHint;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -42,6 +46,9 @@ public class ControllerRoot {
     @Autowired
     AdminService adminService;
 
+    @Autowired
+    FrameWorkingDays frameWorkingDays;
+
     @FXML
     private Label currAdminLabel;
 
@@ -59,6 +66,15 @@ public class ControllerRoot {
 
     @FXML
     private MenuItem menuDbTables;
+
+    @FXML
+    private HBox imagesHbox;
+
+    @FXML
+    private Button appointmentBtn;
+
+    @FXML
+    private Button scheduleBtn;
 
     @FXML
     void menuDbTablesAction(ActionEvent event) {
@@ -85,10 +101,34 @@ public class ControllerRoot {
         frameRoot.getRoot().setCenter(frameMain.getCenterPane());
     }
 
+    @FXML
+    void scheduleBtnAction(ActionEvent event) {
+        frameRoot.getRoot().setCenter(frameWorkingDays.getCenterPane());
+    }
+
     public void startController() {
         setMainPane();
         initAdminLabel();
+        setButtonImages();
     }
+
+    private void setButtonImages() {
+        setImage(doctorsBtn, "/images/doctor.png");
+        setImage(adminBtn, "/images/admin.png");
+        setImage(patientBtn, "/images/patient.png");
+        setImage(appointmentBtn, "/images/appointment.png");
+        setImage(scheduleBtn, "/images/schedule.png");
+        setImage(mainBtn, "/images/tree.png");
+    }
+
+    private void setImage(Button btn, String path) {
+        ImageView view = new ImageView(new Image(path, 100, 100, false, false));
+        view.setCache(true);
+        view.setCacheHint(CacheHint.SPEED);
+        view.setSmooth(true);
+        btn.setGraphic(view);
+    }
+
 
     private void setMainPane() {
         AnchorPane centerPane = frameMain.getCenterPane();
