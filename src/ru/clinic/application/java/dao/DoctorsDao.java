@@ -95,7 +95,8 @@ public class DoctorsDao {
     }
 
     public void deleteDoctor(int selectedDoctorId, int id) {
-        jdbcTemplate.update(REMOVE_DOCTOR, selectedDoctorId, id);
+        LOGGER.debug("[DoctorsDao][deleteDoctor] Administrator with id[" + id + "] removing doctor id[" + selectedDoctorId + "]");
+        jdbcTemplate.update(REMOVE_DOCTOR, id, selectedDoctorId);
     }
 
     public void updateDoctor(int doctorId, int whoModified, String fio, Date dobDate, String cellPhone, String cellPhoneTwo, String homePhone, String email, String comment) {

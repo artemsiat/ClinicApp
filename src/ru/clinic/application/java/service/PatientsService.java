@@ -66,19 +66,31 @@ public class PatientsService {
 
     public static String maskPhoneNumber(String digits) {
         String result = "+7(";
-        if (digits.length() > 10){
-            result += digits.substring(0,3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6, 8) + "-" + digits.substring(8, 10) + " доб.:" + digits.substring(10);
-        }else if (digits.length() > 8){
-            result += digits.substring(0,3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6, 8) + "-" + digits.substring(8);
-        }else if (digits.length() > 6){
-            result += digits.substring(0,3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6);
-        }else if (digits.length() > 3){
-            result += digits.substring(0,3) + ")" + digits.substring(3);
-        }else if (digits.length() > 2){
-            result += digits + ")";
-        }else {
-            result += digits;
+        if (digits != null) {
+
+            if (digits.length() > 10) {
+                result += digits.substring(0, 3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6, 8) + "-" + digits.substring(8, 10) + " доб.:" + digits.substring(10);
+            } else if (digits.length() > 8) {
+                result += digits.substring(0, 3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6, 8) + "-" + digits.substring(8);
+            } else if (digits.length() > 6) {
+                result += digits.substring(0, 3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6);
+            } else if (digits.length() > 3) {
+                result += digits.substring(0, 3) + ")" + digits.substring(3);
+            } else if (digits.length() > 2) {
+                result += digits + ")";
+            } else {
+                result += digits;
+            }
         }
         return result;
+    }
+
+    public ObservableList<Patient> findPatient(String firstName, String lastName, String middleName, String phone, String email) {
+        LOGGER.debug("[PatientsService][findPatient] Looking for patient firstName[" + firstName +
+                "] lastName[" + lastName + "] middleName[" + middleName + "] phone[" + phone + "] email[" + email + "]");
+        System.out.println(firstName.trim().toLowerCase());
+        ObservableList<Patient> patientsList = patientsDao.findPatient(firstName, lastName, middleName, phone, email);
+        patients = patientsList;
+        return patientsList;
     }
 }

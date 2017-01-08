@@ -15,6 +15,7 @@ import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.PatientsService;
+import ru.clinic.application.test.PopulatePatients;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -38,6 +39,9 @@ public class ControllerPatients extends ControllerClass {
     private static final String INFORMATION_EMPTY_FIO_TITLE = "Информационное окно";
     private static final String INFORMATION_EMPTY_FIO_CONTEXT_NOT_SELECTED = "Для внесения нового пациента в базу данных необходимо заполнить как минимум одно поле.";
 
+    /*Information Dialog Find fieldsEmpty*/
+    private static final String INFORMATION_EMPTY_FIND_FIELDS = "Для поиска пациента необходимо заполнить поля.";
+
     /*Confirmation Dialog removing patient*/
     private final static String CONFIRMATION_DELETE_TITLE = "Подтверждение";
     private final static String CONFIRMATION_DELETE_HEADER = "Вы собираетесь удалить пациента. ";
@@ -53,6 +57,9 @@ public class ControllerPatients extends ControllerClass {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    PopulatePatients populatePatients;
 
     @FXML
     private TextField lastNameFindFld;
@@ -162,7 +169,36 @@ public class ControllerPatients extends ControllerClass {
 
     @FXML
     void findBtnAction(ActionEvent event) {
+        //populatePatients.populateRandomPatients(1500);
+        if (checkFindFields()){
+            ObservableList<Patient> patients = patientsService.findPatient(firstNameFindFld.getText(), lastNameFindFld.getText(),
+                    middleNameFindFld.getText(), phoneFindFld.getText(), emailFindFld.getText());
+            patientsTable.setItems(patients);
+            patientsTable.refresh();
+        }else {
+            LOGGER.debug("[ControllerPatients][findBtnAction] Check find fields returned false. Alerting user");
+            alertFindFieldsEmpty();
+            patientsTable.setItems(patientsService.loadLastCreatedPatients());
+            patientsTable.refresh();
+        }
 
+    }
+
+    private void alertFindFieldsEmpty() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(INFORMATION_TITLE);
+        alert.setHeaderText(null);
+        alert.setContentText(INFORMATION_EMPTY_FIND_FIELDS);
+
+        alert.showAndWait();
+    }
+
+    private boolean checkFindFields() {
+        if (StringUtils.isBlank(firstNameFindFld.getText()) && StringUtils.isBlank(lastNameFindFld.getText()) && StringUtils.isBlank(middleNameFindFld.getText()) &&
+                StringUtils.isBlank(phoneFindFld.getText()) && StringUtils.isBlank(emailFindFld.getText())) {
+            return false;
+        }
+        return true;
     }
 
     @FXML

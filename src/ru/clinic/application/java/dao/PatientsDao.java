@@ -2,6 +2,7 @@ package ru.clinic.application.java.dao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -14,6 +15,7 @@ import ru.clinic.application.java.service.setting.SettingsService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by Artem Siatchinov on 1/5/2017.
@@ -34,6 +36,7 @@ public class PatientsDao {
             "firstName=?, lastName=?, middleName=?, phone=?, phoneTwo=?, email=?, comment=?, who_modified=?, modified=CURRENT_TIMESTAMP " +
             "WHERE id = ?";
     private final static String REMOVE_PATIENT = "UPDATE patient SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
+    private final static String FIND_PATIENT = "SELECT * FROM patient WHERE removed = false ";
 
     private final static String PATIENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS PATIENT("+
             "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
@@ -109,5 +112,69 @@ public class PatientsDao {
 
     public void deletePatient(int selectedPatientId, int id) {
         jdbcTemplate.update(REMOVE_PATIENT, id, selectedPatientId);
+    }
+
+    public ObservableList<Patient> findPatient(String firstName, String lastName, String middleName, String phone, String email) {
+        // LOWER(firstname) like '%андр%'"
+        //"SELECT * FROM (SELECT * FROM patient WHERE removed = false  ORDER BY modified DESC) WHERE ROWNUM <= ";
+        String sql = FIND_PATIENT;
+        ArrayList<String> params = new ArrayList<>();
+
+        if (!StringUtils.isBlank(lastName)){
+            sql += " AND LOWER(lastname) like '%" + lastName.trim().toLowerCase() + "%' ";
+            params.add(lastName.trim().toLowerCase());
+        }
+        if (!StringUtils.isBlank(firstName)){
+            sql += " AND LOWER(firstName) like '%" + firstName.trim().toLowerCase() + "%' ";
+            params.add(firstName.trim().toLowerCase());
+        }
+        if (!StringUtils.isBlank(middleName)){
+            sql += " AND LOWER(middleName) like '%" + middleName.trim().toLowerCase() + "%' ";
+            params.add(middleName.trim().toLowerCase());
+        }
+        if (!StringUtils.isBlank(phone)){
+            //AND (phone like '%101%' OR phonetwo like '%101%')
+            sql += " AND (phone like '%" + phone + "%' OR phonetwo like '%" + phone + "%') ";
+            params.add(phone);
+            params.add(phone);
+        }
+        if (!StringUtils.isBlank(email)){
+            sql += " AND LOWER(email) like '%" + email.trim().trim().toLowerCase() + "%' ";
+            params.add(email.trim().trim().toLowerCase());
+        }
+        sql = "SELECT * FROM (" + sql + ") WHERE ROWNUM <= " + settingsService.getMaxPatientsLoadCount();
+
+        return selectPatients(sql);
+
+    }
+
+    private ObservableList<Patient> selectPatients(String sql, ArrayList<String> params) {
+        Object[] objects = params.toArray();
+
+        ObservableList<Patient> patients = jdbcTemplate.query(sql, objects, new ResultSetExtractor<ObservableList<Patient>>() {
+
+            @Override
+            public ObservableList<Patient> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                ObservableList<Patient> patients = FXCollections.observableArrayList();
+
+                while (rs.next()) {
+                    Patient patient = new Patient();
+                    patient.setId(rs.getInt("id"));
+                    patient.setFirstName(rs.getString("firstName"));
+                    patient.setLastName(rs.getString("lastName"));
+                    patient.setMiddleName(rs.getString("middleName"));
+                    patient.setCellPhone(rs.getString("phone"));
+                    patient.setCellPhoneTwo(rs.getString("phoneTwo"));
+                    patient.setEmail(rs.getString("email"));
+                    patient.setComment(rs.getString("comment"));
+                    patient.generateFio();
+
+                    patients.add(patient);
+                }
+                return patients;
+            }
+        });
+        return patients;
+
     }
 }

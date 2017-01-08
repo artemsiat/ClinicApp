@@ -32,7 +32,12 @@
                                           <TextField fx:id="emailFindFld" prefHeight="25.0" prefWidth="220.0" promptText="E-mail" />
                                        </children>
                                     </HBox>
-                                    <Button fx:id="findBtn" mnemonicParsing="false" onAction="#findBtnAction" text="Найти пациента" />
+                                    <HBox alignment="CENTER_LEFT" spacing="15.0">
+                                       <children>
+                                          <Button fx:id="findBtn" mnemonicParsing="false" onAction="#findBtnAction" text="Найти пациента" />
+                                          <Label text="Всего пациентов:" />
+                                       </children>
+                                    </HBox>
                                  </children>
                               </VBox>
                            </children>
