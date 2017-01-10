@@ -295,6 +295,24 @@ public class ControllerPatients extends ControllerClass {
         fioCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("fioProp"));
         phoneCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("cellPhoneProp"));
         emailCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("emailProp"));
+
+        //Todo remove. This is example of how to change color of a row
+/*        emailCol.setCellFactory(new Callback<TableColumn<Patient, String>, TableCell<Patient, String>>() {
+            @Override
+            public TableCell<Patient, String> call(TableColumn<Patient, String> param) {
+                return new TableCell<Patient, String>(){
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (!empty){
+                            this.setStyle("-fx-background-color:red");
+                            this.setText(item);
+                        }
+                    }
+                };
+            }
+        });*/
+
         ObservableList<Patient> patients = patientsService.loadLastCreatedPatients();
 
         patientsTable.setItems(patients);
