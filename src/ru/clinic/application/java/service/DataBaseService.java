@@ -4,10 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.DataBaseDao;
-import ru.clinic.application.java.service.dataBaseModel.TableAdmins;
-import ru.clinic.application.java.service.dataBaseModel.TableDoctors;
-import ru.clinic.application.java.service.dataBaseModel.TablePatients;
-import ru.clinic.application.java.service.dataBaseModel.TableStatus;
+import ru.clinic.application.java.service.dataBaseModel.*;
 
 import javax.annotation.PostConstruct;
 
@@ -29,6 +26,9 @@ public class DataBaseService {
     @Autowired
     TablePatients tablePatients;
 
+    @Autowired
+    TableWorkingDays tableWorkingDays;
+
     private TableStatus[] tables;
 
     @Autowired
@@ -40,7 +40,7 @@ public class DataBaseService {
 
     @PostConstruct
     public void init(){
-        tables = new TableStatus[]{this.tableAdmins, this.tableDoctors, this.tablePatients};
+        tables = new TableStatus[]{this.tableAdmins, this.tableDoctors, this.tablePatients, this.tableWorkingDays};
     }
 
     public boolean checkTables() {

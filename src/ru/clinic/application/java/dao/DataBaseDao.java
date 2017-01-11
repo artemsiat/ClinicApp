@@ -73,15 +73,30 @@ public class DataBaseDao {
             "when_removed timestamp,"+
             "removed boolean)";
 
+    private final static String WORKING_DAY_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'WORKING_DAY'";
+    private final static String DROP_WORKING_DAY_TABLE = "DROP TABLE WORKING_DAY";
+    private final static String WORKING_DAY_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS WORKING_DAY("+
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
+            "doctor_id int,"+
+            "working_day date,"+
+            "start_time varchar(10),"+
+            "end_time varchar(10),"+
+            "start_lunch varchar(10),"+
+            "end_lunch varchar(10),"+
+            "comment varchar(500),"+
+            "creator int,"+
+            "created timestamp,"+
+            "who_modified int,"+
+            "modified timestamp,"+
+            "who_removed int,"+
+            "when_removed timestamp,"+
+            "removed boolean)";
+
     @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    public DataBaseDao(){
-
-    }
 
     public boolean checkAdminTable(){
         LOGGER.debug("[DataBaseDao][checkAdminTable] Checking if Admin table is created");
@@ -98,6 +113,12 @@ public class DataBaseDao {
     public boolean checkPatientsTable() {
         LOGGER.debug("[DataBaseDao][checkPatientsTable] Checking if Patient table is created");
         Integer count = jdbcTemplate.queryForObject(PATIENT_CHECK_TABLE, Integer.class);
+        return count == 1;
+    }
+
+    public boolean checkWorkingDayTable() {
+        LOGGER.debug("[DataBaseDao][checkWorkingDayTable] Checking if WorkingDay table is created");
+        Integer count = jdbcTemplate.queryForObject(WORKING_DAY_CHECK_TABLE, Integer.class);
         return count == 1;
     }
 
@@ -133,5 +154,11 @@ public class DataBaseDao {
         jdbcTemplate.execute(PATIENT_CREATE_TABLE);
     }
 
+    public void dropWorkingDayTable() {
+        jdbcTemplate.execute(DROP_WORKING_DAY_TABLE);
+    }
 
+    public void createWorkingDayTable() {
+        jdbcTemplate.execute(WORKING_DAY_CREATE_TABLE);
+    }
 }

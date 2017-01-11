@@ -15,6 +15,7 @@ import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.dataBaseModel.TableAdmins;
 import ru.clinic.application.java.service.dataBaseModel.TableDoctors;
 import ru.clinic.application.java.service.dataBaseModel.TablePatients;
+import ru.clinic.application.java.service.dataBaseModel.TableWorkingDays;
 
 import java.util.Optional;
 
@@ -55,6 +56,9 @@ public class ControllerDbTables {
     @Autowired
     TablePatients tablePatients;
 
+    @Autowired
+    TableWorkingDays tableWorkingDays;
+
     @FXML
     private Label adminStatus;
 
@@ -94,6 +98,18 @@ public class ControllerDbTables {
     @FXML
     private Button refreshPatientBtn;
 
+    @FXML
+    private Label workingDayStatus;
+
+    @FXML
+    private Button createWorkingDay;
+
+    @FXML
+    private Button dropWorkingDay;
+
+    @FXML
+    private Button updateWorkingDay;
+
 
 
 
@@ -101,6 +117,7 @@ public class ControllerDbTables {
         setAdminStatus();
         setDoctorsStatus();
         setPatientStatus();
+        setWorkingDayStatus();
     }
 
     private void alertNoAuth() {
@@ -229,6 +246,35 @@ public class ControllerDbTables {
     void createPatientBtnAction(ActionEvent event) {
         if (confirmAction()) {
             tablePatients.createTable();
+        }
+    }
+
+    public void setWorkingDayStatus() {
+        if (workingDayStatus != null && createWorkingDay != null && dropWorkingDay != null){
+            setCreatedStatus(tableWorkingDays.isCreated(), workingDayStatus, createWorkingDay, dropWorkingDay);
+        }
+    }
+
+    @FXML
+    void updateWorkingDayAction(ActionEvent event) {
+        tableWorkingDays.checkIfCreated();
+    }
+
+    @FXML
+    void dropWorkingDayAction(ActionEvent event) {
+        if (adminService.getCurrentAdmin().getId() == 0) {
+            if (confirmAction()) {
+                tableWorkingDays.dropTable();
+            }
+        }else {
+            alertNoAuth();
+        }
+    }
+
+    @FXML
+    void createWorkingDayAction(ActionEvent event) {
+        if (confirmAction()) {
+            tableWorkingDays.createTable();
         }
     }
 }

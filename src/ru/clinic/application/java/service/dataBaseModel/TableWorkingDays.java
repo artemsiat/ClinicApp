@@ -1,18 +1,16 @@
 package ru.clinic.application.java.service.dataBaseModel;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.DataBaseDao;
 import ru.clinic.application.java.fx.controllers.ControllerDbTables;
 
 /**
- * Created by Artem Siatchinov on 1/2/2017.
+ * Created by Artem Siatchinov on 1/11/2017.
  */
-@Component
-public class TableAdmins extends TableStatus{
 
-    private final static Logger LOGGER = Logger.getLogger(TableAdmins.class.getName());
+@Component
+public class TableWorkingDays extends TableStatus{
 
     @Autowired
     DataBaseDao dataBaseDao;
@@ -20,30 +18,30 @@ public class TableAdmins extends TableStatus{
     @Autowired
     ControllerDbTables controllerDbTables;
 
-    private final static String TABLE_NAME = "ADMIN";
+    private final static String TABLE_NAME = "WORKING_DAY";
 
-    public TableAdmins() {
+    public TableWorkingDays() {
         super(TABLE_NAME);
     }
 
     @Override
     public boolean checkIfCreated() {
-        boolean created = dataBaseDao.checkAdminTable();
-        LOGGER.debug("[TableAdmins][checkIfCreated] Table ["+ TABLE_NAME+"] is " + (created? "created" : "not created"));
+        boolean created = dataBaseDao.checkWorkingDayTable();
         setCreated(created);
-        controllerDbTables.setAdminStatus();
+        controllerDbTables.setWorkingDayStatus();
         return created;
     }
 
     @Override
     public void dropTable() {
-        dataBaseDao.dropAdminTable();
+        dataBaseDao.dropWorkingDayTable();
         checkIfCreated();
     }
 
     @Override
     public void createTable() {
-        dataBaseDao.createAdminTable();
+        dataBaseDao.createWorkingDayTable();
         checkIfCreated();
     }
+
 }
