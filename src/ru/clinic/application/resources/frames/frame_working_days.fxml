@@ -2,36 +2,79 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="636.0" prefWidth="1036.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="636.0" prefWidth="1206.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane dividerPositions="0.7088974854932302" layoutX="347.0" layoutY="208.0" prefHeight="636.0" prefWidth="1036.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+      <VBox layoutX="15.0" layoutY="15.0" spacing="10.0">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
                <children>
-                  <VBox fx:id="vBox" alignment="CENTER" layoutX="14.0" layoutY="14.0" spacing="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
-                     <children>
-                        <ComboBox prefHeight="25.0" prefWidth="237.0" promptText="Выберите Врача" />
-                     </children>
-                  </VBox>
+                  <ComboBox fx:id="doctorComboBox" onAction="#doctorComboBoxAction" prefHeight="25.0" prefWidth="320.0" promptText="Выберите Врача" />
+                  <Label fx:id="doctorComboBoxLabel" text="Label" />
                </children>
-            </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+            </HBox>
+            <HBox alignment="CENTER_LEFT" spacing="15.0">
                <children>
-                  <HBox layoutX="432.0" layoutY="595.0" spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
+                  <DatePicker fx:id="wdDatePicker" prefHeight="25.0" prefWidth="320.0" />
+                  <Label fx:id="wdDatePickerLabel" text="Label" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <HBox spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
+         <children>
+            <Button fx:id="createWdBtn" mnemonicParsing="false" onAction="#createWdBtnAction" text="Сделать рабочим" />
+            <Button fx:id="saveWdBtn" mnemonicParsing="false" onAction="#saveWdBtnAction" text="Сохранить" />
+            <Button fx:id="removeWdBtn" mnemonicParsing="false" onAction="#removeWdBtnAction" text="Удалить" />
+         </children>
+      </HBox>
+      <VBox layoutX="435.0" layoutY="272.0" spacing="35.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <children>
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Рабочие время" />
+                  <HBox alignment="CENTER_LEFT" spacing="15.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Сделать рабочим" />
-                        <Button mnemonicParsing="false" text="Сохранить" />
-                        <Button mnemonicParsing="false" text="Удалить" />
+                        <Label maxWidth="-Infinity" prefWidth="90.0" text="Начало" />
+                        <Slider fx:id="workStartSlider" prefHeight="14.0" prefWidth="429.0" />
+                        <Label fx:id="workStartLabel" prefWidth="80.0" text="time" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="15.0">
+                     <children>
+                        <Label maxWidth="1.7976931348623157E308" prefWidth="90.0" text="Окончание" />
+                        <Slider fx:id="workEndSlider" prefHeight="14.0" prefWidth="429.0" />
+                        <Label fx:id="workEndLabel" prefWidth="80.0" text="time" />
                      </children>
                   </HBox>
                </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
+            </VBox>
+            <VBox spacing="5.0">
+               <children>
+                  <Label text="Обеденный перерыв" />
+                  <HBox alignment="CENTER_LEFT" spacing="15.0">
+                     <children>
+                        <Label maxWidth="-Infinity" prefWidth="90.0" text="Начало" />
+                        <Slider fx:id="lunchStartSlider" prefHeight="14.0" prefWidth="429.0" />
+                        <Label fx:id="lunchStartLabel" prefWidth="80.0" text="time" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="15.0">
+                     <children>
+                        <Label maxWidth="1.7976931348623157E308" prefWidth="90.0" text="Окончание" />
+                        <Slider fx:id="lunchEndSlider" prefHeight="14.0" prefWidth="429.0" />
+                        <Label fx:id="lunchEndLabel" prefWidth="80.0" text="time" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

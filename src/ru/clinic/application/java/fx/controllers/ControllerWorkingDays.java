@@ -1,18 +1,11 @@
 package ru.clinic.application.java.fx.controllers;
 
-import com.sun.javafx.scene.control.skin.DatePickerSkin;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.fx.ControllerClass;
-
-import java.time.LocalDate;
 
 /**
  * Created by Artem Siatchinov on 1/4/2017.
@@ -21,18 +14,101 @@ import java.time.LocalDate;
 @Component
 public class ControllerWorkingDays extends ControllerClass {
 
-    private Node calendarNode;
+    @FXML
+    private Label doctorComboBoxLabel;
+
+    @FXML
+    private Label wdDatePickerLabel;
 
     @FXML
     private AnchorPane anchorPane;
 
     @FXML
-    private VBox vBox;
+    private ComboBox<String> doctorComboBox;
+
+    @FXML
+    private DatePicker wdDatePicker;
+
+    @FXML
+    private Button createWdBtn;
+
+    @FXML
+    private Button saveWdBtn;
+
+    @FXML
+    private Button removeWdBtn;
+
+    @FXML
+    private Slider workStartSlider;
+
+    @FXML
+    private Label workStartLabel;
+
+    @FXML
+    private Slider workEndSlider;
+
+    @FXML
+    private Label workEndLabel;
+
+    @FXML
+    private Slider lunchStartSlider;
+
+    @FXML
+    private Label lunchStartLabel;
+
+    @FXML
+    private Slider lunchEndSlider;
+
+    @FXML
+    private Label lunchEndLabel;
+
+    @FXML
+    void createWdBtnAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void doctorComboBoxAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void removeWdBtnAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void saveWdBtnAction(ActionEvent event) {
+
+    }
 
 
     public void startController() {
+        initDoctorComboBox();
+        initListeners();
+        initDatePicker();
+        setLabels();
+    }
 
-        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+    private void initDoctorComboBox() {
+
+    }
+
+    private void initListeners() {
+
+    }
+
+    private void setLabels() {
+
+    }
+
+
+    public void stopController() {
+
+    }
+
+    private void initDatePicker() {
+/*        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
             @Override
             public DateCell call(DatePicker param) {
                 return new DateCell(){
@@ -48,11 +124,11 @@ public class ControllerWorkingDays extends ControllerClass {
                                 "\nне рабочий" + "\nС 10:30 \nдо 18:30" + "\nПерерыва нет");
 
                         //if date is a working day set it to color
-/*                        if (dateIsWorkingDate(item)){
+*//*                        if (dateIsWorkingDate(item)){
 
                             setDisable(true);
                             setStyle("-fx-background-color: #C2DFFF;");
-                        }*/
+                        }*//*
 
                         // else if date is before today ,set date to color and disable for picking
                         if (item.isBefore(LocalDate.now())){
@@ -68,7 +144,7 @@ public class ControllerWorkingDays extends ControllerClass {
                     }
                 };
             }
-        };
+        };*/
 //
 //        wdDatePicker.dayCellFactoryProperty().addListener(new ChangeListener<Callback<DatePicker, DateCell>>() {
 //            @Override
@@ -114,16 +190,10 @@ public class ControllerWorkingDays extends ControllerClass {
 //
 //        leftPane.getChildren().add(calendarNode);
 
-        DatePicker datePicker = new DatePicker();
-        datePicker.setDayCellFactory(dayCellFactory);
-        DatePickerSkin datePickerSkin = new DatePickerSkin(datePicker);
-        Node calendar = datePickerSkin.getPopupContent();
-        vBox.getChildren().add(calendar);
+//        DatePicker datePicker = new DatePicker();
+//        datePicker.setDayCellFactory(dayCellFactory);
+//        DatePickerSkin datePickerSkin = new DatePickerSkin(datePicker);
+//        Node calendar = datePickerSkin.getPopupContent();
+//        vBox.getChildren().add(calendar);
     }
-
-    public void stopController() {
-
-    }
-
-
 }
