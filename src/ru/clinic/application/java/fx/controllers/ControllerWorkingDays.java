@@ -87,6 +87,7 @@ public class ControllerWorkingDays extends ControllerClass {
     public void startController() {
         //todo add comments tobthe working day object
         // Todo add functionality to create multiple wd for multiple doctors in seperate popup window
+        // Todo, can create time picking with time buttons . example 10  10 15   10 30   10 45.. and the same for 11 on the next row. generate buttons dynamicaly.
         initDoctorComboBox();
         initListeners();
         initDatePicker();
