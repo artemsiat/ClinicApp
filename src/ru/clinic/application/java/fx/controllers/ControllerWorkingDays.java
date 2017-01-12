@@ -84,6 +84,7 @@ public class ControllerWorkingDays extends ControllerClass {
 
 
     public void startController() {
+        //todo add comments tobthe working day object
         initDoctorComboBox();
         initListeners();
         initDatePicker();
