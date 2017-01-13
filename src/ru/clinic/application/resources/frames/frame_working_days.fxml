@@ -5,6 +5,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -74,6 +75,7 @@
                   </HBox>
                </children>
             </VBox>
+            <TextArea fx:id="commentField" prefHeight="91.0" prefWidth="200.0" promptText="Коментарий" />
          </children>
       </VBox>
    </children>

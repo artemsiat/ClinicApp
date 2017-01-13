@@ -63,6 +63,9 @@ public class ControllerWorkingDays extends ControllerClass {
     private Label lunchEndLabel;
 
     @FXML
+    private TextArea commentField;
+
+    @FXML
     void createWdBtnAction(ActionEvent event) {
 
     }
