@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class SettingsService {
 
     private int maxPatientsLoadCount = 30;
+    private int workingDaySliderMaxValue = 60;
     private static boolean testing = true;
 
     public int getMaxPatientsLoadCount() {
@@ -18,5 +19,13 @@ public class SettingsService {
 
     public static boolean isTesting() {
         return testing;
+    }
+
+    public int getWorkingDaySliderMaxValue() {
+        return workingDaySliderMaxValue;
+    }
+
+    public void setWorkingDaySliderMaxValue(int workingDaySliderMaxValue) {
+        this.workingDaySliderMaxValue = workingDaySliderMaxValue;
     }
 }

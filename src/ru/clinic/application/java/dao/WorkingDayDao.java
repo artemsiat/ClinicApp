@@ -21,5 +21,22 @@ public class WorkingDayDao {
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    private final static String WORKING_DAY_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS WORKING_DAY("+
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
+            "doctor_id int,"+
+            "working_day date,"+
+            "start_time varchar(10),"+
+            "end_time varchar(10),"+
+            "start_lunch varchar(10),"+
+            "end_lunch varchar(10),"+
+            "comment varchar(500),"+
+            "creator int,"+
+            "created timestamp,"+
+            "who_modified int,"+
+            "modified timestamp,"+
+            "who_removed int,"+
+            "when_removed timestamp,"+
+            "removed boolean)";
+
 
 }

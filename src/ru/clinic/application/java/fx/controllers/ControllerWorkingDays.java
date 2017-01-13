@@ -1,11 +1,15 @@
 package ru.clinic.application.java.fx.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.fx.ControllerClass;
+import ru.clinic.application.java.service.setting.SettingsService;
 
 /**
  * Created by Artem Siatchinov on 1/4/2017.
@@ -13,6 +17,9 @@ import ru.clinic.application.java.fx.ControllerClass;
 
 @Component
 public class ControllerWorkingDays extends ControllerClass {
+
+    @Autowired
+    SettingsService settingsService;
 
     @FXML
     private Label doctorComboBoxLabel;
@@ -88,7 +95,6 @@ public class ControllerWorkingDays extends ControllerClass {
 
 
     public void startController() {
-        //todo add comments tobthe working day object
         // Todo add functionality to create multiple wd for multiple doctors in seperate popup window
         // Todo, can create time picking with time buttons . example 10  10 15   10 30   10 45.. and the same for 11 on the next row. generate buttons dynamicaly.
         initDoctorComboBox();
@@ -102,7 +108,24 @@ public class ControllerWorkingDays extends ControllerClass {
     }
 
     private void initListeners() {
+        workStartSlider.setMax(settingsService.getWorkingDaySliderMaxValue());
+        workEndSlider.setMax(settingsService.getWorkingDaySliderMaxValue());
 
+
+        workStartSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
+                workStartLabel.setText(String.valueOf(newValue.intValue()));
+            }
+        });
+
+        workEndSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                workEndLabel.setText(String.valueOf(newValue.intValue()));
+            }
+        });
     }
 
     private void setLabels() {
