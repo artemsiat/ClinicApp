@@ -35,7 +35,7 @@
             <Button fx:id="removeWdBtn" mnemonicParsing="false" onAction="#removeWdBtnAction" text="Удалить" />
          </children>
       </HBox>
-      <VBox layoutX="435.0" layoutY="272.0" spacing="35.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+      <VBox layoutX="435.0" layoutY="272.0" prefHeight="283.0" prefWidth="683.0" spacing="35.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
          <children>
             <VBox spacing="5.0">
                <children>
@@ -44,14 +44,14 @@
                      <children>
                         <Label maxWidth="-Infinity" prefWidth="90.0" text="Начало" />
                         <Slider fx:id="workStartSlider" prefHeight="14.0" prefWidth="429.0" />
-                        <Label fx:id="workStartLabel" prefWidth="80.0" text="time" />
+                        <Label fx:id="workStartLabel" prefHeight="17.0" prefWidth="130.0" text="time" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="15.0">
                      <children>
                         <Label maxWidth="1.7976931348623157E308" prefWidth="90.0" text="Окончание" />
                         <Slider fx:id="workEndSlider" prefHeight="14.0" prefWidth="429.0" />
-                        <Label fx:id="workEndLabel" prefWidth="80.0" text="time" />
+                        <Label fx:id="workEndLabel" prefWidth="130.0" text="time" />
                      </children>
                   </HBox>
                </children>
@@ -63,14 +63,14 @@
                      <children>
                         <Label maxWidth="-Infinity" prefWidth="90.0" text="Начало" />
                         <Slider fx:id="lunchStartSlider" prefHeight="14.0" prefWidth="429.0" />
-                        <Label fx:id="lunchStartLabel" prefWidth="80.0" text="time" />
+                        <Label fx:id="lunchStartLabel" prefWidth="130.0" text="time" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" spacing="15.0">
                      <children>
                         <Label maxWidth="1.7976931348623157E308" prefWidth="90.0" text="Окончание" />
                         <Slider fx:id="lunchEndSlider" prefHeight="14.0" prefWidth="429.0" />
-                        <Label fx:id="lunchEndLabel" prefWidth="80.0" text="time" />
+                        <Label fx:id="lunchEndLabel" prefWidth="130.0" text="time" />
                      </children>
                   </HBox>
                </children>

@@ -1,7 +1,5 @@
 package ru.clinic.application.java.fx.controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,6 +10,7 @@ import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Doctor;
 import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.service.DoctorsService;
+import ru.clinic.application.java.service.WorkingDayService;
 import ru.clinic.application.java.service.setting.SettingsService;
 
 /**
@@ -30,6 +29,9 @@ public class ControllerWorkingDays extends ControllerClass {
 
     @Autowired
     DoctorsService doctorsService;
+
+    @Autowired
+    WorkingDayService workingDayService;
 
     @FXML
     private Label doctorComboBoxLabel;
@@ -86,7 +88,7 @@ public class ControllerWorkingDays extends ControllerClass {
     void createWdBtnAction(ActionEvent event) {
 
     }
-    
+
 
     @FXML
     void doctorComboBoxAction(ActionEvent event) {
@@ -112,18 +114,20 @@ public class ControllerWorkingDays extends ControllerClass {
         initDoctorComboBox();
         initListeners();
         initDatePicker();
-        setLabels();
+        setInitialSliderValues();
+    }
+
+    private void setInitialSliderValues() {
+        workStartSlider.setValue(settingsService.getWorkingDayInitialStartTime());
+        workEndSlider.setValue(settingsService.getWorkingDayInitialEndTime());
+        lunchStartSlider.setValue(settingsService.getWorkingDayInitialLunchStartTime());
+        lunchEndSlider.setValue(settingsService.getWorkingDayInitialLunchEndTime());
     }
 
     private void clearLabels() {
         LOGGER.debug("[clearLabels] Clearing labels");
         setDoctorLabel();
         setDatePickerLabel();
-
-        workStartLabel.setText("");
-        workEndLabel.setText("");
-        lunchStartLabel.setText("");
-        lunchEndLabel.setText("");
     }
 
     private void setDatePickerLabel() {
@@ -131,9 +135,9 @@ public class ControllerWorkingDays extends ControllerClass {
     }
 
     private void setDoctorLabel() {
-        if (selectedDoctor == null){
+        if (selectedDoctor == null) {
             doctorComboBoxLabel.setText("Врач не выбран");
-        }else {
+        } else {
             doctorComboBoxLabel.setText("Выбранный врач: " + selectedDoctor.getFio());
         }
     }
@@ -141,7 +145,7 @@ public class ControllerWorkingDays extends ControllerClass {
     private void initDoctorComboBox() {
         LOGGER.debug("[initDoctorComboBox] Setting Doctors ComboBox");
         doctorComboBox.getItems().clear();
-        if (doctorsService.getDoctors().isEmpty()){
+        if (doctorsService.getDoctors().isEmpty()) {
             LOGGER.debug("[initDoctorComboBox] doctors observable arrayList is empty. Loading Doctors from Data Base");
             doctorsService.loadDoctors();
         }
@@ -155,21 +159,80 @@ public class ControllerWorkingDays extends ControllerClass {
         workStartSlider.setMax(settingsService.getWorkingDaySliderMaxValue());
         workEndSlider.setMax(settingsService.getWorkingDaySliderMaxValue());
 
+        lunchStartSlider.setMax(settingsService.getWorkingDaySliderMaxValue());
+        lunchEndSlider.setMax(settingsService.getWorkingDaySliderMaxValue());
 
-        workStartSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-                workStartLabel.setText(String.valueOf(newValue.intValue()));
+        workStartSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            //if start slider move beyond the end slider value
+            if (newValue.doubleValue() > workEndSlider.getValue()){
+                workEndSlider.setValue(newValue.doubleValue());
             }
+            //if slider moves after the start of lunch time
+            if (newValue.doubleValue() > lunchStartSlider.getValue()){
+                lunchStartSlider.setValue(newValue.doubleValue());
+            }
+            setWorkTimeLabels();
         });
 
-        workEndSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                workEndLabel.setText(String.valueOf(newValue.intValue()));
+        workEndSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            //Make sure the End slider does not slide before start slider
+            if (newValue.doubleValue() < workStartSlider.getValue()){
+                //set the value of start slider to the same value as end slider
+                workStartSlider.setValue(newValue.doubleValue());
             }
+            // if slider value is smaller then the end lunch slider value
+            if (newValue.doubleValue() < lunchEndSlider.getValue()){
+                lunchEndSlider.setValue(newValue.doubleValue());
+            }
+            setWorkTimeLabels();
+
         });
+
+        lunchStartSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            //Make sure the lunch does not start after it ends
+            if (newValue.doubleValue() > lunchEndSlider.getValue()){
+                lunchEndSlider.setValue(newValue.doubleValue());
+            }
+            // Make sure the lunch time is in bounds of working day
+            //if lunch starts before the working day starts
+            if (newValue.doubleValue() < workStartSlider.getValue()){
+                workStartSlider.setValue(newValue.doubleValue());
+            }
+            setLunchLabels();
+        });
+
+        lunchEndSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            //Make sure the lunch does not end before it starts
+            if (newValue.doubleValue() < lunchStartSlider.getValue()){
+                lunchStartSlider.setValue(newValue.doubleValue());
+            }
+            // Make sure the lunch time is in bounds of working day
+            if (newValue.doubleValue() > workEndSlider.getValue()){
+                workEndSlider.setValue(newValue.doubleValue());
+            }
+            setLunchLabels();
+        });
+    }
+
+    private void setWorkTimeLabels() {
+        int startTime = workStartSlider.valueProperty().intValue();
+        int endTime = workEndSlider.valueProperty().intValue();
+
+        workStartLabel.setText(workingDayService.convertStartSliderValue(startTime));
+        workEndLabel.setText(workingDayService.convertEndSliderValue(endTime));
+    }
+
+    private void setLunchLabels() {
+        int lunchStart = lunchStartSlider.valueProperty().intValue();
+        int lunchEnd = lunchEndSlider.valueProperty().intValue();
+
+        if (lunchStart == lunchEnd){
+            lunchEndLabel.setText("без обеда");
+            lunchStartLabel.setText("без обеда");
+        }else {
+            lunchEndLabel.setText(workingDayService.convertEndSliderValue(lunchEnd));
+            lunchStartLabel.setText(workingDayService.convertStartSliderValue(lunchStart));
+        }
     }
 
     private void setLabels() {
