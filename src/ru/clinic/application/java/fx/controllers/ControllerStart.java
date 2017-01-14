@@ -76,12 +76,14 @@ public class ControllerStart {
     }
 
     public void starController(){
+        LOGGER.debug("[starController] Controller started");
         clearFields();
         initDropBox();
         adminSelected = null;
     }
 
     private void stopController(){
+        LOGGER.debug("[stopController] Controller stopped");
         clearFields();
         adminSelected = null;
     }
@@ -93,7 +95,7 @@ public class ControllerStart {
 
     @FXML
     void closeBtnAction(ActionEvent event) {
-        LOGGER.debug("[ControllerStart][closeBtnAction]");
+        LOGGER.debug("[closeBtnAction] Close Button clicked");
         clearFields();
         stopController();
         frameStart.stop();
@@ -101,30 +103,31 @@ public class ControllerStart {
 
     @FXML
     void enterBtnAction(ActionEvent event) {
-        LOGGER.debug("[ControllerStart][enterBtnAction]");
+        LOGGER.debug("[enterBtnAction] Enter Button clicked");
         if (checkAuthorization()){
             adminService.setCurrentAdmin(adminSelected);
-            LOGGER.debug("[ControllerStart][enterBtnAction] admin is authorized. Checking if dataBase tables are set");
+            LOGGER.debug("[enterBtnAction] admin is authorized. Checking if dataBase tables are set");
             if (dataBaseService.checkTables()){
-                LOGGER.debug("[ControllerStart][enterBtnAction] All DataBase tables are set. Starting Main Frame");
+                LOGGER.debug("[enterBtnAction] All DataBase tables are set. Starting Main Frame");
                 //Start Main Frame
                 frameRoot.start();
                 frameStart.stop();
             }else {
-                LOGGER.debug("[ControllerStart][enterBtnAction] Some or all database tables are not set. Starting dbTables Frame");
+                LOGGER.debug("[enterBtnAction] Some or all database tables are not set. Starting dbTables Frame");
                 //Start Tables Frame
                 if (alertConfirmation()) {
                     frameDbTables.start();
                 }
             }
         }else {
-            LOGGER.debug("[startController][enterBtnAction] admin is not authorized");
+            LOGGER.debug("[enterBtnAction] admin is not authorized");
             authLabel.setText(NOT_AUTHORIZED);
         }
 
     }
 
     private boolean alertConfirmation() {
+        LOGGER.debug("[alertConfirmation] Alerting user that some database tables are not created");
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(CONFIRMATION_TITLE);
         alert.setHeaderText(CONFIRMATION_HEADER);
@@ -138,29 +141,35 @@ public class ControllerStart {
     }
 
     private boolean checkAuthorization() {
+        LOGGER.debug("[checkAuthorization] Checking if admin is authorised");
         if (adminSelected == null){
+            LOGGER.debug("[checkAuthorization] admin is not selected");
             return false;
         }else if (adminSelected.getPassword() == null || adminSelected.getPassword().equals("")){
+            LOGGER.debug("[checkAuthorization] selected admin does not have a password");
             return true;
         }else if (StringUtils.equals(adminSelected.getPassword(), passwordTextField.getText())){
+            LOGGER.debug("[checkAuthorization] entered password matches");
             return true;
         }
+        LOGGER.debug("[checkAuthorization] entered password does not matche");
         return false;
     }
 
     private void clearFields(){
-        LOGGER.debug("[ControllerStart][clearFields] Clearing : authLabel, adminDropBox");
+        LOGGER.debug("[clearFields] Clearing : authLabel, adminDropBox");
         authLabel.setText("");
         adminDropBox.getItems().clear();
     }
 
     private void initDropBox(){
-
+        LOGGER.debug("[initDropBox] Initializing Admin drop box");
         adminDropBox.getItems().add(adminService.getMainAdmin().getFio());
 
         ObservableList<Admin> admins = adminService.loadAdmins();
         admins.forEach(admin ->{
             adminDropBox.getItems().add(admin.getFio());
+            LOGGER.debug("[initDropBox] Added admin to drop box " + admin.getFio());
         });
 
         adminDropBox.valueProperty().addListener(new ChangeListener<String>() {
@@ -170,7 +179,7 @@ public class ControllerStart {
 
                 if (newValue != null) {
                     Admin admin = adminService.getAdminByFio(adminDropBox.getSelectionModel().getSelectedItem());
-                    LOGGER.debug("[ControllerStart][adminDropBoxAction] Admin chosen [" + newValue + "].");
+                    LOGGER.debug("[adminDropBoxAction] Admin chosen [" + newValue + "].");
                     adminSelected = admin;
                     if (admin != null) {
                         if (admin.getPassword() != null && !admin.getPassword().isEmpty()) {

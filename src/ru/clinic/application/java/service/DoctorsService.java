@@ -1,5 +1,6 @@
 package ru.clinic.application.java.service;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,10 @@ public class DoctorsService {
 
     @Autowired
     AdminService adminService;
+
+    public DoctorsService(){
+        doctors = FXCollections.observableArrayList();
+    }
 
     public ObservableList<Doctor> loadDoctors() {
         LOGGER.debug("[DoctorsService][loadDoctors] Loading doctors from data base");

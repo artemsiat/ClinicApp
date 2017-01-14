@@ -87,7 +87,7 @@ public class AdminDao {
                     if (dob != null){
                         admin.setDob(dob.toLocalDate());
                     }
-
+                    LOGGER.debug("[selectAllAdmins] Loaded Amdin " + admin.getFio());
                     admins.add(admin);
                 }
                 return admins;

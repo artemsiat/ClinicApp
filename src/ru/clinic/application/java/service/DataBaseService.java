@@ -48,10 +48,10 @@ public class DataBaseService {
         for (TableStatus tableStatus : tables){
 
             if (!tableStatus.checkIfCreated()){
-                LOGGER.debug("[DataBaseService][checkTables] Table ["+ tableStatus.getTableName()  + "] is not created");
+                LOGGER.debug("[checkTables] Table ["+ tableStatus.getTableName()  + "] is not created");
                 return false;
             }
-            LOGGER.debug("[DataBaseService][checkTables] Table [" + tableStatus.getTableName()  + "] is created");
+            LOGGER.debug("[checkTables] Table [" + tableStatus.getTableName()  + "] is created");
         }
         return true;
     }

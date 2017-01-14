@@ -42,7 +42,7 @@ public class AdminService {
         admin.setId(0);
         admin.setPassword("admin");
 
-        LOGGER.debug("[AdminService][initMainAdmin] Initializing Main Admin Instance [" + admin.getFio() + "]");
+        LOGGER.debug("[initMainAdmin] Initializing Main Admin Instance [" + admin.getFio() + "]");
 
         return admin;
     }
@@ -60,7 +60,7 @@ public class AdminService {
     }
 
     public void updateAdmin(int selectedAdminId, String fio, LocalDate dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password) {
-        LOGGER.debug("[AdminService][updateAdmin] Updating Administrator");
+        LOGGER.debug("[updateAdmin] Updating Administrator");
         Date dobDate = null;
         if (dob != null){
             dobDate = Date.valueOf(dob);
@@ -69,15 +69,15 @@ public class AdminService {
     }
 
     public void deleteAdmin(int selectedAdminId, int whoRemoved) {
-        LOGGER.debug("[AdminService][deleteAdmin] Removing Administrator");
+        LOGGER.debug("[deleteAdmin] Removing Administrator");
         adminDao.deleteAdmin(selectedAdminId, whoRemoved);
     }
 
     public ObservableList<Admin> loadAdmins() {
-        LOGGER.debug("[AdminService][loadAdmins] Loading admins from data base");
+        LOGGER.debug("[loadAdmins] Loading admins from data base");
         ObservableList<Admin> adminObservableList = adminDao.selectAllAdmins();
         admins = adminObservableList;
-        LOGGER.debug("[AdminService][loadAdmins] Successfully loaded ["+ adminObservableList.size() + "] administrators" );
+        LOGGER.debug("[loadAdmins] Successfully loaded ["+ adminObservableList.size() + "] administrators" );
         return admins;
     }
 

@@ -6,9 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.dao.entity.Doctor;
 import ru.clinic.application.java.fx.ControllerClass;
+import ru.clinic.application.java.service.DoctorsService;
 import ru.clinic.application.java.service.setting.SettingsService;
 
 /**
@@ -18,8 +21,15 @@ import ru.clinic.application.java.service.setting.SettingsService;
 @Component
 public class ControllerWorkingDays extends ControllerClass {
 
+    private final static Logger LOGGER = Logger.getLogger(ControllerWorkingDays.class.getName());
+
+    private Doctor selectedDoctor = null;
+
     @Autowired
     SettingsService settingsService;
+
+    @Autowired
+    DoctorsService doctorsService;
 
     @FXML
     private Label doctorComboBoxLabel;
@@ -95,16 +105,50 @@ public class ControllerWorkingDays extends ControllerClass {
 
 
     public void startController() {
+        LOGGER.debug("[startController] Working Day controller starting");
         // Todo add functionality to create multiple wd for multiple doctors in seperate popup window
         // Todo, can create time picking with time buttons . example 10  10 15   10 30   10 45.. and the same for 11 on the next row. generate buttons dynamicaly.
+        clearLabels();
         initDoctorComboBox();
         initListeners();
         initDatePicker();
         setLabels();
     }
 
-    private void initDoctorComboBox() {
+    private void clearLabels() {
+        LOGGER.debug("[clearLabels] Clearing labels");
+        setDoctorLabel();
+        setDatePickerLabel();
 
+        workStartLabel.setText("");
+        workEndLabel.setText("");
+        lunchStartLabel.setText("");
+        lunchEndLabel.setText("");
+    }
+
+    private void setDatePickerLabel() {
+        wdDatePickerLabel.setText("");
+    }
+
+    private void setDoctorLabel() {
+        if (selectedDoctor == null){
+            doctorComboBoxLabel.setText("Врач не выбран");
+        }else {
+            doctorComboBoxLabel.setText("Выбранный врач: " + selectedDoctor.getFio());
+        }
+    }
+
+    private void initDoctorComboBox() {
+        LOGGER.debug("[initDoctorComboBox] Setting Doctors ComboBox");
+        doctorComboBox.getItems().clear();
+        if (doctorsService.getDoctors().isEmpty()){
+            LOGGER.debug("[initDoctorComboBox] doctors observable arrayList is empty. Loading Doctors from Data Base");
+            doctorsService.loadDoctors();
+        }
+        doctorsService.getDoctors().forEach(doctor -> {
+            doctorComboBox.getItems().add(doctor.getFio());
+            LOGGER.debug("[initDoctorComboBox] adding doctor to dropBox: " + doctor.getFio());
+        });
     }
 
     private void initListeners() {

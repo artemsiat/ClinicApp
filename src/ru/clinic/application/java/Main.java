@@ -23,16 +23,16 @@ public class Main extends Application{
     }
 
     public static void main(String[] args){
-        LOGGER.debug("[Main][main] Starting Application !!!");
+        LOGGER.debug("[main] Starting Application !!!");
         launch();
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        LOGGER.debug("[Main][start] configuring spring framework");
+        LOGGER.debug("[start] configuring spring framework");
         config();
 
-        LOGGER.debug("[Main][start] Launching FrameStart");
+        LOGGER.debug("[start] Launching FrameStart");
         applicationContext.getBean(FrameStart.class).start(primaryStage);
     }
 
