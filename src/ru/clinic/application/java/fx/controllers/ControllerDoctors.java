@@ -210,6 +210,7 @@ public class ControllerDoctors extends ControllerClass {
 
     private void doctorSelected() {
         selectedDoctor = doctorsService.getDoctors().get(tableView.getSelectionModel().getSelectedIndex());
+        doctorsService.setSelectedDoctor(selectedDoctor);
         setSelectedDoctor();
     }
 

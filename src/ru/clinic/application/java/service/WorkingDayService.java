@@ -1,10 +1,13 @@
 package ru.clinic.application.java.service;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.WorkingDayDao;
 import ru.clinic.application.java.service.setting.SettingsService;
+
+import java.time.LocalDate;
 
 /**
  * Created by Artem Siatchinov on 1/8/2017.
@@ -13,7 +16,10 @@ import ru.clinic.application.java.service.setting.SettingsService;
 @Component
 public class WorkingDayService {
 
-    private final static Logger LOGGER = Logger.getLogger(WorkingDayService.class.getName());
+    private final static Logger LOGGER = LogManager.getLogger(WorkingDayService.class.getName());
+
+    @Autowired
+    AdminService adminService;
 
     @Autowired
     WorkingDayDao workingDayDao;
@@ -48,4 +54,11 @@ public class WorkingDayService {
         return answer;
     }
 
+    public void createWorkingDay(int doctorId, LocalDate day, String workStart, String workEnd, String lunchStart, String lunchEnd, String comment) {
+        LOGGER.debug("[createWorkingDay] creating new working day. Doctor id [{}], day [{}], workStart[{}], workEnd[{}], lunchStart[{}], lunchEnd[{}]"
+                , doctorId, day, workStart, workEnd, lunchStart, lunchEnd);
+        workingDayDao.addWorkingDay(adminService.getCurrentAdmin().getId(), doctorId, day, workStart, workEnd, lunchStart, lunchEnd, comment);
+
+        workingDayDao.loadWorkingDaysRange(LocalDate.now().minusDays(30), LocalDate.now().plusDays(30), 1);
+    }
 }

@@ -4,6 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,6 +16,9 @@ import ru.clinic.application.java.service.DoctorsService;
 import ru.clinic.application.java.service.WorkingDayService;
 import ru.clinic.application.java.service.setting.SettingsService;
 
+import java.time.LocalDate;
+import java.util.Optional;
+
 /**
  * Created by Artem Siatchinov on 1/4/2017.
  */
@@ -21,6 +27,11 @@ import ru.clinic.application.java.service.setting.SettingsService;
 public class ControllerWorkingDays extends ControllerClass {
 
     private final static Logger LOGGER = Logger.getLogger(ControllerWorkingDays.class.getName());
+
+    private static final String INFORMATION_TITLE = "Информационное окно";
+    private static final String NO_DOCTOR_SELECTED = "Для создания расписания необходимо выбрать врача";
+    private static final String NO_WORKING_DAY_SELECTED = "Для создания расписания необходимо выбрать рабочий день";
+    private static final String ALREADY_WORKING_DAY = "Выбранный день уже рабочий";
 
     private Doctor selectedDoctor = null;
 
@@ -35,58 +46,74 @@ public class ControllerWorkingDays extends ControllerClass {
 
     @FXML
     private Label doctorComboBoxLabel;
-
     @FXML
     private Label wdDatePickerLabel;
-
     @FXML
     private AnchorPane anchorPane;
-
     @FXML
     private ComboBox<String> doctorComboBox;
-
     @FXML
     private DatePicker wdDatePicker;
-
     @FXML
     private Button createWdBtn;
-
     @FXML
     private Button saveWdBtn;
-
     @FXML
     private Button removeWdBtn;
-
     @FXML
     private Slider workStartSlider;
-
     @FXML
     private Label workStartLabel;
-
     @FXML
     private Slider workEndSlider;
-
     @FXML
     private Label workEndLabel;
-
     @FXML
     private Slider lunchStartSlider;
-
     @FXML
     private Label lunchStartLabel;
-
     @FXML
     private Slider lunchEndSlider;
-
     @FXML
     private Label lunchEndLabel;
-
     @FXML
     private TextArea commentField;
 
     @FXML
     void createWdBtnAction(ActionEvent event) {
+        if (checkInputFields()){
+            String workStart = workingDayService.convertSliderValue(workStartSlider.valueProperty().intValue());
+            String workEnd = workingDayService.convertSliderValue(workEndSlider.valueProperty().intValue());
+            String lunchStart = workingDayService.convertSliderValue(lunchStartSlider.valueProperty().intValue());
+            String lunchEnd = workingDayService.convertSliderValue(lunchEndSlider.valueProperty().intValue());
 
+            workingDayService.createWorkingDay(selectedDoctor.getId(), wdDatePicker.getValue(), workStart, workEnd, lunchStart, lunchEnd, commentField.getText());
+        }
+    }
+
+    private boolean checkInputFields() {
+        if (selectedDoctor == null){
+            LOGGER.debug("[checkInputFields] Doctor is not selected. Alerting User");
+            alertOnCreation(NO_DOCTOR_SELECTED);
+            return false;
+        }else if (wdDatePicker.getValue() == null){
+            LOGGER.debug("[checkInputFields] WorkingDay is not selected. Alerting User");
+            alertOnCreation(NO_WORKING_DAY_SELECTED);
+            return false;
+        }else if (wdDatePicker.getValue() != null && isWorkingDay(wdDatePicker.getValue())){
+            alertOnCreation(ALREADY_WORKING_DAY);
+            return false;
+        }
+        return true;
+    }
+
+    private void alertOnCreation(String сontext) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(INFORMATION_TITLE);
+        alert.setHeaderText(null);
+        alert.setContentText(сontext);
+
+        alert.showAndWait();
     }
 
 
@@ -111,10 +138,29 @@ public class ControllerWorkingDays extends ControllerClass {
         // Todo add functionality to create multiple wd for multiple doctors in seperate popup window
         // Todo, can create time picking with time buttons . example 10  10 15   10 30   10 45.. and the same for 11 on the next row. generate buttons dynamicaly.
         clearLabels();
-        initDoctorComboBox();
-        initListeners();
-        initDatePicker();
+        setDoctorComboBox();
+        setDoctorComboBoxListener();
+        setSliderListeners();
+        setDatePickerListener();
         setInitialSliderValues();
+        setWorkDayLabel();
+
+        if (doctorsService.getSelectedDoctor() != null){
+            doctorComboBox.setValue(doctorsService.getSelectedDoctor().getFio());
+        }
+    }
+
+    private void setDoctorComboBoxListener() {
+        doctorComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (!StringUtils.isEmpty(newValue)){
+                Optional<Doctor> doctorOptional = doctorsService.getDoctors().stream().filter(doctor -> StringUtils.equals(doctor.getFio(), newValue)).findFirst();
+                if (doctorOptional.isPresent()){
+                    selectedDoctor = doctorOptional.get();
+                    doctorsService.setSelectedDoctor(selectedDoctor);
+                    setDoctorLabel();
+                }
+            }
+        });
     }
 
     private void setInitialSliderValues() {
@@ -136,26 +182,28 @@ public class ControllerWorkingDays extends ControllerClass {
 
     private void setDoctorLabel() {
         if (selectedDoctor == null) {
+            doctorComboBoxLabel.setTextFill(Color.BLACK);
             doctorComboBoxLabel.setText("Врач не выбран");
         } else {
+            doctorComboBoxLabel.setTextFill(Color.GREEN);
             doctorComboBoxLabel.setText("Выбранный врач: " + selectedDoctor.getFio());
         }
     }
 
-    private void initDoctorComboBox() {
-        LOGGER.debug("[initDoctorComboBox] Setting Doctors ComboBox");
+    private void setDoctorComboBox() {
+        LOGGER.debug("[setDoctorComboBox] Setting Doctors ComboBox");
         doctorComboBox.getItems().clear();
         if (doctorsService.getDoctors().isEmpty()) {
-            LOGGER.debug("[initDoctorComboBox] doctors observable arrayList is empty. Loading Doctors from Data Base");
+            LOGGER.debug("[setDoctorComboBox] doctors observable arrayList is empty. Loading Doctors from Data Base");
             doctorsService.loadDoctors();
         }
         doctorsService.getDoctors().forEach(doctor -> {
             doctorComboBox.getItems().add(doctor.getFio());
-            LOGGER.debug("[initDoctorComboBox] adding doctor to dropBox: " + doctor.getFio());
+            LOGGER.debug("[setDoctorComboBox] adding doctor to dropBox: " + doctor.getFio());
         });
     }
 
-    private void initListeners() {
+    private void setSliderListeners() {
         workStartSlider.setMax(settingsService.getWorkingDaySliderMaxValue());
         workEndSlider.setMax(settingsService.getWorkingDaySliderMaxValue());
 
@@ -235,16 +283,37 @@ public class ControllerWorkingDays extends ControllerClass {
         }
     }
 
-    private void setLabels() {
-
-    }
-
 
     public void stopController() {
 
     }
 
-    private void initDatePicker() {
+    private void setDatePickerListener() {
+        wdDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+            setWorkDayLabel();
+        });
+
+        wdDatePicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell(){
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        if (isWorkingDay(item)){
+                            setTextFill(Color.GREEN);
+                            setText(item.getDayOfMonth() + "\nРабочий\nс 9:00 по 21:00\nБез обеда");
+                        }else {
+                            setTextFill(Color.BLUE);
+                            setText(item.getDayOfMonth() + "\nне Рабочий\n \n ");
+                        }
+                        super.updateItem(item, empty);
+                    }
+                };
+            }
+        });
+
+        wdDatePicker.setStyle("-fx-font-size: 10pt");
+
 /*        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
             @Override
             public DateCell call(DatePicker param) {
@@ -332,5 +401,23 @@ public class ControllerWorkingDays extends ControllerClass {
 //        DatePickerSkin datePickerSkin = new DatePickerSkin(datePicker);
 //        Node calendar = datePickerSkin.getPopupContent();
 //        vBox.getChildren().add(calendar);
+    }
+
+    private void setWorkDayLabel() {
+        LocalDate date = wdDatePicker.getValue();
+        if (date ==  null){
+            wdDatePickerLabel.setTextFill(Color.BLACK);
+            wdDatePickerLabel.setText("День не выбран");
+        }else if (isWorkingDay(date)){
+            wdDatePickerLabel.setTextFill(Color.GREEN);
+            wdDatePickerLabel.setText("Рабочий день: " + wdDatePicker.getValue().toString());
+        }else {
+            wdDatePickerLabel.setTextFill(Color.BLUE);
+            wdDatePickerLabel.setText("Не рабочий день: " + wdDatePicker.getValue().toString());
+        }
+    }
+
+    private boolean isWorkingDay(LocalDate date) {
+        return date.getDayOfYear() % 7 != 0;
     }
 }

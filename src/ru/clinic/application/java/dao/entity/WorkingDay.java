@@ -1,5 +1,7 @@
 package ru.clinic.application.java.dao.entity;
 
+import java.time.LocalDate;
+
 /**
  * Created by Artem Siatchinov on 1/12/2017.
  */
@@ -12,6 +14,8 @@ public class WorkingDay {
     private String startLunch;
     private String endLunch;
     private String comment;
+    private LocalDate workingDay;
+    private int creator;
 
     public int getId() {
         return id;
@@ -67,5 +71,13 @@ public class WorkingDay {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public void setWorkingDay(LocalDate workingDay) {
+        this.workingDay = workingDay;
+    }
+
+    public void setCreator(int creator) {
+        this.creator = creator;
     }
 }

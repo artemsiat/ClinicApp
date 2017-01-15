@@ -27,8 +27,8 @@
             <VBox layoutX="695.0" layoutY="35.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0">
                <children>
                   <Label fx:id="currAdminLabel" text="Администратор:" />
-                  <Label text="Selected Patient:" />
-                  <Label text="Selected Doctor:" />
+                  <Label fx:id="selectedPatientLabel" text="Selected Patient:" />
+                  <Label fx:id="selectedDoctorLabel" text="Selected Doctor:" />
                </children>
             </VBox>
             <MenuBar layoutX="234.0" layoutY="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

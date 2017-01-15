@@ -72,28 +72,24 @@ public class PatientsDao {
     }
 
     private ObservableList<Patient> selectPatients(String sql){
-        ObservableList<Patient> patients = jdbcTemplate.query(sql, new ResultSetExtractor<ObservableList<Patient>>() {
+        ObservableList<Patient> patients = jdbcTemplate.query(sql, rs -> {
+            ObservableList<Patient> patients1 = FXCollections.observableArrayList();
 
-            @Override
-            public ObservableList<Patient> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                ObservableList<Patient> patients = FXCollections.observableArrayList();
+            while (rs.next()) {
+                Patient patient = new Patient();
+                patient.setId(rs.getInt("id"));
+                patient.setFirstName(rs.getString("firstName"));
+                patient.setLastName(rs.getString("lastName"));
+                patient.setMiddleName(rs.getString("middleName"));
+                patient.setCellPhone(rs.getString("phone"));
+                patient.setCellPhoneTwo(rs.getString("phoneTwo"));
+                patient.setEmail(rs.getString("email"));
+                patient.setComment(rs.getString("comment"));
+                patient.generateFio();
 
-                while (rs.next()) {
-                    Patient patient = new Patient();
-                    patient.setId(rs.getInt("id"));
-                    patient.setFirstName(rs.getString("firstName"));
-                    patient.setLastName(rs.getString("lastName"));
-                    patient.setMiddleName(rs.getString("middleName"));
-                    patient.setCellPhone(rs.getString("phone"));
-                    patient.setCellPhoneTwo(rs.getString("phoneTwo"));
-                    patient.setEmail(rs.getString("email"));
-                    patient.setComment(rs.getString("comment"));
-                    patient.generateFio();
-
-                    patients.add(patient);
-                }
-                return patients;
+                patients1.add(patient);
             }
+            return patients1;
         });
         return patients;
     }

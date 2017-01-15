@@ -13,8 +13,10 @@ import javafx.scene.layout.HBox;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.dao.entity.Doctor;
 import ru.clinic.application.java.fx.frames.*;
 import ru.clinic.application.java.service.AdminService;
+import ru.clinic.application.java.service.DoctorsService;
 
 /**
  * Created by Artem Siatchinov on 1/8/2017.
@@ -48,6 +50,15 @@ public class ControllerRoot {
 
     @Autowired
     FrameWorkingDays frameWorkingDays;
+
+    @Autowired
+    DoctorsService doctorsService;
+
+    @FXML
+    private Label selectedPatientLabel;
+
+    @FXML
+    private Label selectedDoctorLabel;
 
     @FXML
     private Label currAdminLabel;
@@ -146,6 +157,15 @@ public class ControllerRoot {
         }else {
             LOGGER.error("[ControllerMain][initAdminLabel] Error. Starting Main Stage without current Administrator ");
             currAdminLabel.setText("Администратор: ");
+        }
+    }
+
+    public void setSelectedDoctor() {
+        Doctor selectedDoctor = doctorsService.getSelectedDoctor();
+        if (selectedDoctor == null){
+            selectedDoctorLabel.setText("Врач: " );
+        }else {
+            selectedDoctorLabel.setText("Врач: " + selectedDoctor.getFio());
         }
     }
 }

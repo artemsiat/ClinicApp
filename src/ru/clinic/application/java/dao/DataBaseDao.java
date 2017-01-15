@@ -99,25 +99,25 @@ public class DataBaseDao {
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public boolean checkAdminTable(){
-        LOGGER.debug("[DataBaseDao][checkAdminTable] Checking if Admin table is created");
+        LOGGER.debug("[checkAdminTable] Checking if Admin table is created");
         Integer count = jdbcTemplate.queryForObject(ADMIN_CHECK_TABLE, Integer.class);
         return count == 1;
     }
 
     public boolean checkDoctorsTable() {
-        LOGGER.debug("[DataBaseDao][checkDoctorsTable] Checking if Doctor table is created");
+        LOGGER.debug("[checkDoctorsTable] Checking if Doctor table is created");
         Integer count = jdbcTemplate.queryForObject(DOCTOR_CHECK_TABLE, Integer.class);
         return count == 1;
     }
 
     public boolean checkPatientsTable() {
-        LOGGER.debug("[DataBaseDao][checkPatientsTable] Checking if Patient table is created");
+        LOGGER.debug("[checkPatientsTable] Checking if Patient table is created");
         Integer count = jdbcTemplate.queryForObject(PATIENT_CHECK_TABLE, Integer.class);
         return count == 1;
     }
 
     public boolean checkWorkingDayTable() {
-        LOGGER.debug("[DataBaseDao][checkWorkingDayTable] Checking if WorkingDay table is created");
+        LOGGER.debug("[checkWorkingDayTable] Checking if WorkingDay table is created");
         Integer count = jdbcTemplate.queryForObject(WORKING_DAY_CHECK_TABLE, Integer.class);
         return count == 1;
     }
