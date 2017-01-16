@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.clinic.application.java.dao.entity.WorkingDay;
+import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.dao.rowmapper.WorkingDayResultSetExtractor;
 
 import java.sql.Date;

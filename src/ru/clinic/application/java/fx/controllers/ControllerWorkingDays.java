@@ -10,10 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.clinic.application.java.dao.entity.Doctor;
+import ru.clinic.application.java.dao.entity.doctor.Doctor;
+import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.service.DoctorsService;
-import ru.clinic.application.java.service.WorkingDayService;
+import ru.clinic.application.java.service.ScheduleService;
 import ru.clinic.application.java.service.setting.SettingsService;
 
 import java.time.LocalDate;
@@ -33,7 +34,7 @@ public class ControllerWorkingDays extends ControllerClass {
     private static final String NO_WORKING_DAY_SELECTED = "Для создания расписания необходимо выбрать рабочий день";
     private static final String ALREADY_WORKING_DAY = "Выбранный день уже рабочий";
 
-    private Doctor selectedDoctor = null;
+    private WorkingDay selectedWorkingDay = null; //Todo move to service Class
 
     @Autowired
     SettingsService settingsService;
@@ -42,7 +43,7 @@ public class ControllerWorkingDays extends ControllerClass {
     DoctorsService doctorsService;
 
     @Autowired
-    WorkingDayService workingDayService;
+    ScheduleService scheduleService;
 
     @FXML
     private Label doctorComboBoxLabel;
@@ -82,17 +83,18 @@ public class ControllerWorkingDays extends ControllerClass {
     @FXML
     void createWdBtnAction(ActionEvent event) {
         if (checkInputFields()){
-            String workStart = workingDayService.convertSliderValue(workStartSlider.valueProperty().intValue());
-            String workEnd = workingDayService.convertSliderValue(workEndSlider.valueProperty().intValue());
-            String lunchStart = workingDayService.convertSliderValue(lunchStartSlider.valueProperty().intValue());
-            String lunchEnd = workingDayService.convertSliderValue(lunchEndSlider.valueProperty().intValue());
+            String workStart = scheduleService.convertSliderValue(workStartSlider.valueProperty().intValue());
+            String workEnd = scheduleService.convertSliderValue(workEndSlider.valueProperty().intValue());
+            String lunchStart = scheduleService.convertSliderValue(lunchStartSlider.valueProperty().intValue());
+            String lunchEnd = scheduleService.convertSliderValue(lunchEndSlider.valueProperty().intValue());
 
-            workingDayService.createWorkingDay(selectedDoctor.getId(), wdDatePicker.getValue(), workStart, workEnd, lunchStart, lunchEnd, commentField.getText());
+            scheduleService.createWorkingDay(doctorsService.getSelectedDoctor().getId(), wdDatePicker.getValue(), workStart, workEnd, lunchStart, lunchEnd, commentField.getText());
+            //Todo Reload working days, so calendar will be renewed
         }
     }
 
     private boolean checkInputFields() {
-        if (selectedDoctor == null){
+        if (doctorsService.getSelectedDoctor() == null){
             LOGGER.debug("[checkInputFields] Doctor is not selected. Alerting User");
             alertOnCreation(NO_DOCTOR_SELECTED);
             return false;
@@ -100,7 +102,7 @@ public class ControllerWorkingDays extends ControllerClass {
             LOGGER.debug("[checkInputFields] WorkingDay is not selected. Alerting User");
             alertOnCreation(NO_WORKING_DAY_SELECTED);
             return false;
-        }else if (wdDatePicker.getValue() != null && isWorkingDay(wdDatePicker.getValue())){
+        }else if (wdDatePicker.getValue() != null && doctorsService.getSelectedDoctor().getWorkingDay(wdDatePicker.getValue()) != null){
             alertOnCreation(ALREADY_WORKING_DAY);
             return false;
         }
@@ -155,8 +157,7 @@ public class ControllerWorkingDays extends ControllerClass {
             if (!StringUtils.isEmpty(newValue)){
                 Optional<Doctor> doctorOptional = doctorsService.getDoctors().stream().filter(doctor -> StringUtils.equals(doctor.getFio(), newValue)).findFirst();
                 if (doctorOptional.isPresent()){
-                    selectedDoctor = doctorOptional.get();
-                    doctorsService.setSelectedDoctor(selectedDoctor);
+                    doctorsService.setSelectedDoctor(doctorOptional.get());
                     setDoctorLabel();
                 }
             }
@@ -181,12 +182,12 @@ public class ControllerWorkingDays extends ControllerClass {
     }
 
     private void setDoctorLabel() {
-        if (selectedDoctor == null) {
+        if (doctorsService.getSelectedDoctor() == null) {
             doctorComboBoxLabel.setTextFill(Color.BLACK);
             doctorComboBoxLabel.setText("Врач не выбран");
         } else {
             doctorComboBoxLabel.setTextFill(Color.GREEN);
-            doctorComboBoxLabel.setText("Выбранный врач: " + selectedDoctor.getFio());
+            doctorComboBoxLabel.setText("Выбранный врач: " + doctorsService.getSelectedDoctor().getFio());
         }
     }
 
@@ -266,8 +267,8 @@ public class ControllerWorkingDays extends ControllerClass {
         int startTime = workStartSlider.valueProperty().intValue();
         int endTime = workEndSlider.valueProperty().intValue();
 
-        workStartLabel.setText(workingDayService.convertStartSliderValue(startTime));
-        workEndLabel.setText(workingDayService.convertEndSliderValue(endTime));
+        workStartLabel.setText(scheduleService.convertStartSliderValue(startTime));
+        workEndLabel.setText(scheduleService.convertEndSliderValue(endTime));
     }
 
     private void setLunchLabels() {
@@ -278,8 +279,8 @@ public class ControllerWorkingDays extends ControllerClass {
             lunchEndLabel.setText("без обеда");
             lunchStartLabel.setText("без обеда");
         }else {
-            lunchEndLabel.setText(workingDayService.convertEndSliderValue(lunchEnd));
-            lunchStartLabel.setText(workingDayService.convertStartSliderValue(lunchStart));
+            lunchEndLabel.setText(scheduleService.convertEndSliderValue(lunchEnd));
+            lunchStartLabel.setText(scheduleService.convertStartSliderValue(lunchStart));
         }
     }
 
@@ -291,6 +292,12 @@ public class ControllerWorkingDays extends ControllerClass {
     private void setDatePickerListener() {
         wdDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             setWorkDayLabel();
+            if (newValue != null){
+                WorkingDay workingDay = doctorsService.getSelectedDoctor().getWorkingDay(newValue);
+                if (workingDay != null){
+                    workingDaySelected(workingDay);
+                }
+            }
         });
 
         wdDatePicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
@@ -299,12 +306,25 @@ public class ControllerWorkingDays extends ControllerClass {
                 return new DateCell(){
                     @Override
                     public void updateItem(LocalDate item, boolean empty) {
-                        if (isWorkingDay(item)){
-                            setTextFill(Color.GREEN);
-                            setText(item.getDayOfMonth() + "\nРабочий\nс 9:00 по 21:00\nБез обеда");
-                        }else {
-                            setTextFill(Color.BLUE);
-                            setText(item.getDayOfMonth() + "\nне Рабочий\n \n ");
+                        Doctor doctor = doctorsService.getSelectedDoctor();
+                        if (doctor != null) {
+                            if (!doctor.isDateInBounds(item)){
+                                scheduleService.loadWorkingDaysRange(item, doctor);
+                            }
+                            WorkingDay workingDay = doctor.getWorkingDay(item);
+                            if (workingDay == null){
+                                setTextFill(Color.BLUE);
+                                setText(item.getDayOfMonth() + "\nНе рабочий\n \n \n ");
+                            }else {
+                                setTextFill(Color.GREEN);
+                                String lunch;
+                                if (workingDay.getStartLunch().equals(workingDay.getEndLunch())){
+                                    lunch = "\nБез обеда";
+                                }else {
+                                    lunch = "\nОбед\nс " + workingDay.getStartLunch() + " по " + workingDay.getEndLunch()
+;                                }
+                                setText(item.getDayOfMonth() + "\nРабочий\nс " + workingDay.getStartTime() + " по " + workingDay.getEndTime() + lunch);
+                            }
                         }
                         super.updateItem(item, empty);
                     }
@@ -403,21 +423,28 @@ public class ControllerWorkingDays extends ControllerClass {
 //        vBox.getChildren().add(calendar);
     }
 
+    private void workingDaySelected(WorkingDay workingDay) {
+        this.selectedWorkingDay = workingDay;
+
+        commentField.setText(selectedWorkingDay.getComment());
+        workStartSlider.setValue(scheduleService.convertToSliderValue(selectedWorkingDay.getStartTime()));
+        workEndSlider.setValue(scheduleService.convertToSliderValue(selectedWorkingDay.getEndTime()));
+        lunchStartSlider.setValue(scheduleService.convertToSliderValue(selectedWorkingDay.getStartLunch()));
+        lunchEndSlider.setValue(scheduleService.convertToSliderValue(selectedWorkingDay.getEndLunch()));
+    }
+
     private void setWorkDayLabel() {
         LocalDate date = wdDatePicker.getValue();
+        Doctor selectedDoctor = doctorsService.getSelectedDoctor();
         if (date ==  null){
             wdDatePickerLabel.setTextFill(Color.BLACK);
             wdDatePickerLabel.setText("День не выбран");
-        }else if (isWorkingDay(date)){
+        }else if (selectedDoctor != null && selectedDoctor.getWorkingDay(date) != null){
             wdDatePickerLabel.setTextFill(Color.GREEN);
             wdDatePickerLabel.setText("Рабочий день: " + wdDatePicker.getValue().toString());
         }else {
             wdDatePickerLabel.setTextFill(Color.BLUE);
             wdDatePickerLabel.setText("Не рабочий день: " + wdDatePicker.getValue().toString());
         }
-    }
-
-    private boolean isWorkingDay(LocalDate date) {
-        return date.getDayOfYear() % 7 != 0;
     }
 }

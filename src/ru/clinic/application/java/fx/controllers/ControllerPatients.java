@@ -283,6 +283,7 @@ public class ControllerPatients extends ControllerClass {
     }
 
     public void startController() {
+        //Todo When loading patients and patient is already selected. Have to load selected patient also and select that patient.
         clearFields();
         clearFieldsFind();
         clearLabels();

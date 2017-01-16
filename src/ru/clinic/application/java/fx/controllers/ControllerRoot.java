@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.clinic.application.java.dao.entity.Doctor;
+import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.fx.frames.*;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DoctorsService;

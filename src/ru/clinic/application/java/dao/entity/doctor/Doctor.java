@@ -1,6 +1,8 @@
-package ru.clinic.application.java.dao.entity;
+package ru.clinic.application.java.dao.entity.doctor;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 
@@ -23,6 +25,16 @@ public class Doctor {
     private SimpleStringProperty homePhonePro = new SimpleStringProperty();
     private SimpleStringProperty emailProp = new SimpleStringProperty();
 
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private ObservableList<WorkingDay> workingDays;
+
+    public Doctor(){
+        workingDays = FXCollections.observableArrayList();
+        startDate = null;
+        endDate = null;
+    }
+
     public String getFio() {
         return fio;
     }
@@ -30,6 +42,27 @@ public class Doctor {
     public void setFio(String fio) {
         this.fio = fio;
         setFioProp(fio);
+    }
+
+    public WorkingDay getWorkingDay(LocalDate date){
+        return workingDays.stream().filter(workingDay -> workingDay.getWorkingDay().equals(date)).findFirst().orElse(null);
+    }
+
+    public boolean isDateInBounds(LocalDate date) {
+        if (startDate == null || endDate == null) {
+            return false;
+        }
+        return date != null && date.isAfter(startDate) && date.isBefore(endDate);
+    }
+
+    public void setWorkingDays(ObservableList<WorkingDay> workingDays, LocalDate startDate, LocalDate endDate){
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.workingDays = workingDays;
+    }
+
+    public ObservableList<WorkingDay> getWorkingDays() {
+        return workingDays;
     }
 
     public int getId() {
@@ -90,6 +123,22 @@ public class Doctor {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+
+    @Override
+    public String toString() {
+        return "Doctor{" +
+                "id=" + id +
+                ", fio='" + fio + '\'' +
+                ", dob=" + dob +
+                ", cellPhone='" + cellPhone + '\'' +
+                ", cellPhoneTwo='" + cellPhoneTwo + '\'' +
+                ", homePhone='" + homePhone + '\'' +
+                ", email='" + email + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
+
 /*Properties*/
 
     public String getFioProp() {
@@ -140,5 +189,5 @@ public class Doctor {
         this.emailProp.set(emailProp);
     }
 
-    //Todo Add to string method
+
 }

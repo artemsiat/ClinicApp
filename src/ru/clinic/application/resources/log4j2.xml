@@ -15,6 +15,9 @@
         <File name="spring-file" fileName="logs/spring-file.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </File>
+        <File name="spring-jdbc" fileName="logs/spring-jdbc.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
     </Appenders>
 
     <Loggers>
@@ -24,6 +27,10 @@
 
         <logger name="org.springframework" level="DEBUG" additivity="false">
             <AppenderRef ref="spring-file"/>
+        </logger>
+
+        <logger name="org.springframework.jdbc" level="DEBUG" additivity="false">
+            <AppenderRef ref="spring-jdbc"/>
         </logger>
 
         <logger name="ru.clinic.application.java.Main" level="DEBUG" additivity="false">

@@ -1,10 +1,13 @@
 package ru.clinic.application.java.service;
 
+import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.WorkingDayDao;
+import ru.clinic.application.java.dao.entity.doctor.Doctor;
+import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.service.setting.SettingsService;
 
 import java.time.LocalDate;
@@ -14,9 +17,13 @@ import java.time.LocalDate;
  */
 
 @Component
-public class WorkingDayService {
+public class ScheduleService {
 
-    private final static Logger LOGGER = LogManager.getLogger(WorkingDayService.class.getName());
+    private final static Logger LOGGER = LogManager.getLogger(ScheduleService.class.getName());
+
+    private final static int LOAD_DAYS_RANGE = 60;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @Autowired
     AdminService adminService;
@@ -59,6 +66,31 @@ public class WorkingDayService {
                 , doctorId, day, workStart, workEnd, lunchStart, lunchEnd);
         workingDayDao.addWorkingDay(adminService.getCurrentAdmin().getId(), doctorId, day, workStart, workEnd, lunchStart, lunchEnd, comment);
 
-        workingDayDao.loadWorkingDaysRange(LocalDate.now().minusDays(30), LocalDate.now().plusDays(30), 1);
+        workingDayDao.loadWorkingDaysRange(LocalDate.now().minusDays(LOAD_DAYS_RANGE), LocalDate.now().plusDays(LOAD_DAYS_RANGE), 3);
+    }
+
+    public void loadWorkingDaysRange(LocalDate date, Doctor doctor) {
+        LocalDate startDate = date.minusDays(LOAD_DAYS_RANGE);
+        LocalDate endDate = date.plusDays(LOAD_DAYS_RANGE);
+        LOGGER.debug("[loadWorkingDaysRange] loading working days for doctor [{}] from [{}] to [{}]", doctor.getId(), startDate, endDate);
+        ObservableList<WorkingDay> workingDays = workingDayDao.loadWorkingDaysRange(startDate, endDate, doctor.getId());
+        doctor.setWorkingDays(workingDays, startDate, endDate);
+    }
+
+    public double convertToSliderValue(String time) {
+        int hours, minutes, intervalsMinutes, hourParts, startHour;
+        intervalsMinutes = settingsService.getGetWorkingDayIntervals();// 15
+        hourParts = 60/intervalsMinutes; // 4
+        startHour = settingsService.getWorkingDayStartHour();//8
+
+        String[] split = time.split(":");
+        hours = Integer.parseInt(split[0].trim());
+        minutes = Integer.parseInt(split[1].trim());
+
+        if (minutes != 0){
+            minutes = minutes/intervalsMinutes;
+        }
+
+        return ((hours - startHour) * hourParts) + minutes;
     }
 }

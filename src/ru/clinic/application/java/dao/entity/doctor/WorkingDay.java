@@ -1,4 +1,4 @@
-package ru.clinic.application.java.dao.entity;
+package ru.clinic.application.java.dao.entity.doctor;
 
 import java.time.LocalDate;
 
@@ -79,5 +79,28 @@ public class WorkingDay {
 
     public void setCreator(int creator) {
         this.creator = creator;
+    }
+
+    public LocalDate getWorkingDay() {
+        return workingDay;
+    }
+
+    public int getCreator() {
+        return creator;
+    }
+
+    @Override
+    public String toString() {
+        return "WorkingDay{" +
+                "id=" + id +
+                ", doctorId=" + doctorId +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", startLunch='" + startLunch + '\'' +
+                ", endLunch='" + endLunch + '\'' +
+                ", comment='" + comment + '\'' +
+                ", workingDay=" + workingDay +
+                ", creator=" + creator +
+                '}';
     }
 }

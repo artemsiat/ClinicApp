@@ -2,11 +2,12 @@ package ru.clinic.application.java.service;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.DoctorsDao;
-import ru.clinic.application.java.dao.entity.Doctor;
+import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.fx.controllers.ControllerRoot;
 import ru.clinic.application.java.service.setting.SettingsService;
 
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 @Component
 public class DoctorsService {
 
-    private static final Logger LOGGER = Logger.getLogger(DoctorsService.class.getName());
+    private final static Logger LOGGER = LogManager.getLogger(DoctorsService.class.getName());
     private Doctor selectedDoctor;
     private ObservableList<Doctor> doctors;
 
@@ -35,6 +36,9 @@ public class DoctorsService {
 
     @Autowired
     ControllerRoot controllerRoot;
+
+    @Autowired
+    ScheduleService scheduleService;
 
     public DoctorsService(){
         doctors = FXCollections.observableArrayList();
@@ -80,7 +84,10 @@ public class DoctorsService {
     }
 
     public void setSelectedDoctor(Doctor selectedDoctor) {
+        LOGGER.debug("[setSelectedDoctor] selected doctor [{}]", selectedDoctor);
         this.selectedDoctor = selectedDoctor;
         controllerRoot.setSelectedDoctor();
+        scheduleService.loadWorkingDaysRange(LocalDate.now(), selectedDoctor);
     }
+
 }

@@ -2,9 +2,11 @@ package ru.clinic.application.java.dao.rowmapper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import ru.clinic.application.java.dao.entity.WorkingDay;
+import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -14,6 +16,8 @@ import java.sql.SQLException;
  * Created by Artem Siatchinov on 1/15/2017.
  */
 public class WorkingDayResultSetExtractor implements ResultSetExtractor<ObservableList<WorkingDay>>{
+
+    private final static Logger LOGGER = LogManager.getLogger(WorkingDayResultSetExtractor.class.getName());
 
     /*
 ID  	DOCTOR_ID  	WORKING_DAY  	START_TIME  	END_TIME  	START_LUNCH  	END_LUNCH  	COMMENT  	CREATOR  	CREATED  	WHO_MODIFIED  	MODIFIED  	WHO_REMOVED  	WHEN_REMOVED  	REMOVED
@@ -40,6 +44,7 @@ ID  	DOCTOR_ID  	WORKING_DAY  	START_TIME  	END_TIME  	START_LUNCH  	END_LUNCH  
             workingDay.setCreator(rs.getInt("creator"));
 
             workingDays.add(workingDay);
+            LOGGER.debug("Loaded working day [{}]", workingDay);
         }
         return workingDays;
     }
