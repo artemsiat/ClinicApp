@@ -1,5 +1,7 @@
 package ru.clinic.application.java.fx.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +15,9 @@ import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.fx.frames.FrameDoctors;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DoctorsService;
+import ru.clinic.application.java.service.PatientsService;
 
+import java.util.HashMap;
 import java.util.Optional;
 
 /**
@@ -47,6 +51,9 @@ public class ControllerDoctors extends ControllerClass {
 
     @Autowired
     DoctorsService doctorsService;
+
+    @Autowired
+    PatientsService patientsService;
 
     @FXML
     private TableView<Doctor> tableView;
@@ -178,8 +185,7 @@ public class ControllerDoctors extends ControllerClass {
         clearLabels();
         setTable();
         setTableListener();
-
-        //TODO Add phone number listeners
+        setPhoneListeners();
     }
 
     private void setTableListener() {
@@ -245,6 +251,38 @@ public class ControllerDoctors extends ControllerClass {
     public void stopController() {
         clearFields();
         clearLabels();
+    }
+
+    private void setPhoneListeners() {
+        HashMap<TextField, Label> phoneFieldToLabel = new HashMap<>();
+        phoneFieldToLabel.put(cellField, cellPhoneLabel);
+        phoneFieldToLabel.put(cellTwoField, cellPhoneTwoLabel);
+        phoneFieldToLabel.put(homePhoneField, homePhoneLabel);
+        phoneFieldToLabel.forEach(((textField, label) -> {
+
+            textField.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    String labelText = "";
+                    if (newValue != null && !newValue.isEmpty()){
+                        String resultDigits = "";
+                        for (int index = 0 ; index < newValue.length(); index ++){
+                            char charAt = newValue.charAt(index);
+                            if (Character.isDigit(charAt)){
+                                resultDigits += charAt;
+                            }
+                        }
+                        textField.setText(resultDigits);
+                        labelText = patientsService.maskPhoneNumber(resultDigits);
+                    }
+
+                    if (label != null){
+                        label.setText(labelText);
+                    }
+                }
+            });
+
+        }));
     }
 
     private void alertNotSelected() {

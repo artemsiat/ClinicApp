@@ -89,7 +89,8 @@ public class ControllerWorkingDays extends ControllerClass {
             String lunchEnd = scheduleService.convertSliderValue(lunchEndSlider.valueProperty().intValue());
 
             scheduleService.createWorkingDay(doctorsService.getSelectedDoctor().getId(), wdDatePicker.getValue(), workStart, workEnd, lunchStart, lunchEnd, commentField.getText());
-            //Todo Reload working days, so calendar will be renewed
+            scheduleService.loadWorkingDaysRange(wdDatePicker.getValue(), doctorsService.getSelectedDoctor());
+            wdDatePicker.setValue(wdDatePicker.getValue().plusDays(1));
         }
     }
 
@@ -159,6 +160,7 @@ public class ControllerWorkingDays extends ControllerClass {
                 if (doctorOptional.isPresent()){
                     doctorsService.setSelectedDoctor(doctorOptional.get());
                     setDoctorLabel();
+                    wdDatePicker.setValue(LocalDate.now());
                 }
             }
         });
@@ -174,11 +176,7 @@ public class ControllerWorkingDays extends ControllerClass {
     private void clearLabels() {
         LOGGER.debug("[clearLabels] Clearing labels");
         setDoctorLabel();
-        setDatePickerLabel();
-    }
-
-    private void setDatePickerLabel() {
-        wdDatePickerLabel.setText("");
+        setWorkDayLabel();
     }
 
     private void setDoctorLabel() {
@@ -441,10 +439,10 @@ public class ControllerWorkingDays extends ControllerClass {
             wdDatePickerLabel.setText("День не выбран");
         }else if (selectedDoctor != null && selectedDoctor.getWorkingDay(date) != null){
             wdDatePickerLabel.setTextFill(Color.GREEN);
-            wdDatePickerLabel.setText("Рабочий день: " + wdDatePicker.getValue().toString());
+            wdDatePickerLabel.setText("Рабочий день: " + wdDatePicker.getValue().getDayOfWeek() + " " + wdDatePicker.getValue().toString());
         }else {
             wdDatePickerLabel.setTextFill(Color.BLUE);
-            wdDatePickerLabel.setText("Не рабочий день: " + wdDatePicker.getValue().toString());
+            wdDatePickerLabel.setText("Не рабочий день: " + wdDatePicker.getValue().getDayOfWeek() + " " + wdDatePicker.getValue().toString());
         }
     }
 }

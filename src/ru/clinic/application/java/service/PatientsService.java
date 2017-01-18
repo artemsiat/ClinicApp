@@ -65,6 +65,7 @@ public class PatientsService {
         patientsDao.deletePatient(selectedPatientId, id);
     }
 
+    //Todo move to separate service. Many controllers beside patients use that.
     public static String maskPhoneNumber(String digits) {
         String result = "+7(";
         if (!StringUtils.isEmpty(digits)) {

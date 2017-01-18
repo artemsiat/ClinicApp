@@ -70,6 +70,9 @@ public class ScheduleService {
     }
 
     public void loadWorkingDaysRange(LocalDate date, Doctor doctor) {
+        if (date == null){
+            date = LocalDate.now();
+        }
         LocalDate startDate = date.minusDays(LOAD_DAYS_RANGE);
         LocalDate endDate = date.plusDays(LOAD_DAYS_RANGE);
         LOGGER.debug("[loadWorkingDaysRange] loading working days for doctor [{}] from [{}] to [{}]", doctor.getId(), startDate, endDate);
