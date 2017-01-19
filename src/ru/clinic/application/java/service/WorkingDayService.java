@@ -17,9 +17,9 @@ import java.time.LocalDate;
  */
 
 @Component
-public class ScheduleService {
+public class WorkingDayService {
 
-    private final static Logger LOGGER = LogManager.getLogger(ScheduleService.class.getName());
+    private final static Logger LOGGER = LogManager.getLogger(WorkingDayService.class.getName());
 
     private final static int LOAD_DAYS_RANGE = 60;
     private LocalDate startDate;
@@ -33,6 +33,9 @@ public class ScheduleService {
 
     @Autowired
     SettingsService settingsService;
+
+    @Autowired
+    DoctorsService doctorsService;
 
     public String convertStartSliderValue(int value){
         return "с " + convertSliderValue(value);
@@ -95,5 +98,10 @@ public class ScheduleService {
         }
 
         return ((hours - startHour) * hourParts) + minutes;
+    }
+
+    public void removeWorkingDay(WorkingDay day) {
+        LOGGER.debug("[removeWorkingDay] Marking working day [{}] as removed. doctor[{}]. admin[{}]", day, doctorsService.getSelectedDoctor().getFio(), adminService.getCurrentAdmin().getFio());
+        workingDayDao.removeWorkingDay(day.getId(), adminService.getCurrentAdmin().getId());
     }
 }

@@ -25,6 +25,7 @@ public class WorkingDayDao {
             "(doctor_id, working_day, start_time, end_time, start_lunch, end_lunch, comment, creator, removed, created) " +
             "VALUES(?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
     private final static String LOAD_WORKING_DAYS_RANGE = "SELECT * FROM WORKING_DAY WHERE working_day > ? AND working_day < ? AND doctor_id = ? AND removed = ?";
+    private final static String REMOVE_WORKING_DAY = "UPDATE WORKING_DAY SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
 
     @Autowired
     JdbcTemplate jdbcTemplate;
@@ -59,5 +60,9 @@ public class WorkingDayDao {
         return jdbcTemplate.query(LOAD_WORKING_DAYS_RANGE,
                 new Object[]{Date.valueOf(startDate), Date.valueOf(endDate), doctorId, false},
                 new WorkingDayResultSetExtractor());
+    }
+
+    public void removeWorkingDay(int wdId, int adminId) {
+        jdbcTemplate.update(REMOVE_WORKING_DAY, adminId, wdId);
     }
 }

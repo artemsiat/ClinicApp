@@ -38,7 +38,7 @@ public class DoctorsService {
     ControllerRoot controllerRoot;
 
     @Autowired
-    ScheduleService scheduleService;
+    WorkingDayService workingDayService;
 
     public DoctorsService(){
         doctors = FXCollections.observableArrayList();
@@ -87,7 +87,7 @@ public class DoctorsService {
         LOGGER.debug("[setSelectedDoctor] selected doctor [{}]", selectedDoctor);
         this.selectedDoctor = selectedDoctor;
         controllerRoot.setSelectedDoctor();
-        scheduleService.loadWorkingDaysRange(LocalDate.now(), selectedDoctor);
+        workingDayService.loadWorkingDaysRange(LocalDate.now(), selectedDoctor);
     }
 
 }
