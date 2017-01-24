@@ -104,4 +104,9 @@ public class WorkingDayService {
         LOGGER.debug("[removeWorkingDay] Marking working day [{}] as removed. doctor[{}]. admin[{}]", day, doctorsService.getSelectedDoctor().getFio(), adminService.getCurrentAdmin().getFio());
         workingDayDao.removeWorkingDay(day.getId(), adminService.getCurrentAdmin().getId());
     }
+
+    public void updateWorkingDay(WorkingDay selectedWorkingDay, int doctorId, LocalDate workingDay, String start, String end, String lunchStart, String lunchEnd, String comment) {
+        LOGGER.debug("[updateWorkingDay] Marking working day [{}] as updated. doctor[{}]. admin[{}]", selectedWorkingDay, doctorsService.getSelectedDoctor().getFio(), adminService.getCurrentAdmin().getFio());
+        workingDayDao.updateWorkingDay(selectedWorkingDay.getId(), adminService.getCurrentAdmin().getId(), start, end, lunchStart, lunchEnd, comment);
+    }
 }

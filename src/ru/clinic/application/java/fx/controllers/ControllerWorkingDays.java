@@ -1,5 +1,6 @@
 package ru.clinic.application.java.fx.controllers;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,9 +11,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.dao.entity.Appointment;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.fx.ControllerClass;
+import ru.clinic.application.java.service.AppointmentService;
 import ru.clinic.application.java.service.DoctorsService;
 import ru.clinic.application.java.service.WorkingDayService;
 import ru.clinic.application.java.service.setting.SettingsService;
@@ -34,6 +37,8 @@ public class ControllerWorkingDays extends ControllerClass {
     private static final String NO_WORKING_DAY_SELECTED = "Для выполнения этой операции необходимо выбрать рабочий день";
     private static final String IS_WORKING_DAY = "Выбранный день уже рабочий";
     private static final String IS_NOT_WORKING_DAY = "Выбранный день не является рабочий";
+    private static final String CANT_MODIFY_WD_WITH_APPS = "Неразрешается изменять рабочии дни с дейсвующими записями.";
+    private static final String WORKING_DAY_CHANGED = "Выбранный день успешно изменен.";
 
     private WorkingDay selectedWorkingDay = null; //Todo move to service Class
 
@@ -45,6 +50,9 @@ public class ControllerWorkingDays extends ControllerClass {
 
     @Autowired
     WorkingDayService workingDayService;
+
+    @Autowired
+    AppointmentService appointmentService;
 
     @FXML
     private Label doctorComboBoxLabel;
@@ -81,6 +89,23 @@ public class ControllerWorkingDays extends ControllerClass {
     @FXML
     private TextArea commentField;
 
+    public void startController() {
+        LOGGER.debug("[startController] Working Day controller starting");
+        // Todo add functionality to create multiple wd for multiple doctors in seperate popup window
+        // Todo, can create time picking with time buttons . example 10  10 15   10 30   10 45.. and the same for 11 on the next row. generate buttons dynamicaly.
+        clearLabels();
+        setDoctorComboBox();
+        setDoctorComboBoxListener();
+        setSliderListeners();
+        setDatePickerListener();
+        setInitialSliderValues();
+        setWorkDayLabel();
+
+        if (doctorsService.getSelectedDoctor() != null) {
+            doctorComboBox.setValue(doctorsService.getSelectedDoctor().getFio());
+        }
+    }
+
     @FXML
     void createWdBtnAction(ActionEvent event) {
         if (alertDoctorSelected() && alertWdSelected() && alertWdiSWorking()) {
@@ -98,7 +123,7 @@ public class ControllerWorkingDays extends ControllerClass {
     private boolean alertDoctorSelected() {
         if (doctorsService.getSelectedDoctor() == null) {
             LOGGER.debug("[checkInputFields] Doctor is not selected. Alerting User");
-            alertOnCreation(NO_DOCTOR_SELECTED);
+            alertUser(NO_DOCTOR_SELECTED);
             return false;
         }
         return true;
@@ -107,7 +132,7 @@ public class ControllerWorkingDays extends ControllerClass {
     private boolean alertWdSelected() {
         if (wdDatePicker.getValue() == null) {
             LOGGER.debug("[checkInputFields] WorkingDay is not selected. Alerting User");
-            alertOnCreation(NO_WORKING_DAY_SELECTED);
+            alertUser(NO_WORKING_DAY_SELECTED);
             return false;
         }
         return true;
@@ -115,7 +140,7 @@ public class ControllerWorkingDays extends ControllerClass {
 
     private boolean alertWdiSWorking() {
         if (wdDatePicker.getValue() != null && doctorsService.getSelectedDoctor().getWorkingDay(wdDatePicker.getValue()) != null) {
-            alertOnCreation(IS_WORKING_DAY);
+            alertUser(IS_WORKING_DAY);
             return false;
         }
         return true;
@@ -123,13 +148,13 @@ public class ControllerWorkingDays extends ControllerClass {
 
     private boolean alertWdiSNotWorking() {
         if (wdDatePicker.getValue() != null && doctorsService.getSelectedDoctor().getWorkingDay(wdDatePicker.getValue()) == null) {
-            alertOnCreation(IS_NOT_WORKING_DAY);
+            alertUser(IS_NOT_WORKING_DAY);
             return false;
         }
         return true;
     }
 
-    private void alertOnCreation(String сontext) {
+    private void alertUser(String сontext) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(INFORMATION_TITLE);
         alert.setHeaderText(null);
@@ -146,33 +171,33 @@ public class ControllerWorkingDays extends ControllerClass {
 
     @FXML
     void removeWdBtnAction(ActionEvent event) {
-        if (alertDoctorSelected() && alertWdSelected() && alertWdiSNotWorking()) {
-            workingDayService.removeWorkingDay(doctorsService.getSelectedDoctor().getWorkingDay(wdDatePicker.getValue()));
-            workingDayService.loadWorkingDaysRange(wdDatePicker.getValue(), doctorsService.getSelectedDoctor());
-            setWorkDayLabel();
+        if (alertDoctorSelected() && alertWdSelected() && alertWdiSNotWorking() && alertCheckAppointments()) {
+
         }
+    }
+
+    private boolean alertCheckAppointments() {
+        ObservableList<Appointment> appsByWd = appointmentService.getAppsByWd(wdDatePicker.getValue());
+        if (appsByWd != null && !appsByWd.isEmpty()) {
+            alertUser(CANT_MODIFY_WD_WITH_APPS);
+            return false;
+        }
+        return true;
     }
 
     @FXML
     void saveWdBtnAction(ActionEvent event) {
+        //Todo for later . Allow time change if there are no appointments for that time
+        if (alertDoctorSelected() && alertWdSelected() && alertWdiSNotWorking() && alertCheckAppointments() && alertCheckAppointments()) {
+            String workStart = workingDayService.convertSliderValue(workStartSlider.valueProperty().intValue());
+            String workEnd = workingDayService.convertSliderValue(workEndSlider.valueProperty().intValue());
+            String lunchStart = workingDayService.convertSliderValue(lunchStartSlider.valueProperty().intValue());
+            String lunchEnd = workingDayService.convertSliderValue(lunchEndSlider.valueProperty().intValue());
 
-    }
-
-
-    public void startController() {
-        LOGGER.debug("[startController] Working Day controller starting");
-        // Todo add functionality to create multiple wd for multiple doctors in seperate popup window
-        // Todo, can create time picking with time buttons . example 10  10 15   10 30   10 45.. and the same for 11 on the next row. generate buttons dynamicaly.
-        clearLabels();
-        setDoctorComboBox();
-        setDoctorComboBoxListener();
-        setSliderListeners();
-        setDatePickerListener();
-        setInitialSliderValues();
-        setWorkDayLabel();
-
-        if (doctorsService.getSelectedDoctor() != null) {
-            doctorComboBox.setValue(doctorsService.getSelectedDoctor().getFio());
+            workingDayService.updateWorkingDay(selectedWorkingDay, doctorsService.getSelectedDoctor().getId(), wdDatePicker.getValue(), workStart, workEnd, lunchStart, lunchEnd, commentField.getText());
+            workingDayService.loadWorkingDaysRange(wdDatePicker.getValue(), doctorsService.getSelectedDoctor());
+            setWorkDayLabel();
+            alertUser(WORKING_DAY_CHANGED);
         }
     }
 

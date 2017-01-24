@@ -18,7 +18,7 @@
                <children>
                   <Button fx:id="mainBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#mainBtnAction" text="Главная" />
                   <Button fx:id="patientBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#patientBtnAction" text="Пациенты" />
-                  <Button fx:id="appointmentBtn" contentDisplay="TOP" mnemonicParsing="false" text="Записать пациента" />
+                  <Button fx:id="appointmentBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#appointmentBtnAction" text="Записать пациента" />
                   <Button fx:id="doctorsBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#doctorsBtnAction" text="Врачи" />
                   <Button fx:id="scheduleBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#scheduleBtnAction" text="Расписание врачей" />
                   <Button fx:id="adminBtn" contentDisplay="TOP" mnemonicParsing="false" onAction="#adminBtnAction" text="Администраторы" />

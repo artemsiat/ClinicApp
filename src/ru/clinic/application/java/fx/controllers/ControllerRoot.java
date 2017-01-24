@@ -54,6 +54,9 @@ public class ControllerRoot {
     @Autowired
     DoctorsService doctorsService;
 
+    @Autowired
+    FrameAppointments frameAppointments;
+
     @FXML
     private Label selectedPatientLabel;
 
@@ -95,6 +98,11 @@ public class ControllerRoot {
     @FXML
     void adminBtnAction(ActionEvent event) {
         frameRoot.getRoot().setCenter(frameAdmins.getCenterPane());
+    }
+
+    @FXML
+    void appointmentBtnAction(ActionEvent event) {
+        frameRoot.getRoot().setCenter(frameAppointments.getCenterPane());
     }
 
     @FXML
