@@ -2,12 +2,13 @@ package ru.clinic.application.java.service;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.PatientsDao;
 import ru.clinic.application.java.dao.entity.Patient;
+import ru.clinic.application.java.fx.controllers.ControllerRoot;
 
 /**
  * Created by Artem Siatchinov on 1/5/2017.
@@ -16,18 +17,24 @@ import ru.clinic.application.java.dao.entity.Patient;
 @Component
 public class PatientsService {
 
-    private static final Logger LOGGER = Logger.getLogger(PatientsService.class.getName());
+    private final static Logger LOGGER = LogManager.getLogger(PatientsService.class.getName());
 
     private ObservableList<Patient> patients;
 
-    @Autowired
-    PatientsDao patientsDao;
+    private Patient selectedPatient;
 
     @Autowired
-    AdminService adminService;
+    private PatientsDao patientsDao;
+
+    @Autowired
+    private AdminService adminService;
+
+    @Autowired
+    private ControllerRoot controllerRoot;
 
     public PatientsService(){
         patients = FXCollections.observableArrayList();
+        selectedPatient = null;
     }
 
     public ObservableList<Patient> loadLastCreatedPatients() {
@@ -51,10 +58,6 @@ public class PatientsService {
         patientsDao.addNewPatient(adminService.getCurrentAdmin().getId(), lastName, firstName, middleName, phoneNumber, phoneNumberTwo, email, comment);
     }
 
-    public ObservableList<Patient> getPatients() {
-        return patients;
-    }
-
     public void updatePatient(int patientId, String firstName, String lastName, String middleName, String phone, String phoneTwo, String email, String comment) {
         LOGGER.debug("[PatientsService][updatePatient] Updating Patient ");
         patientsDao.updatePatient(patientId, adminService.getCurrentAdmin().getId(), firstName, lastName, middleName, phone, phoneTwo, email, comment);
@@ -65,29 +68,6 @@ public class PatientsService {
         patientsDao.deletePatient(selectedPatientId, id);
     }
 
-    //Todo move to separate service. Many controllers beside patients use that.
-    public static String maskPhoneNumber(String digits) {
-        String result = "+7(";
-        if (!StringUtils.isEmpty(digits)) {
-
-            if (digits.length() > 10) {
-                result += digits.substring(0, 3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6, 8) + "-" + digits.substring(8, 10) + " доб.:" + digits.substring(10);
-            } else if (digits.length() > 8) {
-                result += digits.substring(0, 3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6, 8) + "-" + digits.substring(8);
-            } else if (digits.length() > 6) {
-                result += digits.substring(0, 3) + ")" + digits.substring(3, 6) + "-" + digits.substring(6);
-            } else if (digits.length() > 3) {
-                result += digits.substring(0, 3) + ")" + digits.substring(3);
-            } else if (digits.length() > 2) {
-                result += digits + ")";
-            } else {
-                result += digits;
-            }
-            return result;
-        }
-        return "";
-    }
-
     public ObservableList<Patient> findPatient(String firstName, String lastName, String middleName, String phone, String email) {
         LOGGER.debug("[PatientsService][findPatient] Looking for patient firstName[" + firstName +
                 "] lastName[" + lastName + "] middleName[" + middleName + "] phone[" + phone + "] email[" + email + "]");
@@ -96,7 +76,21 @@ public class PatientsService {
         return patientsList;
     }
 
+    public void setSelectedPatient(Patient patient){
+        LOGGER.debug("[setSelectedPatient] selecting patient [{}]", patient );
+        selectedPatient = patient;
+        controllerRoot.setSelectedPatient();
+    }
+
     public int getPatientsCount() {
         return patientsDao.getPatientsCount();
+    }
+
+    public ObservableList<Patient> getPatients() {
+        return patients;
+    }
+
+    public Patient getSelectedPatient() {
+        return selectedPatient;
     }
 }

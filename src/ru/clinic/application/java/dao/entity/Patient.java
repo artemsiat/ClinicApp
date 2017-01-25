@@ -2,7 +2,7 @@ package ru.clinic.application.java.dao.entity;
 
 import javafx.beans.property.SimpleStringProperty;
 import org.apache.commons.lang3.StringUtils;
-import ru.clinic.application.java.service.PatientsService;
+import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
 /**
  * Created by Artem Siatchinov on 1/5/2017.
@@ -133,7 +133,7 @@ public class Patient {
     }
 
     public void setCellPhoneProp(String cellPhoneProp) {
-        this.cellPhoneProp.set(PatientsService.maskPhoneNumber(cellPhoneProp));
+        this.cellPhoneProp.set(ClinicAppUtils.maskPhoneNumber(cellPhoneProp));
     }
 
     public String getEmailProp() {
@@ -148,5 +148,17 @@ public class Patient {
         this.emailProp.set(emailProp);
     }
 
-    //Todo add to string method
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", fio='" + fio + '\'' +
+                ", cellPhone='" + cellPhone + '\'' +
+                ", cellPhoneTwo='" + cellPhoneTwo + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

@@ -16,6 +16,7 @@ import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.PatientsService;
+import ru.clinic.application.java.service.utils.ClinicAppUtils;
 import ru.clinic.application.test.PopulatePatients;
 
 import java.util.HashMap;
@@ -345,7 +346,7 @@ public class ControllerPatients extends ControllerClass {
                             }
                         }
                         textField.setText(resultDigits);
-                        labelText = patientsService.maskPhoneNumber(resultDigits);
+                        labelText = ClinicAppUtils.maskPhoneNumber(resultDigits);
                     }
 
                     if (label != null){
@@ -389,6 +390,7 @@ public class ControllerPatients extends ControllerClass {
 
     private void patientSelected() {
         selectedPatient = patientsService.getPatients().get(patientsTable.getSelectionModel().getSelectedIndex());
+        patientsService.setSelectedPatient(selectedPatient);
         setSelectedPatient();
     }
 

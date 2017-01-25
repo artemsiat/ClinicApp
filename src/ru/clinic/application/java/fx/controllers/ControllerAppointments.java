@@ -2,10 +2,7 @@ package ru.clinic.application.java.fx.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -64,7 +61,18 @@ public class ControllerAppointments extends ControllerClass {
     private GridPane timesGridPane;
 
     @FXML
+    private Button patientBtn;
+
+    @FXML
+    private Label patientBtnLabel;
+
+    @FXML
     void doctorComboBoxAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void patientBtnAction(ActionEvent event) {
 
     }
 

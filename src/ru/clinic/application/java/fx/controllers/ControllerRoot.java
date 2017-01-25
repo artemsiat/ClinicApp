@@ -13,10 +13,12 @@ import javafx.scene.layout.HBox;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.fx.frames.*;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DoctorsService;
+import ru.clinic.application.java.service.PatientsService;
 
 /**
  * Created by Artem Siatchinov on 1/8/2017.
@@ -47,6 +49,9 @@ public class ControllerRoot {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    PatientsService patientsService;
 
     @Autowired
     FrameWorkingDays frameWorkingDays;
@@ -129,6 +134,9 @@ public class ControllerRoot {
         setMainPane();
         initAdminLabel();
         setButtonImages();
+
+        setSelectedDoctor();
+        setSelectedPatient();
     }
 
     private void setButtonImages() {
@@ -174,6 +182,15 @@ public class ControllerRoot {
             selectedDoctorLabel.setText("Врач: " );
         }else {
             selectedDoctorLabel.setText("Врач: " + selectedDoctor.getFio());
+        }
+    }
+
+    public void setSelectedPatient() {
+        Patient selectedPatient = patientsService.getSelectedPatient();
+        if (selectedPatient == null){
+            selectedPatientLabel.setText("Пациент: ");
+        }else {
+            selectedPatientLabel.setText("Пациент: " + selectedPatient.getFio());
         }
     }
 }

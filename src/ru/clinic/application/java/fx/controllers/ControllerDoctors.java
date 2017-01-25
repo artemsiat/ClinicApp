@@ -16,6 +16,7 @@ import ru.clinic.application.java.fx.frames.FrameDoctors;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DoctorsService;
 import ru.clinic.application.java.service.PatientsService;
+import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -29,7 +30,7 @@ public class ControllerDoctors extends ControllerClass {
 
     private final static Logger LOGGER = Logger.getLogger(ControllerDoctors.class.getName());
 
-    private Doctor selectedDoctor;
+    private Doctor selectedDoctor = null;
 
     /*Confirmation Diaolog removing admin*/
     private final static String CONFIRMATION_TITLE = "Подтверждение";
@@ -199,7 +200,7 @@ public class ControllerDoctors extends ControllerClass {
     }
 
     private void doctorCleared() {
-        selectedDoctor = null;
+        doctorsService.setSelectedDoctor(null);
         clearFields();
         clearLabels();
     }
@@ -273,7 +274,7 @@ public class ControllerDoctors extends ControllerClass {
                             }
                         }
                         textField.setText(resultDigits);
-                        labelText = patientsService.maskPhoneNumber(resultDigits);
+                        labelText = ClinicAppUtils.maskPhoneNumber(resultDigits);
                     }
 
                     if (label != null){

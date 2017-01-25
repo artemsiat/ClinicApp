@@ -15,6 +15,7 @@ import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.fx.frames.FrameAdmins;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.PatientsService;
+import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -255,7 +256,7 @@ public class ControllerAdmins extends ControllerClass{
                             }
                         }
                         textField.setText(resultDigits);
-                        labelText = patientsService.maskPhoneNumber(resultDigits);
+                        labelText = ClinicAppUtils.maskPhoneNumber(resultDigits);
                     }
 
                     if (label != null){

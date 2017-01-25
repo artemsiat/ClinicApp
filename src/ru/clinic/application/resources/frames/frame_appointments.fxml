@@ -40,6 +40,12 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="15.0">
                            <children>
+                              <Button fx:id="patientBtn" mnemonicParsing="false" onAction="#patientBtnAction" prefWidth="320.0" text="Button" />
+                              <Label fx:id="patientBtnLabel" text="Label" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" spacing="15.0">
+                           <children>
                               <DatePicker fx:id="wdDatePicker" prefHeight="25.0" prefWidth="320.0" />
                               <Label fx:id="wdDatePickerLabel" text="Label" />
                            </children>
