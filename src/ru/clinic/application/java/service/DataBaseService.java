@@ -3,7 +3,6 @@ package ru.clinic.application.java.service;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.clinic.application.java.dao.DataBaseDao;
 import ru.clinic.application.java.service.dataBaseModel.*;
 
 import javax.annotation.PostConstruct;
@@ -29,18 +28,14 @@ public class DataBaseService {
     @Autowired
     TableWorkingDays tableWorkingDays;
 
-    private TableStatus[] tables;
-
     @Autowired
-    DataBaseDao dataBaseDao;
+    TableAppointments tableAppointments;
 
-    public DataBaseService(){
-
-    }
+    private TableStatus[] tables;
 
     @PostConstruct
     public void init(){
-        tables = new TableStatus[]{this.tableAdmins, this.tableDoctors, this.tablePatients, this.tableWorkingDays};
+        tables = new TableStatus[]{this.tableAdmins, this.tableDoctors, this.tablePatients, this.tableWorkingDays, this.tableAppointments};
     }
 
     public boolean checkTables() {

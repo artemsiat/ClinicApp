@@ -40,7 +40,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" spacing="15.0">
                            <children>
-                              <Button fx:id="patientBtn" mnemonicParsing="false" onAction="#patientBtnAction" prefWidth="320.0" text="Button" />
+                              <Button fx:id="choosePatientBtn" alignment="TOP_LEFT" mnemonicParsing="false" onAction="#choosePatientBtnAction" prefWidth="320.0" text="Выбрать пациента" textOverrun="CLIP" />
                               <Label fx:id="patientBtnLabel" text="Label" />
                            </children>
                         </HBox>
@@ -65,10 +65,12 @@
                   </HBox>
                   <VBox alignment="BOTTOM_RIGHT" layoutX="156.0" layoutY="35.0" spacing="35.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
                      <children>
-                        <GridPane fx:id="timesGridPane" alignment="CENTER">
+                        <GridPane fx:id="timesGridPane" alignment="CENTER" gridLinesVisible="true" prefHeight="88.0" prefWidth="480.0">
                           <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="240.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="240.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="240.0" minWidth="10.0" prefWidth="240.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="408.0" minWidth="10.0" prefWidth="240.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -76,7 +78,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                         </GridPane>
-                        <TextArea minWidth="100.0" prefHeight="181.0" prefWidth="372.0" text="Комментарий" />
+                        <TextArea minWidth="100.0" prefHeight="181.0" prefWidth="372.0" promptText="Комментарий" />
                      </children>
                   </VBox>
                </children>

@@ -78,6 +78,25 @@ public class DataBaseDao {
     private final static String WORKING_DAY_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS WORKING_DAY("+
             "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
             "doctor_id int,"+
+            "wd_id int,"+
+            "patient_id int,"+
+            "appointment_date date,"+
+            "start_time varchar(10),"+
+            "end_time varchar(10),"+
+            "comment varchar(500),"+
+            "creator int,"+
+            "created timestamp,"+
+            "who_modified int,"+
+            "modified timestamp,"+
+            "who_removed int,"+
+            "when_removed timestamp,"+
+            "removed boolean)";
+
+    private final static String APPOINTMENT_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'APPOINTMENT'";
+    private final static String APPOINTMENT_DROP_TABLE = "DROP TABLE APPOINTMENT";
+    private final static String APPOINTMENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS APPOINTMENT("+
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
+            "doctor_id int,"+
             "working_day date,"+
             "start_time varchar(10),"+
             "end_time varchar(10),"+
@@ -123,7 +142,9 @@ public class DataBaseDao {
     }
 
     public boolean checkAppointmentTable() {
-        return false;
+        LOGGER.debug("[checkAppointmentTable] Checking if WorkingDay table is created");
+        Integer count = jdbcTemplate.queryForObject(APPOINTMENT_CHECK_TABLE, Integer.class);
+        return count == 1;
     }
 
     public boolean checkSettingsTable() {
@@ -160,5 +181,13 @@ public class DataBaseDao {
 
     public void createWorkingDayTable() {
         jdbcTemplate.execute(WORKING_DAY_CREATE_TABLE);
+    }
+
+    public void dropAppointmentTable() {
+        jdbcTemplate.execute(APPOINTMENT_DROP_TABLE);
+    }
+
+    public void createAppointmentTable() {
+        jdbcTemplate.execute(APPOINTMENT_CREATE_TABLE);
     }
 }

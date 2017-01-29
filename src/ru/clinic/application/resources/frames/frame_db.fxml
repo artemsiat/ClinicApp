@@ -83,14 +83,14 @@
                   <HBox spacing="15.0">
                      <children>
                         <Label text="Приемы :" />
-                        <Label text="status" />
+                        <Label fx:id="appointmentStatus" text="status" />
                      </children>
                   </HBox>
                   <HBox spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Создать" />
-                        <Button mnemonicParsing="false" text="Удалить" />
-                        <Button mnemonicParsing="false" text="Обновить" />
+                        <Button fx:id="createAppointmentBtn" mnemonicParsing="false" onAction="#createAppointmentBtnAction" text="Создать" />
+                        <Button fx:id="dropAppointmentBtn" mnemonicParsing="false" onAction="#dropAppointmentBtnAction" text="Удалить" />
+                        <Button fx:id="refreshAppointmentBtn" mnemonicParsing="false" onAction="#refreshAppointmentBtnAction" text="Обновить" />
                      </children>
                   </HBox>
                </children>

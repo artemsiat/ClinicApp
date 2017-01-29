@@ -117,7 +117,7 @@ public class ControllerRoot {
 
     @FXML
     void patientBtnAction(ActionEvent event) {
-        frameRoot.getRoot().setCenter(framePatients.getCenterPane());
+        startPatientsFrame();
     }
 
     @FXML
@@ -192,5 +192,9 @@ public class ControllerRoot {
         }else {
             selectedPatientLabel.setText("Пациент: " + selectedPatient.getFio());
         }
+    }
+
+    public void startPatientsFrame() {
+        frameRoot.getRoot().setCenter(framePatients.getCenterPane());
     }
 }

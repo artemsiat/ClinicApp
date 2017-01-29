@@ -17,6 +17,7 @@ import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.service.AppointmentService;
 import ru.clinic.application.java.service.DoctorsService;
+import ru.clinic.application.java.service.PatientsService;
 import ru.clinic.application.java.service.WorkingDayService;
 
 import java.time.LocalDate;
@@ -42,6 +43,12 @@ public class ControllerAppointments extends ControllerClass {
     @Autowired
     AppointmentService appointmentService;
 
+    @Autowired
+    PatientsService patientsService;
+
+    @Autowired
+    ControllerRoot controllerRoot;
+
     @FXML
     private AnchorPane mainAnchorPane;
 
@@ -61,7 +68,7 @@ public class ControllerAppointments extends ControllerClass {
     private GridPane timesGridPane;
 
     @FXML
-    private Button patientBtn;
+    private Button choosePatientBtn;
 
     @FXML
     private Label patientBtnLabel;
@@ -72,8 +79,8 @@ public class ControllerAppointments extends ControllerClass {
     }
 
     @FXML
-    void patientBtnAction(ActionEvent event) {
-
+    void choosePatientBtnAction(ActionEvent event) {
+        controllerRoot.startPatientsFrame();
     }
 
     @Override
@@ -83,6 +90,7 @@ public class ControllerAppointments extends ControllerClass {
         setDatePickerListener();
 
         setDoctorLabel();
+        setPatientLabel();
         setWorkDayLabel();
     }
 
@@ -178,6 +186,16 @@ public class ControllerAppointments extends ControllerClass {
         }
     }
 
+    private void setPatientLabel() {
+        if (patientsService.getSelectedPatient() == null) {
+            patientBtnLabel.setTextFill(Color.BLACK);
+            patientBtnLabel.setText("Пациент не выбран");
+        } else {
+            patientBtnLabel.setTextFill(Color.GREEN);
+            patientBtnLabel.setText("Выбранный пациент: " + patientsService.getSelectedPatient().getFio());
+        }
+    }
+
     private void setWorkDayLabel() {
         LocalDate date = wdDatePicker.getValue();
         Doctor selectedDoctor = doctorsService.getSelectedDoctor();
@@ -187,9 +205,19 @@ public class ControllerAppointments extends ControllerClass {
         } else if (selectedDoctor != null && selectedDoctor.getWorkingDay(date) != null) {
             wdDatePickerLabel.setTextFill(Color.GREEN);
             wdDatePickerLabel.setText("Рабочий день: " + wdDatePicker.getValue().getDayOfWeek() + " " + wdDatePicker.getValue().toString());
+            setTimeGridPane();
         } else {
             wdDatePickerLabel.setTextFill(Color.BLUE);
             wdDatePickerLabel.setText("Не рабочий день: " + wdDatePicker.getValue().getDayOfWeek() + " " + wdDatePicker.getValue().toString());
+        }
+    }
+
+    private void setTimeGridPane() {
+        for (int column = 0 ; column < 4 ; column++){
+            for (int row = 0 ; row < 15 ; row++){
+                Button button = new Button(row + " : " + column);
+                timesGridPane.add(button, column, row);
+            }
         }
     }
 

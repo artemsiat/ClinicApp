@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.fx.frames.FrameDbTables;
 import ru.clinic.application.java.service.AdminService;
-import ru.clinic.application.java.service.dataBaseModel.TableAdmins;
-import ru.clinic.application.java.service.dataBaseModel.TableDoctors;
-import ru.clinic.application.java.service.dataBaseModel.TablePatients;
-import ru.clinic.application.java.service.dataBaseModel.TableWorkingDays;
+import ru.clinic.application.java.service.dataBaseModel.*;
 
 import java.util.Optional;
 
@@ -58,6 +55,9 @@ public class ControllerDbTables {
 
     @Autowired
     TableWorkingDays tableWorkingDays;
+
+    @Autowired
+    TableAppointments tableAppointments;
 
     @FXML
     private Label adminStatus;
@@ -109,6 +109,18 @@ public class ControllerDbTables {
 
     @FXML
     private Button updateWorkingDay;
+
+    @FXML
+    private Label appointmentStatus;
+
+    @FXML
+    private Button createAppointmentBtn;
+
+    @FXML
+    private Button dropAppointmentBtn;
+
+    @FXML
+    private Button refreshAppointmentBtn;
 
 
 
@@ -276,5 +288,34 @@ public class ControllerDbTables {
         if (confirmAction()) {
             tableWorkingDays.createTable();
         }
+    }
+
+    public void setAppointmentStatus() {
+        if (appointmentStatus != null && createAppointmentBtn != null && dropAppointmentBtn != null){
+            setCreatedStatus(tableAppointments.isCreated(), appointmentStatus, createAppointmentBtn, dropAppointmentBtn);
+        }
+    }
+
+    @FXML
+    void createAppointmentBtnAction(ActionEvent event) {
+        if (confirmAction()) {
+            tableAppointments.createTable();
+        }
+    }
+
+    @FXML
+    void dropAppointmentBtnAction(ActionEvent event) {
+        if (adminService.getCurrentAdmin().getId() == 0) {
+            if (confirmAction()) {
+                tableAppointments.dropTable();
+            }
+        }else {
+            alertNoAuth();
+        }
+    }
+
+    @FXML
+    void refreshAppointmentBtnAction(ActionEvent event) {
+        tableAppointments.checkIfCreated();
     }
 }
