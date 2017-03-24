@@ -164,6 +164,7 @@ public class ControllerAppointments extends ControllerClass {
     }
 
     private void setDoctorComboBox() {
+
         LOGGER.debug("[setDoctorComboBox] Setting Doctors ComboBox");
         doctorComboBox.getItems().clear();
         if (doctorsService.getDoctors().isEmpty()) {
@@ -172,6 +173,7 @@ public class ControllerAppointments extends ControllerClass {
         }
         doctorsService.getDoctors().forEach(doctor -> {
             doctorComboBox.getItems().add(doctor.getFio());
+            //Comment
             LOGGER.debug("[setDoctorComboBox] adding doctor to dropBox: " + doctor.getFio());
         });
     }
