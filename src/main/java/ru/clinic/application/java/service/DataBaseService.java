@@ -51,4 +51,13 @@ public class DataBaseService {
         }
         return true;
     }
+
+    public boolean checkTable(TableStatus table){
+        if (!table.checkIfCreated()){
+            LOGGER.debug("Table [{}] is not created", table.getTableName());
+            return false;
+        }
+        LOGGER.debug("Table [{}] is created", table.getTableName());
+        return true;
+    }
 }

@@ -17,6 +17,7 @@ import ru.clinic.application.java.fx.frames.FrameRoot;
 import ru.clinic.application.java.fx.frames.FrameStart;
 import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DataBaseService;
+import ru.clinic.application.java.service.dataBaseModel.TableAdmins;
 
 import java.util.Optional;
 
@@ -56,6 +57,9 @@ public class ControllerStart {
 
     @Autowired
     AdminService adminService;
+
+    @Autowired
+    TableAdmins tableAdmins;
 
     @FXML
     private Button enterButton;
@@ -164,14 +168,18 @@ public class ControllerStart {
     }
 
     private void initDropBox(){
-        LOGGER.debug("[initDropBox] Initializing Admin drop box");
+        LOGGER.debug("[initDropBox] Initializing Admin drop box. Adding main Admin");
         adminDropBox.getItems().add(adminService.getMainAdmin().getFio());
 
-        ObservableList<Admin> admins = adminService.loadAdmins();
-        admins.forEach(admin ->{
-            adminDropBox.getItems().add(admin.getFio());
-            LOGGER.debug("[initDropBox] Added admin to drop box " + admin.getFio());
-        });
+        LOGGER.debug("Checking if AdminTable is created. Adding all other admins");
+        boolean checkTable = dataBaseService.checkTable(tableAdmins);
+        if (checkTable) {
+            ObservableList<Admin> admins = adminService.loadAdmins();
+            admins.forEach(admin -> {
+                adminDropBox.getItems().add(admin.getFio());
+                LOGGER.debug("[initDropBox] Added admin to drop box " + admin.getFio());
+            });
+        }
 
         adminDropBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
