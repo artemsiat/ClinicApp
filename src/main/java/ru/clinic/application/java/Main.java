@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.clinic.application.java.configuration.AppConfig;
 import ru.clinic.application.java.configuration.DaoConfiguration;
-import ru.clinic.application.java.configuration.TestConfig;
 import ru.clinic.application.java.fx.frames.FrameStart;
 import ru.clinic.application.java.service.setting.SettingsService;
 
@@ -40,9 +39,6 @@ public class Main extends Application{
     private void config() {
         applicationContext.register(AppConfig.class);
         applicationContext.register(DaoConfiguration.class);
-        if (SettingsService.isTesting()) {
-            applicationContext.register(TestConfig.class);
-        }
 
         applicationContext.refresh();
     }

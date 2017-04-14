@@ -1,0 +1,2 @@
+A-2 : add junit testing, add extra dataBase for testing
+A-3 : if only one table is not created at start(admin table) then when dialog popups all tables are marked as not created.
