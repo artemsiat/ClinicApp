@@ -9,7 +9,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 @Configuration
 public class TestDaoConfig {
 
-    private final static String URL = "jdbc:h2:./clinicDbTest;mv_store=false";
+    private final static String URL = "jdbc:h2:./data-base/test/clinicDbTest;mv_store=false";
 
     private final static String DRIVER = "org.h2.Driver";
 
