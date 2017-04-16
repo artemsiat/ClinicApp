@@ -1,5 +1,6 @@
 package ru.clinic.application;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.test.context.ContextConfiguration;
 import ru.clinic.application.config.JavaFxJUnit4ClassRunner;
 import ru.clinic.application.config.TestDaoConfig;
 import ru.clinic.application.java.configuration.AppConfig;
+import ru.clinic.application.java.dao.entity.Admin;
+import ru.clinic.application.java.service.AdminService;
 import ru.clinic.application.java.service.DataBaseService;
 import ru.clinic.application.java.service.dataBaseModel.TableAdmins;
 
@@ -24,6 +27,9 @@ public class TestClinicApp {
     @Autowired
     private TableAdmins tableAdmins;
 
+    @Autowired
+    private AdminService adminService;
+
     @Test
     public void testOne(){
         if (tableAdmins.checkIfCreated()) {
@@ -39,5 +45,13 @@ public class TestClinicApp {
         tableAdmins.dropTable();
         boolean secondDrop = dataBaseService.checkTable(tableAdmins);
         if (secondDrop) throw new AssertionError();
+    }
+
+    @Test
+    public void adminTest(){
+        Admin mainAdmin = adminService.getMainAdmin();
+        System.out.println(mainAdmin.getFio());
+        Assert.assertNotNull(mainAdmin);
+        Assert.assertEquals(mainAdmin.getFio(), "Main Administrator");
     }
 }
