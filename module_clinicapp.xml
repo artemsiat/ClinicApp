@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_clinicapp" default="compile.module.clinicapp">
+  <dirname property="module.clinicapp.basedir" file="${ant.file.module_clinicapp}"/>
+  
+  <property name="module.jdk.home.clinicapp" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.clinicapp" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.clinicapp" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.clinicapp" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="clinicapp.output.dir" value="${module.clinicapp.basedir}/out/production/ClinicApp"/>
+  <property name="clinicapp.testoutput.dir" value="${module.clinicapp.basedir}/out/test/ClinicApp"/>
+  
+  <path id="clinicapp.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="clinicapp.module.production.classpath">
+    <path refid="${module.jdk.classpath.clinicapp}"/>
+    <path refid="library.h2-1.4.192.classpath"/>
+    <path refid="library.spring.classpath"/>
+    <path refid="library.apache-log4j-2.classpath"/>
+    <path refid="library.apache_jars.classpath"/>
+  </path>
+  
+  <path id="clinicapp.runtime.production.module.classpath">
+    <pathelement location="${clinicapp.output.dir}"/>
+    <path refid="library.h2-1.4.192.classpath"/>
+    <path refid="library.spring.classpath"/>
+    <path refid="library.apache-log4j-2.classpath"/>
+    <path refid="library.apache_jars.classpath"/>
+  </path>
+  
+  <path id="clinicapp.module.classpath">
+    <path refid="${module.jdk.classpath.clinicapp}"/>
+    <pathelement location="${clinicapp.output.dir}"/>
+    <path refid="library.h2-1.4.192.classpath"/>
+    <path refid="library.spring.classpath"/>
+    <path refid="library.apache-log4j-2.classpath"/>
+    <path refid="library.apache_jars.classpath"/>
+  </path>
+  
+  <path id="clinicapp.runtime.module.classpath">
+    <pathelement location="${clinicapp.testoutput.dir}"/>
+    <pathelement location="${clinicapp.output.dir}"/>
+    <path refid="library.h2-1.4.192.classpath"/>
+    <path refid="library.spring.classpath"/>
+    <path refid="library.apache-log4j-2.classpath"/>
+    <path refid="library.apache_jars.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.clinicapp">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.clinicapp">
+    <patternset refid="excluded.from.module.clinicapp"/>
+  </patternset>
+  
+  <path id="clinicapp.module.sourcepath">
+    <dirset dir="${module.clinicapp.basedir}">
+      <include name="src"/>
+      <include name="src/ru/clinic/application/resources"/>
+      <include name="src/ru/clinic/application/resources/frames"/>
+      <include name="src/ru/clinic/application/resources/css"/>
+    </dirset>
+  </path>
+  
+  <path id="clinicapp.module.test.sourcepath">
+    <dirset dir="${module.clinicapp.basedir}">
+      <include name="src/ru/clinic/application/test/test_resources"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.clinicapp" depends="compile.module.clinicapp.production,compile.module.clinicapp.tests" description="Compile module ClinicApp"/>
+  
+  <target name="compile.module.clinicapp.production" depends="register.custom.compilers" description="Compile module ClinicApp; production classes">
+    <mkdir dir="${clinicapp.output.dir}"/>
+    <javac2 destdir="${clinicapp.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.clinicapp}/javac">
+      <compilerarg line="${compiler.args.clinicapp}"/>
+      <bootclasspath refid="clinicapp.module.bootclasspath"/>
+      <classpath refid="clinicapp.module.production.classpath"/>
+      <src refid="clinicapp.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.clinicapp"/>
+    </javac2>
+    
+    <copy todir="${clinicapp.output.dir}">
+      <fileset dir="${module.clinicapp.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="/ru/clinic/application/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="/ru/clinic/application/resources/frames">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="/ru/clinic/application/resources/css">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.clinicapp.tests" depends="register.custom.compilers,compile.module.clinicapp.production" description="compile module ClinicApp; test classes" unless="skip.tests">
+    <mkdir dir="${clinicapp.testoutput.dir}"/>
+    <javac2 destdir="${clinicapp.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.clinicapp}/javac">
+      <compilerarg line="${compiler.args.clinicapp}"/>
+      <bootclasspath refid="clinicapp.module.bootclasspath"/>
+      <classpath refid="clinicapp.module.classpath"/>
+      <src refid="clinicapp.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.clinicapp"/>
+    </javac2>
+    
+    <copy todir="${clinicapp.testoutput.dir}">
+      <fileset dir="/ru/clinic/application/test/test_resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.clinicapp" description="cleanup module">
+    <delete dir="${clinicapp.output.dir}"/>
+    <delete dir="${clinicapp.testoutput.dir}"/>
+  </target>
+</project>
