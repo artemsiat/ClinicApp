@@ -3,6 +3,7 @@ package ru.clinic.application.java.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -113,6 +114,7 @@ public class DataBaseDao {
             "removed boolean)";
 
     @Autowired
+    private
     JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -120,14 +122,24 @@ public class DataBaseDao {
 
     public boolean checkAdminTable(){
         LOGGER.debug("[checkAdminTable] Checking if Admin table is created");
-        Integer count = jdbcTemplate.queryForObject(ADMIN_CHECK_TABLE, Integer.class);
-        return count == 1;
+        try {
+            Integer count = jdbcTemplate.queryForObject(ADMIN_CHECK_TABLE, Integer.class);
+            return count == 1;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean checkDoctorsTable() {
         LOGGER.debug("[checkDoctorsTable] Checking if Doctor table is created");
-        Integer count = jdbcTemplate.queryForObject(DOCTOR_CHECK_TABLE, Integer.class);
-        return count == 1;
+        try {
+            Integer count = jdbcTemplate.queryForObject(DOCTOR_CHECK_TABLE, Integer.class);
+            return count == 1;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean checkPatientsTable() {
@@ -138,14 +150,24 @@ public class DataBaseDao {
 
     public boolean checkWorkingDayTable() {
         LOGGER.debug("[checkWorkingDayTable] Checking if WorkingDay table is created");
-        Integer count = jdbcTemplate.queryForObject(WORKING_DAY_CHECK_TABLE, Integer.class);
-        return count == 1;
+        try {
+            Integer count = jdbcTemplate.queryForObject(WORKING_DAY_CHECK_TABLE, Integer.class);
+            return count == 1;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean checkAppointmentTable() {
         LOGGER.debug("[checkAppointmentTable] Checking if WorkingDay table is created");
-        Integer count = jdbcTemplate.queryForObject(APPOINTMENT_CHECK_TABLE, Integer.class);
-        return count == 1;
+        try {
+            Integer count = jdbcTemplate.queryForObject(APPOINTMENT_CHECK_TABLE, Integer.class);
+            return count == 1;
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean checkSettingsTable() {
@@ -153,42 +175,82 @@ public class DataBaseDao {
     }
 
     public void dropAdminTable() {
-        jdbcTemplate.execute(DROP_ADMIN_TABLE);
+        try {
+            jdbcTemplate.execute(DROP_ADMIN_TABLE);
+        }catch (Exception e){
+            LOGGER.error("Error checking setting table");
+        }
     }
 
     public void createAdminTable() {
-        jdbcTemplate.execute(ADMIN_CREATE_TABLE);
+        try {
+            jdbcTemplate.execute(ADMIN_CREATE_TABLE);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void dropDoctorsTable() {
-        jdbcTemplate.execute(DROP_DOCTOR_TABLE);
+        try {
+            jdbcTemplate.execute(DROP_DOCTOR_TABLE);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createDoctorsTable() {
-        jdbcTemplate.execute(DOCTOR_CREATE_TABLE);
+        try {
+            jdbcTemplate.execute(DOCTOR_CREATE_TABLE);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void dropPatientTable() {
-        jdbcTemplate.execute(DROP_PATIENT_TABLE);
+        try {
+            jdbcTemplate.execute(DROP_PATIENT_TABLE);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createPatientTable() {
-        jdbcTemplate.execute(PATIENT_CREATE_TABLE);
+        try {
+            jdbcTemplate.execute(PATIENT_CREATE_TABLE);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void dropWorkingDayTable() {
-        jdbcTemplate.execute(DROP_WORKING_DAY_TABLE);
+        try {
+            jdbcTemplate.execute(DROP_WORKING_DAY_TABLE);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createWorkingDayTable() {
-        jdbcTemplate.execute(WORKING_DAY_CREATE_TABLE);
+        try {
+            jdbcTemplate.execute(WORKING_DAY_CREATE_TABLE);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void dropAppointmentTable() {
-        jdbcTemplate.execute(APPOINTMENT_DROP_TABLE);
+        try {
+            jdbcTemplate.execute(APPOINTMENT_DROP_TABLE);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void createAppointmentTable() {
-        jdbcTemplate.execute(APPOINTMENT_CREATE_TABLE);
+        try {
+            jdbcTemplate.execute(APPOINTMENT_CREATE_TABLE);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

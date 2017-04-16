@@ -57,24 +57,28 @@ public class AdminDao {
             "removed boolean)";
 
     @Autowired
+    private
     JdbcTemplate jdbcTemplate;
 
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @Autowired
+    private
     DataBaseDao dataBaseDao;
 
     public void insertAdmin(String fio, Date dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password, int creator) {
-        jdbcTemplate.update(INSERT_ADMIN, fio, dob, cellPhone, cellPhoneTwo, homePhone, email, login, password, creator, false);
+        try {
+            jdbcTemplate.update(INSERT_ADMIN, fio, dob, cellPhone, cellPhoneTwo, homePhone, email, login, password, creator, false);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public ObservableList<Admin> selectAllAdmins() {
-        if (dataBaseDao.checkAdminTable()) {
-            return jdbcTemplate.query(SELECT_ALL_ADMINS, new ResultSetExtractor<ObservableList<Admin>>() {
-
-                @Override
-                public ObservableList<Admin> extractData(ResultSet rs) throws SQLException, DataAccessException {
+        try {
+            if (dataBaseDao.checkAdminTable()) {
+                return jdbcTemplate.query(SELECT_ALL_ADMINS, rs -> {
                     ObservableList<Admin> adminsList = FXCollections.observableArrayList();
 
                     while (rs.next()) {
@@ -96,17 +100,27 @@ public class AdminDao {
                         adminsList.add(admin);
                     }
                     return adminsList;
-                }
-            });
+                });
+            }
+        } catch (DataAccessException e) {
+            e.printStackTrace();
         }
-        return FXCollections.observableArrayList();
+        return FXCollections.emptyObservableList();
     }
 
     public void updateAdmin(int selectedAdminId, int whoModified, String fio, Date dobDate, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password) {
-        jdbcTemplate.update(UPDATE_ADMIN, fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, login, password, whoModified, selectedAdminId);
+        try {
+            jdbcTemplate.update(UPDATE_ADMIN, fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, login, password, whoModified, selectedAdminId);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void deleteAdmin(int selectedAdminId, int whoRemoved) {
-        jdbcTemplate.update(REMOVE_ADMIN, whoRemoved, selectedAdminId);
+        try {
+            jdbcTemplate.update(REMOVE_ADMIN, whoRemoved, selectedAdminId);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

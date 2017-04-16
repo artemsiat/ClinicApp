@@ -69,30 +69,38 @@ public class PatientsDao {
 
 
     public void addNewPatient(int creatorId, String lastName, String firstName, String middleName, String phoneNumber, String phoneNumberTwo, String email, String comment) {
-        jdbcTemplate.update(INSERT_PATIENT, firstName, lastName, middleName, phoneNumber, phoneNumberTwo, email, comment, creatorId, false);
+        try {
+            jdbcTemplate.update(INSERT_PATIENT, firstName, lastName, middleName, phoneNumber, phoneNumberTwo, email, comment, creatorId, false);
+        }catch (Exception e){
+            LOGGER.error("Error adding new patient", e);
+        }
     }
 
     private ObservableList<Patient> selectPatients(String sql){
-        ObservableList<Patient> patients = jdbcTemplate.query(sql, rs -> {
-            ObservableList<Patient> patients1 = FXCollections.observableArrayList();
+        try {
+            return jdbcTemplate.query(sql, rs -> {
+                ObservableList<Patient> patients = FXCollections.observableArrayList();
 
-            while (rs.next()) {
-                Patient patient = new Patient();
-                patient.setId(rs.getInt("id"));
-                patient.setFirstName(rs.getString("firstName"));
-                patient.setLastName(rs.getString("lastName"));
-                patient.setMiddleName(rs.getString("middleName"));
-                patient.setCellPhone(rs.getString("phone"));
-                patient.setCellPhoneTwo(rs.getString("phoneTwo"));
-                patient.setEmail(rs.getString("email"));
-                patient.setComment(rs.getString("comment"));
-                patient.generateFio();
+                while (rs.next()) {
+                    Patient patient = new Patient();
+                    patient.setId(rs.getInt("id"));
+                    patient.setFirstName(rs.getString("firstName"));
+                    patient.setLastName(rs.getString("lastName"));
+                    patient.setMiddleName(rs.getString("middleName"));
+                    patient.setCellPhone(rs.getString("phone"));
+                    patient.setCellPhoneTwo(rs.getString("phoneTwo"));
+                    patient.setEmail(rs.getString("email"));
+                    patient.setComment(rs.getString("comment"));
+                    patient.generateFio();
 
-                patients1.add(patient);
-            }
-            return patients1;
-        });
-        return patients;
+                    patients.add(patient);
+                }
+                return patients;
+            });
+        }catch (Exception e){
+            LOGGER.error("Error selecting patients ", e);
+        }
+        return FXCollections.emptyObservableList();
     }
 
     public ObservableList<Patient> selectLastCreatedPatients() {
@@ -106,16 +114,22 @@ public class PatientsDao {
     }
 
     public void updatePatient(int patientId, int who_modified, String firstName, String lastName, String middleName, String phone, String phoneTwo, String email, String comment) {
-        jdbcTemplate.update(UPDATE_PATIENT, firstName, lastName, middleName, phone, phoneTwo, email, comment, who_modified, patientId);
+        try {
+            jdbcTemplate.update(UPDATE_PATIENT, firstName, lastName, middleName, phone, phoneTwo, email, comment, who_modified, patientId);
+        }catch (Exception e){
+            LOGGER.error("Error updating patient", e);
+        }
     }
 
     public void deletePatient(int selectedPatientId, int id) {
-        jdbcTemplate.update(REMOVE_PATIENT, id, selectedPatientId);
+        try {
+            jdbcTemplate.update(REMOVE_PATIENT, id, selectedPatientId);
+        }catch (Exception e){
+            LOGGER.debug("Error, deleting patient " , e);
+        }
     }
 
     public ObservableList<Patient> findPatient(String firstName, String lastName, String middleName, String phone, String email) {
-        // LOWER(firstname) like '%андр%'"
-        //"SELECT * FROM (SELECT * FROM patient WHERE removed = false  ORDER BY modified DESC) WHERE ROWNUM <= ";
         String sql = FIND_PATIENT;
         ArrayList<String> params = new ArrayList<>();
 
@@ -148,36 +162,45 @@ public class PatientsDao {
     }
 
     private ObservableList<Patient> selectPatients(String sql, ArrayList<String> params) {
-        Object[] objects = params.toArray();
+        try {
+            Object[] objects = params.toArray();
 
-        ObservableList<Patient> patients = jdbcTemplate.query(sql, objects, new ResultSetExtractor<ObservableList<Patient>>() {
+            ObservableList<Patient> patients = jdbcTemplate.query(sql, objects, new ResultSetExtractor<ObservableList<Patient>>() {
 
-            @Override
-            public ObservableList<Patient> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                ObservableList<Patient> patients = FXCollections.observableArrayList();
+                @Override
+                public ObservableList<Patient> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                    ObservableList<Patient> patients = FXCollections.observableArrayList();
 
-                while (rs.next()) {
-                    Patient patient = new Patient();
-                    patient.setId(rs.getInt("id"));
-                    patient.setFirstName(rs.getString("firstName"));
-                    patient.setLastName(rs.getString("lastName"));
-                    patient.setMiddleName(rs.getString("middleName"));
-                    patient.setCellPhone(rs.getString("phone"));
-                    patient.setCellPhoneTwo(rs.getString("phoneTwo"));
-                    patient.setEmail(rs.getString("email"));
-                    patient.setComment(rs.getString("comment"));
-                    patient.generateFio();
+                    while (rs.next()) {
+                        Patient patient = new Patient();
+                        patient.setId(rs.getInt("id"));
+                        patient.setFirstName(rs.getString("firstName"));
+                        patient.setLastName(rs.getString("lastName"));
+                        patient.setMiddleName(rs.getString("middleName"));
+                        patient.setCellPhone(rs.getString("phone"));
+                        patient.setCellPhoneTwo(rs.getString("phoneTwo"));
+                        patient.setEmail(rs.getString("email"));
+                        patient.setComment(rs.getString("comment"));
+                        patient.generateFio();
 
-                    patients.add(patient);
+                        patients.add(patient);
+                    }
+                    return patients;
                 }
-                return patients;
-            }
-        });
-        return patients;
-
+            });
+            return patients;
+        }catch (Exception e){
+            LOGGER.error("Error selecting patients", e);
+        }
+        return FXCollections.emptyObservableList();
     }
 
     public int getPatientsCount() {
-        return jdbcTemplate.queryForObject(PATIENTS_COUNT, Integer.class);
+        try {
+            return jdbcTemplate.queryForObject(PATIENTS_COUNT, Integer.class);
+        }catch (Exception e){
+            LOGGER.error("Error getting patients count", e);
+        }
+        return 0;
     }
 }

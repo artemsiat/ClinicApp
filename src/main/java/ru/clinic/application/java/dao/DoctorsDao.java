@@ -53,6 +53,7 @@ public class DoctorsDao {
             "removed boolean)";
 
     @Autowired
+    private
     JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -62,15 +63,17 @@ public class DoctorsDao {
     }
 
     public void insertDoctor(String fio, Date dobDate, String cellPhone, String cellPhoneTwo, String homePhone, String email, String comment, int id) {
-        jdbcTemplate.update(INSERT_DOCTOR, fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, comment, id, false);
+        try {
+            jdbcTemplate.update(INSERT_DOCTOR, fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, comment, id, false);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public ObservableList<Doctor> selectAllDoctors() {
-        ObservableList<Doctor> doctors = jdbcTemplate.query(SELECT_ALL_DOCTORS, new ResultSetExtractor<ObservableList<Doctor>>() {
-
-            @Override
-            public ObservableList<Doctor> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                ObservableList<Doctor> doctors = FXCollections.observableArrayList();
+        try {
+            return jdbcTemplate.query(SELECT_ALL_DOCTORS, rs -> {
+                ObservableList<Doctor> doctors1 = FXCollections.observableArrayList();
 
                 while (rs.next()) {
                     Doctor doctor = new Doctor();
@@ -87,20 +90,30 @@ public class DoctorsDao {
                         doctor.setDob(dob.toLocalDate());
                     }
 
-                    doctors.add(doctor);
+                    doctors1.add(doctor);
                 }
-                return doctors;
-            }
-        });
-        return doctors;
+                return doctors1;
+            });
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+        return FXCollections.emptyObservableList();
     }
 
     public void deleteDoctor(int selectedDoctorId, int id) {
         LOGGER.debug("[DoctorsDao][deleteDoctor] Administrator with id[" + id + "] removing doctor id[" + selectedDoctorId + "]");
-        jdbcTemplate.update(REMOVE_DOCTOR, id, selectedDoctorId);
+        try {
+            jdbcTemplate.update(REMOVE_DOCTOR, id, selectedDoctorId);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateDoctor(int doctorId, int whoModified, String fio, Date dobDate, String cellPhone, String cellPhoneTwo, String homePhone, String email, String comment) {
-        jdbcTemplate.update(UPDATE_DOCTOR, fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, comment, whoModified, doctorId);
+        try {
+            jdbcTemplate.update(UPDATE_DOCTOR, fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, comment, whoModified, doctorId);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 }

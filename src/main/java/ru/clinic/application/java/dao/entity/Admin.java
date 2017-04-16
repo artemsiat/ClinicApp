@@ -153,5 +153,18 @@ public class Admin {
         this.emailProp.set(emailProp);
     }
 
-    //Todo Add to String method
+    @Override
+    public String toString() {
+        return "Admin{" +
+                "id=" + id +
+                ", fio='" + fio + '\'' +
+                ", dob=" + dob +
+                ", cellPhone='" + cellPhone + '\'' +
+                ", cellPhoneTwo='" + cellPhoneTwo + '\'' +
+                ", homePhone='" + homePhone + '\'' +
+                ", email='" + email + '\'' +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
