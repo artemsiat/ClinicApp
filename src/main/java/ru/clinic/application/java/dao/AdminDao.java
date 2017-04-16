@@ -62,39 +62,44 @@ public class AdminDao {
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+    @Autowired
+    DataBaseDao dataBaseDao;
+
     public void insertAdmin(String fio, Date dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password, int creator) {
         jdbcTemplate.update(INSERT_ADMIN, fio, dob, cellPhone, cellPhoneTwo, homePhone, email, login, password, creator, false);
     }
 
     public ObservableList<Admin> selectAllAdmins() {
-        ObservableList<Admin> admins = jdbcTemplate.query(SELECT_ALL_ADMINS, new ResultSetExtractor<ObservableList<Admin>>() {
+        if (dataBaseDao.checkAdminTable()) {
+            return jdbcTemplate.query(SELECT_ALL_ADMINS, new ResultSetExtractor<ObservableList<Admin>>() {
 
-            @Override
-            public ObservableList<Admin> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                ObservableList<Admin> admins = FXCollections.observableArrayList();
+                @Override
+                public ObservableList<Admin> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                    ObservableList<Admin> adminsList = FXCollections.observableArrayList();
 
-                while (rs.next()) {
-                    Admin admin = new Admin();
-                    admin.setId(rs.getInt("id"));
-                    admin.setFio(rs.getString("fio"));
-                    admin.setCellPhone(rs.getString("cellphone"));
-                    admin.setCellPhoneTwo(rs.getString("cellphone2"));
-                    admin.setHomePhone(rs.getString("homephone"));
-                    admin.setEmail(rs.getString("email"));
-                    admin.setUserName(rs.getString("user_name"));
-                    admin.setPassword(rs.getString("password"));
+                    while (rs.next()) {
+                        Admin admin = new Admin();
+                        admin.setId(rs.getInt("id"));
+                        admin.setFio(rs.getString("fio"));
+                        admin.setCellPhone(rs.getString("cellphone"));
+                        admin.setCellPhoneTwo(rs.getString("cellphone2"));
+                        admin.setHomePhone(rs.getString("homephone"));
+                        admin.setEmail(rs.getString("email"));
+                        admin.setUserName(rs.getString("user_name"));
+                        admin.setPassword(rs.getString("password"));
 
-                    Date dob = rs.getDate("dob");
-                    if (dob != null){
-                        admin.setDob(dob.toLocalDate());
+                        Date dob = rs.getDate("dob");
+                        if (dob != null) {
+                            admin.setDob(dob.toLocalDate());
+                        }
+                        LOGGER.debug("[selectAllAdmins] Loaded Amdin " + admin.getFio());
+                        adminsList.add(admin);
                     }
-                    LOGGER.debug("[selectAllAdmins] Loaded Amdin " + admin.getFio());
-                    admins.add(admin);
+                    return adminsList;
                 }
-                return admins;
-            }
-        });
-        return admins;
+            });
+        }
+        return FXCollections.observableArrayList();
     }
 
     public void updateAdmin(int selectedAdminId, int whoModified, String fio, Date dobDate, String cellPhone, String cellPhoneTwo, String homePhone, String email, String login, String password) {

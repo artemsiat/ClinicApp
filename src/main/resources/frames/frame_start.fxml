@@ -8,17 +8,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyReleased="#keyReleased" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox fx:id="btnsBox" layoutX="451.0" layoutY="361.0" spacing="15.0" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
          <children>
-            <Button fx:id="enterButton" mnemonicParsing="false" onAction="#enterBtnAction" text="Войти" />
+            <Button fx:id="enterButton" mnemonicParsing="false" onMouseClicked="#enterBtnMouseClicked" text="Войти" />
             <Button fx:id="closeButton" mnemonicParsing="false" onAction="#closeBtnAction" text="Закрыть" />
          </children>
       </HBox>
       <VBox alignment="CENTER_LEFT" layoutX="61.0" layoutY="74.0" spacing="15.0" AnchorPane.leftAnchor="61.0" AnchorPane.topAnchor="74.0">
          <children>
-            <ComboBox fx:id="adminDropBox" onAction="#adminDropBoxAction" prefWidth="300.0" promptText="Администраторы" />
+            <ComboBox fx:id="adminDropBox" prefWidth="300.0" promptText="Администраторы" />
             <PasswordField fx:id="passwordTextField" promptText="пароль" />
             <Label fx:id="authLabel" text="Label" />
          </children>
