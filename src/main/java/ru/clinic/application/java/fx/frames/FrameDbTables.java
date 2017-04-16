@@ -62,6 +62,7 @@ public class FrameDbTables extends FrameClass{
         controller.startController();
         setIcon(stage);
         stage.show();
+        controller.postStart();
     }
 
     public void stop(){

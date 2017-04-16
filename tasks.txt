@@ -1,0 +1,8 @@
+
+A-3 : if only one table is not created at start(admin table) then when dialog popups all tables are marked as not created.
+A-4 : At the start frame let enter after 'enter' button has been pressed on computer
+A-5 : Cover all jdbcTemplate logic in try , catch
+
+----------------------------
+FINISHED
+A-2 : add junit testing, add extra dataBase for testing

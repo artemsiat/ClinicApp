@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.fx.frames.FrameDbTables;
 import ru.clinic.application.java.service.AdminService;
+import ru.clinic.application.java.service.DataBaseService;
 import ru.clinic.application.java.service.dataBaseModel.*;
 
 import java.util.Optional;
@@ -59,6 +60,9 @@ public class ControllerDbTables {
 
     @Autowired
     TableAppointments tableAppointments;
+
+    @Autowired
+    DataBaseService dataBaseService;
 
     @FXML
     private Label adminStatus;
@@ -127,10 +131,11 @@ public class ControllerDbTables {
 
 
     public void startController() {
-        setAdminStatus();
-        setDoctorsStatus();
-        setPatientStatus();
-        setWorkingDayStatus();
+        dataBaseService.setAllTableStatuses();
+    }
+
+    public void postStart() {
+
     }
 
     private void alertNoAuth() {
@@ -143,6 +148,7 @@ public class ControllerDbTables {
     }
 
     private void setCreatedStatus(boolean created, Label labelStatus, Button createBtn, Button dropBtn){
+        LOGGER.debug("Setting created status [{}] to [{}], [{}], [{}]", created, labelStatus, createBtn, dropBtn);
         if (created){
             labelStatus.setText(CREATED);
             labelStatus.setTextFill(POS_COLOR);

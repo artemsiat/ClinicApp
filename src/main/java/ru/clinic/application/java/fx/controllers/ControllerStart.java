@@ -139,10 +139,7 @@ public class ControllerStart {
         alert.setContentText(CONFIRMATION_CONTENT);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
-            return true;
-        }
-        return false;
+        return result.get() == ButtonType.OK;
     }
 
     private boolean checkAuthorization() {
