@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.clinic.application.java.dao.entity.Appointment;
+import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.fx.ControllerClass;

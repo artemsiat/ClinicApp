@@ -1,11 +1,14 @@
 package ru.clinic.application.java.service;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.WorkingDayDao;
+import ru.clinic.application.java.dao.entity.appointment.FreeTime;
+import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.service.setting.SettingsService;
@@ -108,5 +111,20 @@ public class WorkingDayService {
     public void updateWorkingDay(WorkingDay selectedWorkingDay, int doctorId, LocalDate workingDay, String start, String end, String lunchStart, String lunchEnd, String comment) {
         LOGGER.debug("[updateWorkingDay] Marking working day [{}] as updated. doctor[{}]. admin[{}]", selectedWorkingDay, doctorsService.getSelectedDoctor().getFio(), adminService.getCurrentAdmin().getFio());
         workingDayDao.updateWorkingDay(selectedWorkingDay.getId(), adminService.getCurrentAdmin().getId(), start, end, lunchStart, lunchEnd, comment);
+    }
+
+    public ObservableList<TimeInterval> getTimeIntervals(WorkingDay workingDay) {
+        ObservableList<TimeInterval> timeIntervals = FXCollections.observableArrayList();
+        if (workingDay.isHaveLunch()){
+            TimeInterval beforeLunch = new FreeTime(workingDay.getStartTime(), workingDay.getStartLunch(), workingDay);
+            TimeInterval afterLunch = new FreeTime(workingDay.getEndLunch(), workingDay.getEndTime(), workingDay);
+
+            timeIntervals.add(beforeLunch);
+            timeIntervals.add(afterLunch);
+        }else {
+            TimeInterval timeInterval = new FreeTime(workingDay.getStartTime(), workingDay.getEndTime(), workingDay);
+            timeIntervals.add(timeInterval);
+        }
+        return timeIntervals;
     }
 }

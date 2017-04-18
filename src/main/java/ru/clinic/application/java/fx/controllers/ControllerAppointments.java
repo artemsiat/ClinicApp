@@ -1,8 +1,11 @@
 package ru.clinic.application.java.fx.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -12,6 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.dao.entity.Admin;
+import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.fx.ControllerClass;
@@ -74,6 +79,18 @@ public class ControllerAppointments extends ControllerClass {
     private Label patientBtnLabel;
 
     @FXML
+    private TableView<TimeInterval> tableViewAppointments;
+
+    @FXML
+    private TableColumn<TimeInterval, String> tableColumnPatient;
+
+    @FXML
+    private TableColumn<TimeInterval, String> tableColumnTime;
+
+    @FXML
+    private TableColumn<TimeInterval, String> tableColumnDuration;
+
+    @FXML
     void doctorComboBoxAction(ActionEvent event) {
 
     }
@@ -88,10 +105,22 @@ public class ControllerAppointments extends ControllerClass {
         setDoctorComboBox();
         setDoctorComboBoxListener();
         setDatePickerListener();
+        setTableAppointmentListener();
+        setTableAppointments();
 
         setDoctorLabel();
         setPatientLabel();
         setWorkDayLabel();
+    }
+
+    private void setTableAppointments() {
+        tableColumnPatient.setCellValueFactory(new PropertyValueFactory<TimeInterval, String>("patientProp"));
+        tableColumnTime.setCellValueFactory(new PropertyValueFactory<TimeInterval, String>("timeProp"));
+        tableColumnDuration.setCellValueFactory(new PropertyValueFactory<TimeInterval, String>("durationProp"));
+
+        ObservableList<TimeInterval> timeIntervals = appointmentService.getAppointmentsByWd(selectedWorkingDay);
+
+        tableViewAppointments.setItems(timeIntervals);
     }
 
     @Override
@@ -117,10 +146,7 @@ public class ControllerAppointments extends ControllerClass {
             setWorkDayLabel();
             if (newValue != null) {
                 WorkingDay workingDay = doctorsService.getSelectedDoctor().getWorkingDay(newValue);
-                if (workingDay != null) {
-                    workingDaySelected(workingDay);
-                    generateTimePicker();
-                }
+                workingDaySelected(workingDay);
             }
         });
 
@@ -159,7 +185,26 @@ public class ControllerAppointments extends ControllerClass {
         wdDatePicker.setStyle("-fx-font-size: 10pt");
     }
 
+    private void setTableAppointmentListener() {
+        tableViewAppointments.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                appointmentSelected();
+            } else {
+                appointmentSelected();
+            }
+        });
+    }
+
+    private void appointmentSelected() {
+
+    }
+
     private void generateTimePicker() {
+
+        //Get working intervals
+        ObservableList<TimeInterval> timeIntervals = appointmentService.getAppointmentsByWd(selectedWorkingDay);
+        tableViewAppointments.setItems(timeIntervals);
+
 
     }
 
@@ -225,5 +270,11 @@ public class ControllerAppointments extends ControllerClass {
 
     private void workingDaySelected(WorkingDay workingDay) {
         this.selectedWorkingDay = workingDay;
+
+        if (selectedWorkingDay != null) {
+            tableViewAppointments.setItems(appointmentService.getAppointmentsByWd(selectedWorkingDay));
+        } else {
+            tableViewAppointments.setItems(FXCollections.emptyObservableList());
+        }
     }
 }

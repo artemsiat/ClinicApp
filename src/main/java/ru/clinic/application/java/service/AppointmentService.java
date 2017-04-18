@@ -2,10 +2,14 @@ package ru.clinic.application.java.service;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.clinic.application.java.dao.entity.Appointment;
+import ru.clinic.application.java.dao.entity.appointment.Appointment;
+import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
+import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 
 import java.time.LocalDate;
+import java.util.*;
 
 /**
  * Created by Artem Siatchinov on 1/20/2017.
@@ -13,11 +17,24 @@ import java.time.LocalDate;
 @Component
 public class AppointmentService {
 
+    @Autowired
+    private WorkingDayService workingDayService;
+
     public ObservableList<Appointment> getAppsByWd(LocalDate workingDay){
         //Todo check that there are no appointments for that day
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         //appointments.add(new Appointment());
         return appointments;
+    }
+
+    public ObservableList<TimeInterval> getAppointmentsByWd(WorkingDay selectedWorkingDay) {
+        if (selectedWorkingDay != null) {
+            ObservableList<TimeInterval> timeIntervals = workingDayService.getTimeIntervals(selectedWorkingDay);
+            timeIntervals.sort(Comparator.comparing(TimeInterval::getStartTime).reversed());
+            timeIntervals.forEach(timeInterval -> System.out.println(timeInterval));
+            return timeIntervals;
+        }
+        return FXCollections.emptyObservableList();
     }
 
 /*    public HashMap<Integer, ArrayList<Integer>> getAvailableTime() {
@@ -27,14 +44,14 @@ public class AppointmentService {
         if (lunchStart != lunchEnd){
             processTimeMap(dayTimeMap, createTimeMap(lunchStart, lunchEnd));
         }
-        *//*and the same thing for each appointment*//*
+        and the same thing for each appointment
         for (Appointment appointment : appointmentObservableList){
             //update the working hours and minutes map (remove lunch and appointment time)
             processTimeMap(dayTimeMap, createTimeMap(appointment.getStartTime(), appointment.getEndTime()));
         }
 
         return dayTimeMap;
-    }
+    }*/
 
     private HashMap<Integer, ArrayList<Integer>> createTimeMap(int startTime, int endTime) {
 
@@ -81,14 +98,14 @@ public class AppointmentService {
 
     private void processTimeMap(HashMap<Integer, ArrayList<Integer>> dayTimeMap, HashMap<Integer, ArrayList<Integer>> appointmentsTimeMapList) {
 
-        *//*Getting map of available minutes for each available hour and the same map for appointment*//*
-        *//*For each entry in appointment map*//*
+/*        Getting map of available minutes for each available hour and the same map for appointment
+        For each entry in appointment map*/
         for (HashMap.Entry<Integer, ArrayList<Integer>> entry : appointmentsTimeMapList.entrySet()){
 
-            *//*Appointment variables*//*
+            //Appointment variables
             Integer key = entry.getKey();
             ArrayList<Integer> values = entry.getValue();
-            *//*New list for day Map*//*
+            //New list for day Map
             ArrayList<Integer> newValues = new ArrayList<>();
             for (Integer minutes : dayTimeMap.get(key)){
                 if (values.contains(minutes)){
@@ -102,7 +119,7 @@ public class AppointmentService {
 
     public ArrayList<Integer> getAppointmentLengths(int startHour, int startMinutes){
         ArrayList<Integer> lengths = new ArrayList<>();
-        HashMap<Integer, ArrayList<Integer>> timeMap = getAvailableTime();
+        HashMap<Integer, ArrayList<Integer>> timeMap = null;// Todo change to [getAvailableTime();]
 
         int length = 0;
         lengths.add(length);
@@ -130,5 +147,5 @@ public class AppointmentService {
         else if (minutes.isEmpty() && startMinutes == 0){return true;}
 
         return false;
-    }*/
+    }
 }

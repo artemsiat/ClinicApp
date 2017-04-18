@@ -1,6 +1,9 @@
 package ru.clinic.application.java.service.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 /**
@@ -8,6 +11,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ClinicAppUtils {
+
+    private static final Logger LOGGER = LogManager.getLogger(ClinicAppUtils.class);
 
     public static String maskPhoneNumber(String digits) {
         String result = "+7(";
@@ -29,5 +34,26 @@ public class ClinicAppUtils {
             return result;
         }
         return "";
+    }
+
+    /*Пример входных данных
+    * startTime='9:00', endTime='12:00'
+    * */
+    public static int calculateDuration(String startTime, String endTime){
+        try {
+            if (startTime != null && endTime != null){
+                String[] endHoursMinutes = endTime.split(":");
+                String[] startHoursMinutes = startTime.split(":");
+
+                int endMinutes = (Integer.parseInt(endHoursMinutes[0]) * 60) + Integer.parseInt(endHoursMinutes[1]);
+                int startMinutes = (Integer.parseInt(startHoursMinutes[0]) * 60) + Integer.parseInt(startHoursMinutes[1]);
+
+                return endMinutes - startMinutes;
+            }
+        }catch (Exception e){
+            LOGGER.error("Error calculating duration in minutes");
+            return 0;
+        }
+        return 0;
     }
 }

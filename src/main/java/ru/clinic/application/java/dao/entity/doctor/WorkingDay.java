@@ -1,5 +1,7 @@
 package ru.clinic.application.java.dao.entity.doctor;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.LocalDate;
 
 /**
@@ -102,5 +104,10 @@ public class WorkingDay {
                 ", workingDay=" + workingDay +
                 ", creator=" + creator +
                 '}';
+    }
+
+    public boolean isHaveLunch() {
+        System.out.println(toString());
+        return !StringUtils.equals(startLunch, endLunch);
     }
 }
