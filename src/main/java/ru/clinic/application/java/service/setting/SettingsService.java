@@ -20,7 +20,7 @@ public class SettingsService {
     private int workingDayInitialLunchStartTime = 16;
     private int workingDayInitialLunchEndTime = 20;
 
-    private static boolean testing = true;
+    private static boolean testing = false;
 
     public int getMaxPatientsLoadCount() {
         return maxPatientsLoadCount;

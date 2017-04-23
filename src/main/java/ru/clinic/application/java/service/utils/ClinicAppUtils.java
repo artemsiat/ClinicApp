@@ -56,4 +56,9 @@ public class ClinicAppUtils {
         }
         return 0;
     }
+
+    public static int[] convertStringTimeToIntTime(String time){
+        String[] hoursToMintes = time.split(":");
+        return new int[]{Integer.parseInt(hoursToMintes[0]), Integer.parseInt(hoursToMintes[1])};
+    }
 }

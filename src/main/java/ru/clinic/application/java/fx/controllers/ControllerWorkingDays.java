@@ -44,16 +44,16 @@ public class ControllerWorkingDays extends ControllerClass {
     private WorkingDay selectedWorkingDay = null; //Todo move to service Class
 
     @Autowired
-    SettingsService settingsService;
+    private SettingsService settingsService;
 
     @Autowired
-    DoctorsService doctorsService;
+    private DoctorsService doctorsService;
 
     @Autowired
-    WorkingDayService workingDayService;
+    private WorkingDayService workingDayService;
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     @FXML
     private Label doctorComboBoxLabel;
