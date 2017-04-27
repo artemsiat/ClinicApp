@@ -99,12 +99,12 @@ public class DataBaseDao {
     private final static String APPOINTMENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS APPOINTMENT("+
             "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
             "doctor_id int,"+
-            "patient int,"+
-            "working_day int,"+
+            "patient_id int,"+
+            "working_day_id int,"+
             "start_time varchar(10),"+
             "end_time varchar(10),"+
             "comment varchar(500),"+
-            "creator int,"+
+            "creator_id int,"+
             "created timestamp,"+
             "who_modified int,"+
             "modified timestamp,"+

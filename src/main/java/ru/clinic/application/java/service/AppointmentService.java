@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.dao.AppointmentDao;
 import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
@@ -29,11 +30,37 @@ public class AppointmentService {
     @Autowired
     private SettingsService settingsService;
 
+    @Autowired
+    private AppointmentDao appointmentDao;
+
+    @Autowired
+    private AdminService adminService;
+
+    @Autowired
+    private DoctorsService doctorsService;
+
+    @Autowired
+    private PatientsService patientsService;
+
     public ObservableList<Appointment> getAppsByWd(LocalDate workingDay) {
         //Todo check that there are no appointments for that day
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
         //appointments.add(new Appointment());
         return appointments;
+    }
+
+    public void addNewAppointment(WorkingDay workingDay, String startTime, String endTime, String comment){
+        Appointment appointment = new Appointment();
+        appointment.setWorkingDay(workingDay);
+        appointment.setPatient(patientsService.getSelectedPatient());
+        appointment.setDoctor(doctorsService.getSelectedDoctor());
+        appointment.setCreator(adminService.getCurrentAdmin());
+
+        appointment.setStartTime(startTime);
+        appointment.setEndTime(endTime);
+        appointment.setComment(comment);
+
+        appointmentDao.addAppointment(appointment);
     }
 
     public ObservableList<TimeInterval> getAppointmentsByWd(WorkingDay selectedWorkingDay) {
