@@ -18,6 +18,8 @@ public abstract class TimeInterval {
     private SimpleStringProperty patientProp = new SimpleStringProperty();
     private SimpleStringProperty timeProp = new SimpleStringProperty();
     private SimpleStringProperty durationProp = new SimpleStringProperty();
+    private long doctorId;
+    private long workingDayId;
 
     public abstract boolean isAppointment();
 
@@ -86,6 +88,24 @@ public abstract class TimeInterval {
         return "TimeInterval{" +
                 "startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
+                ", doctorId=" + doctorId +
+                ", workingDayId=" + workingDayId +
                 '}';
+    }
+
+    public void setDoctorId(long doctorId) {
+        this.doctorId = doctorId;
+    }
+
+    public long getDoctorId() {
+        return doctorId;
+    }
+
+    public void setWorkingDayId(long workingDayId) {
+        this.workingDayId = workingDayId;
+    }
+
+    public long getWorkingDayId() {
+        return workingDayId;
     }
 }

@@ -7,11 +7,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.AppointmentDao;
+import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
+import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.service.setting.SettingsService;
-import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -64,6 +65,7 @@ public class AppointmentService {
     }
 
     public ObservableList<TimeInterval> getAppointmentsByWd(WorkingDay selectedWorkingDay) {
+
         if (selectedWorkingDay != null) {
             ObservableList<TimeInterval> timeIntervals = workingDayService.getTimeIntervals(selectedWorkingDay);
             timeIntervals.sort(Comparator.comparing(TimeInterval::getStartTime).reversed());
@@ -176,5 +178,9 @@ public class AppointmentService {
             timeMap.put(intervalEnd, new ArrayList<>(Arrays.asList(0, 15, 30)));
         }
         return timeMap;
+    }
+
+    public ObservableList<TimeInterval> loadAppointments(Doctor doctor, Patient patient, WorkingDay workingDay) {
+        return appointmentDao.selectAppointments(doctor, workingDay);
     }
 }

@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
@@ -14,6 +15,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.dao.entity.Patient;
+import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
@@ -24,6 +27,7 @@ import ru.clinic.application.java.service.PatientsService;
 import ru.clinic.application.java.service.WorkingDayService;
 import ru.clinic.application.java.service.utils.AppointmentUtils;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +98,55 @@ public class ControllerAppointments extends ControllerClass {
     private TableColumn<TimeInterval, String> tableColumnDuration;
 
     @FXML
+    private Button buttonCreateAppointment;
+
+    @FXML
+    private TextArea textAreaComment;
+
+    @FXML
+    void mouseClickedButtonCreateAppointment(MouseEvent event) {
+        LOGGER.debug("create new appointment clicked");
+        if (checkOnCreateAppointment()) {
+            String startTime = dropBoxAppStart.getSelectionModel().getSelectedItem();
+            String endTime = dropBoxAppEnd.getSelectionModel().getSelectedItem();
+            String comment = textAreaComment.getText();
+            LOGGER.debug("creating new appointment startTime[], endTime");
+            appointmentService.addNewAppointment(selectedWorkingDay, startTime, endTime, comment);
+
+            refreshAppointmentsTable();
+        }
+    }
+
+    private boolean checkOnCreateAppointment() {
+        if (
+                doctorsService.getSelectedDoctor() != null
+                && patientsService.getSelectedPatient() != null
+                && this.selectedWorkingDay != null
+                && !dropBoxAppStart.isDisable()
+                && !dropBoxAppEnd.isDisable()
+                && !dropBoxAppStart.getSelectionModel().isEmpty()
+                && !dropBoxAppEnd.getSelectionModel().isEmpty()
+                ){
+            LOGGER.debug("New appointment can be created");
+            return true;
+        }
+        LOGGER.debug("New appointment can not be can be created");
+        return false;
+    }
+
+    private void refreshAppointmentsTable(){
+        Doctor doctor = doctorsService.getSelectedDoctor();
+        Patient patient = patientsService.getSelectedPatient();
+
+        if (doctor != null && patient != null && selectedWorkingDay != null){
+            ObservableList<TimeInterval> appointments = appointmentService.loadAppointments(doctor, patient, selectedWorkingDay);
+            tableViewAppointments.setItems(appointments);
+        }else {
+            LOGGER.debug("Can not load appointments. Not all instances present: doctor [{}], patient [{}], workingDay [{}]");
+        }
+    }
+
+    @FXML
     void doctorComboBoxAction(ActionEvent event) {
 
     }
@@ -151,16 +204,20 @@ public class ControllerAppointments extends ControllerClass {
         List<String> startTime = appointmentUtils.getAppointmentStartTime(availableTime);
 
         dropBoxAppStart.getItems().setAll(startTime);
-        LOGGER.debug("StartTime [{}]" , startTime);
+        LOGGER.debug("StartTime [{}]", startTime);
     }
 
     private void startTimeComboBoxSelected() {
-        dropBoxAppEnd.setDisable(false);
         String startTime = dropBoxAppStart.getSelectionModel().getSelectedItem();
-        TimeInterval selectedItem = tableViewAppointments.getSelectionModel().getSelectedItem();
-        List<String> endTime = appointmentUtils.getEndTimeList(startTime, selectedItem);
+        if (startTime != null) {
+            dropBoxAppEnd.setDisable(false);
+            TimeInterval selectedItem = tableViewAppointments.getSelectionModel().getSelectedItem();
+            System.out.println("start time " + startTime);
+            System.out.println("selected time interval " + selectedItem);
+            List<String> endTime = appointmentUtils.getEndTimeList(startTime, selectedItem);
 
-        dropBoxAppEnd.getItems().setAll(endTime);
+            dropBoxAppEnd.getItems().setAll(endTime);
+        }
     }
 
     private void setDoctorComboBox() {

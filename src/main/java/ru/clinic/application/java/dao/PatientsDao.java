@@ -12,6 +12,8 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
+import ru.clinic.application.java.dao.rowmapper.PatientExtractor;
+import ru.clinic.application.java.dao.rowmapper.PatientListExtractor;
 import ru.clinic.application.java.service.setting.SettingsService;
 
 import java.sql.ResultSet;
@@ -78,25 +80,7 @@ public class PatientsDao {
 
     private ObservableList<Patient> selectPatients(String sql){
         try {
-            return jdbcTemplate.query(sql, rs -> {
-                ObservableList<Patient> patients = FXCollections.observableArrayList();
-
-                while (rs.next()) {
-                    Patient patient = new Patient();
-                    patient.setId(rs.getInt("id"));
-                    patient.setFirstName(rs.getString("firstName"));
-                    patient.setLastName(rs.getString("lastName"));
-                    patient.setMiddleName(rs.getString("middleName"));
-                    patient.setCellPhone(rs.getString("phone"));
-                    patient.setCellPhoneTwo(rs.getString("phoneTwo"));
-                    patient.setEmail(rs.getString("email"));
-                    patient.setComment(rs.getString("comment"));
-                    patient.generateFio();
-
-                    patients.add(patient);
-                }
-                return patients;
-            });
+            return jdbcTemplate.query(sql, new PatientListExtractor());
         }catch (Exception e){
             LOGGER.error("Error selecting patients ", e);
         }
@@ -146,7 +130,7 @@ public class PatientsDao {
             params.add(middleName.trim().toLowerCase());
         }
         if (!StringUtils.isBlank(phone)){
-            //AND (phone like '%101%' OR phonetwo like '%101%')
+            //AND (phone like '%101%' OR phone two like '%101%')
             sql += " AND (phone like '%" + phone + "%' OR phonetwo like '%" + phone + "%') ";
             params.add(phone);
             params.add(phone);
@@ -159,40 +143,6 @@ public class PatientsDao {
 
         return selectPatients(sql);
 
-    }
-
-    private ObservableList<Patient> selectPatients(String sql, ArrayList<String> params) {
-        try {
-            Object[] objects = params.toArray();
-
-            ObservableList<Patient> patients = jdbcTemplate.query(sql, objects, new ResultSetExtractor<ObservableList<Patient>>() {
-
-                @Override
-                public ObservableList<Patient> extractData(ResultSet rs) throws SQLException, DataAccessException {
-                    ObservableList<Patient> patients = FXCollections.observableArrayList();
-
-                    while (rs.next()) {
-                        Patient patient = new Patient();
-                        patient.setId(rs.getInt("id"));
-                        patient.setFirstName(rs.getString("firstName"));
-                        patient.setLastName(rs.getString("lastName"));
-                        patient.setMiddleName(rs.getString("middleName"));
-                        patient.setCellPhone(rs.getString("phone"));
-                        patient.setCellPhoneTwo(rs.getString("phoneTwo"));
-                        patient.setEmail(rs.getString("email"));
-                        patient.setComment(rs.getString("comment"));
-                        patient.generateFio();
-
-                        patients.add(patient);
-                    }
-                    return patients;
-                }
-            });
-            return patients;
-        }catch (Exception e){
-            LOGGER.error("Error selecting patients", e);
-        }
-        return FXCollections.emptyObservableList();
     }
 
     public int getPatientsCount() {

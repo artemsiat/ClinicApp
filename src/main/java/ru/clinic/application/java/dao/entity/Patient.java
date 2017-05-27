@@ -161,4 +161,26 @@ public class Patient {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+    public String getFullName() {
+        String fullName = "";
+        if (StringUtils.isNoneBlank(lastName)){
+            fullName = lastName;
+        }
+        if (StringUtils.isNoneBlank(firstName)){
+            if (StringUtils.isNoneBlank(fullName)){
+                fullName = fullName + " " + firstName;
+            }else {
+                fullName = firstName;
+            }
+        }
+        if (StringUtils.isNoneBlank(middleName)){
+            if (StringUtils.isNoneBlank(fullName)){
+                fullName = fullName + " " + middleName;
+            }else {
+                fullName = middleName;
+            }
+        }
+        return fullName;
+    }
 }

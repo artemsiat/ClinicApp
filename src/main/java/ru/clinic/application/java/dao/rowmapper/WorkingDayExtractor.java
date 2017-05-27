@@ -15,9 +15,9 @@ import java.sql.SQLException;
 /**
  * Created by Artem Siatchinov on 1/15/2017.
  */
-public class WorkingDayResultSetExtractor implements ResultSetExtractor<ObservableList<WorkingDay>>{
+public class WorkingDayExtractor implements ResultSetExtractor<ObservableList<WorkingDay>>{
 
-    private final static Logger LOGGER = LogManager.getLogger(WorkingDayResultSetExtractor.class.getName());
+    private final static Logger LOGGER = LogManager.getLogger(WorkingDayExtractor.class.getName());
 
     /*
 ID  	DOCTOR_ID  	WORKING_DAY  	START_TIME  	END_TIME  	START_LUNCH  	END_LUNCH  	COMMENT  	CREATOR  	CREATED  	WHO_MODIFIED  	MODIFIED  	WHO_REMOVED  	WHEN_REMOVED  	REMOVED

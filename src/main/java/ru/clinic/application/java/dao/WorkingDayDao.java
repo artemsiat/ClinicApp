@@ -9,7 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
-import ru.clinic.application.java.dao.rowmapper.WorkingDayResultSetExtractor;
+import ru.clinic.application.java.dao.rowmapper.WorkingDayExtractor;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -68,7 +68,7 @@ public class WorkingDayDao {
         try {
             return jdbcTemplate.query(LOAD_WORKING_DAYS_RANGE,
                     new Object[]{Date.valueOf(startDate), Date.valueOf(endDate), doctorId, false},
-                    new WorkingDayResultSetExtractor());
+                    new WorkingDayExtractor());
         }catch (Exception e){
             LOGGER.error("Error loading working days", e);
         }

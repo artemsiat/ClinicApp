@@ -45,13 +45,13 @@ public class ClinicAppUtils {
                 String[] endHoursMinutes = endTime.split(":");
                 String[] startHoursMinutes = startTime.split(":");
 
-                int endMinutes = (Integer.parseInt(endHoursMinutes[0]) * 60) + Integer.parseInt(endHoursMinutes[1]);
-                int startMinutes = (Integer.parseInt(startHoursMinutes[0]) * 60) + Integer.parseInt(startHoursMinutes[1]);
+                int endMinutes = (Integer.parseInt(StringUtils.trim(endHoursMinutes[0])) * 60) + Integer.parseInt(StringUtils.trim(endHoursMinutes[1]));
+                int startMinutes = (Integer.parseInt(StringUtils.trim(startHoursMinutes[0])) * 60) + Integer.parseInt(StringUtils.trim(startHoursMinutes[1]));
 
                 return endMinutes - startMinutes;
             }
         }catch (Exception e){
-            LOGGER.error("Error calculating duration in minutes");
+            LOGGER.error("Error calculating duration in minutes", e);
             return 0;
         }
         return 0;
@@ -59,6 +59,8 @@ public class ClinicAppUtils {
 
     public static int[] convertStringTimeToIntTime(String time){
         String[] hoursToMintes = time.split(":");
-        return new int[]{Integer.parseInt(hoursToMintes[0]), Integer.parseInt(hoursToMintes[1])};
+        String hour = StringUtils.trim(hoursToMintes[0]);
+        String minutes = StringUtils.trim(hoursToMintes[1]);
+        return new int[]{Integer.parseInt(hour), Integer.parseInt(minutes)};
     }
 }
