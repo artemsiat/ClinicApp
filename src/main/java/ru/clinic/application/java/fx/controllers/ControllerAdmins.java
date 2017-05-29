@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 
 @Component
-public class ControllerAdmins extends ControllerClass{
+public class ControllerAdmins extends ControllerClass {
 
     private final static Logger LOGGER = LogManager.getLogger(ControllerAdmins.class.getName());
     private Admin selectedAdmin = null;
@@ -132,7 +132,7 @@ public class ControllerAdmins extends ControllerClass{
             adminService.addNewAdmin(fioField.getText(), dobDatePicker.getValue(), cellPhoneField.getText(),
                     cellPhoneField2.getText(), homePhoneField.getText(), emailField.getText(), loginField.getText(), passField.getText());
             adminTable.setItems(adminService.loadAdmins());
-        }else {
+        } else {
             LOGGER.debug("[ControllerAdmins][createBtnAction] Fio field is empty.");
             alertNoFio();
         }
@@ -158,23 +158,23 @@ public class ControllerAdmins extends ControllerClass{
                         adminService.getCurrentAdmin().getFio() + "] is not authorised to perform delete on this Administrator [" + selectedAdmin.getFio() + "]");
                 alertNoAuth();
             }
-        }else{
+        } else {
             LOGGER.debug("[ControllerAdmins][updateBtnAction] No Administrator selected");
             alertNotSelected();
         }
     }
 
     private boolean confirmAction() {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle(CONFIRMATION_TITLE);
-            alert.setHeaderText(CONFIRMATION_HEADER);
-            alert.setContentText(CONFIRMATION_CONTENT);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle(CONFIRMATION_TITLE);
+        alert.setHeaderText(CONFIRMATION_HEADER);
+        alert.setContentText(CONFIRMATION_CONTENT);
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
-                return true;
-            }
-            return false;
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            return true;
+        }
+        return false;
     }
 
     @FXML
@@ -194,7 +194,7 @@ public class ControllerAdmins extends ControllerClass{
                         adminService.getCurrentAdmin().getFio() + "] is not authorised to perform update on this Administrator [" + selectedAdmin.getFio() + "]");
                 alertNoAuth();
             }
-        }else{
+        } else {
             LOGGER.debug("[ControllerAdmins][updateBtnAction] No Administrator selected");
             alertNotSelected();
         }
@@ -248,11 +248,11 @@ public class ControllerAdmins extends ControllerClass{
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     String labelText = "";
-                    if (newValue != null && !newValue.isEmpty()){
+                    if (newValue != null && !newValue.isEmpty()) {
                         String resultDigits = "";
-                        for (int index = 0 ; index < newValue.length(); index ++){
+                        for (int index = 0; index < newValue.length(); index++) {
                             char charAt = newValue.charAt(index);
-                            if (Character.isDigit(charAt)){
+                            if (Character.isDigit(charAt)) {
                                 resultDigits += charAt;
                             }
                         }
@@ -260,7 +260,7 @@ public class ControllerAdmins extends ControllerClass{
                         labelText = ClinicAppUtils.maskPhoneNumber(resultDigits);
                     }
 
-                    if (label != null){
+                    if (label != null) {
                         label.setText(labelText);
                     }
                 }
@@ -271,9 +271,9 @@ public class ControllerAdmins extends ControllerClass{
 
     private void setTableListener() {
         adminTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null){
+            if (newValue == null) {
                 adminCleared();
-            }else{
+            } else {
                 adminSelected();
             }
         });
@@ -294,11 +294,10 @@ public class ControllerAdmins extends ControllerClass{
         emailField.setText(selectedAdmin.getEmail());
 
 
-
-        if (adminService.getCurrentAdmin().getId() == 0 || adminService.getCurrentAdmin().getId() == selectedAdmin.getId()){
+        if (adminService.getCurrentAdmin().getId() == 0 || adminService.getCurrentAdmin().getId() == selectedAdmin.getId()) {
             loginField.setText(selectedAdmin.getUserName());
             passField.setText(selectedAdmin.getPassword());
-        }else {
+        } else {
             loginField.setText("");
             passField.setText("");
         }
@@ -310,7 +309,7 @@ public class ControllerAdmins extends ControllerClass{
         setSelectedAdmin();
     }
 
-    private void setTable(){
+    private void setTable() {
         fioCol.setCellValueFactory(new PropertyValueFactory<Admin, String>("fioProp"));
         cellPhoneCol.setCellValueFactory(new PropertyValueFactory<Admin, String>("cellPhoneProp"));
         homePhoneCol.setCellValueFactory(new PropertyValueFactory<Admin, String>("homePhonePro"));

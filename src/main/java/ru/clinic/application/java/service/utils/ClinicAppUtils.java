@@ -1,7 +1,6 @@
 package ru.clinic.application.java.service.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -39,9 +38,9 @@ public class ClinicAppUtils {
     /*Пример входных данных
     * startTime='9:00', endTime='12:00'
     * */
-    public static int calculateDuration(String startTime, String endTime){
+    public static int calculateDuration(String startTime, String endTime) {
         try {
-            if (startTime != null && endTime != null){
+            if (startTime != null && endTime != null) {
                 String[] endHoursMinutes = endTime.split(":");
                 String[] startHoursMinutes = startTime.split(":");
 
@@ -50,17 +49,36 @@ public class ClinicAppUtils {
 
                 return endMinutes - startMinutes;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error calculating duration in minutes", e);
             return 0;
         }
         return 0;
     }
 
-    public static int[] convertStringTimeToIntTime(String time){
+    public static int[] convertStringTimeToIntTime(String time) {
         String[] hoursToMintes = time.split(":");
         String hour = StringUtils.trim(hoursToMintes[0]);
         String minutes = StringUtils.trim(hoursToMintes[1]);
         return new int[]{Integer.parseInt(hour), Integer.parseInt(minutes)};
+    }
+
+    /*Adds minutes to start time*/
+    public static String addMinutes(String time, int duration) {
+        if (time != null){
+
+            String[] hourMinutes = time.split(":");
+
+            int hour = Integer.parseInt(StringUtils.trim(hourMinutes[0]));
+            duration = Integer.parseInt(StringUtils.trim(hourMinutes[1])) + duration;
+
+            int addHours = duration / 60 ;
+            int addMinutes = duration % 60;
+
+            hour = hour + addHours;
+
+            return AppointmentUtils.generateStringTime(hour, addMinutes);
+        }
+        return null;
     }
 }

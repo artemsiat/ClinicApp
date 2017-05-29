@@ -21,7 +21,7 @@ public class AppService {
     @Autowired
     AppDao appDao;
 
-    public AppService(){
+    public AppService() {
         mainAdmin = setMainAdmin();
         admins = FXCollections.observableArrayList();
     }
@@ -34,12 +34,11 @@ public class AppService {
     }
 
 
-
     public ObservableList<Admin> getAdminsList() {
         return admins;
     }
 
-    public Admin getMainAdmin(){
+    public Admin getMainAdmin() {
         return mainAdmin;
     }
 

@@ -69,7 +69,7 @@ public class WorkingDayDao {
             return jdbcTemplate.query(LOAD_WORKING_DAYS_RANGE,
                     new Object[]{Date.valueOf(startDate), Date.valueOf(endDate), doctorId, false},
                     new WorkingDayExtractor());
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error loading working days", e);
         }
         return FXCollections.observableArrayList();
@@ -86,7 +86,7 @@ public class WorkingDayDao {
     public void updateWorkingDay(int workingDayId, int whoModified, String start, String end, String lunchStart, String lunchEnd, String comment) {
         try {
             jdbcTemplate.update(UPDATE_WORKING_DAY, start, end, lunchStart, lunchEnd, comment, whoModified, workingDayId);
-        }catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("Error updating working day ", e);
         }
     }

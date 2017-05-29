@@ -27,7 +27,6 @@ public class Admin {
     private SimpleStringProperty emailProp = new SimpleStringProperty();
 
 
-
     public String getFio() {
         return fio;
     }

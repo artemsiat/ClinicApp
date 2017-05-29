@@ -29,7 +29,7 @@ public class Doctor {
     private LocalDate endDate;
     private ObservableList<WorkingDay> workingDays;
 
-    public Doctor(){
+    public Doctor() {
         workingDays = FXCollections.observableArrayList();
         startDate = null;
         endDate = null;
@@ -44,7 +44,7 @@ public class Doctor {
         setFioProp(fio);
     }
 
-    public WorkingDay getWorkingDay(LocalDate date){
+    public WorkingDay getWorkingDay(LocalDate date) {
         return workingDays.stream().filter(workingDay -> workingDay.getWorkingDay().equals(date)).findFirst().orElse(null);
     }
 
@@ -55,7 +55,7 @@ public class Doctor {
         return date != null && date.isAfter(startDate) && date.isBefore(endDate);
     }
 
-    public void setWorkingDays(ObservableList<WorkingDay> workingDays, LocalDate startDate, LocalDate endDate){
+    public void setWorkingDays(ObservableList<WorkingDay> workingDays, LocalDate startDate, LocalDate endDate) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.workingDays = workingDays;

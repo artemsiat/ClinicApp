@@ -1,8 +1,5 @@
 package ru.clinic.application.java.fx.controllers;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -73,7 +70,7 @@ public class ControllerStart {
     @FXML
     private Label authLabel;
 
-    public void starController(){
+    public void starController() {
         LOGGER.debug("[starController] Controller started");
         clearFields();
         initDropBox();
@@ -83,7 +80,7 @@ public class ControllerStart {
 
     }
 
-    private void stopController(){
+    private void stopController() {
         LOGGER.debug("[stopController] Controller stopped");
         clearFields();
     }
@@ -91,7 +88,7 @@ public class ControllerStart {
     @FXML
     void keyReleased(KeyEvent event) {
         LOGGER.debug("Key released [{}]", event.getCode().getName());
-        if ("Enter".equals(event.getCode().getName())){
+        if ("Enter".equals(event.getCode().getName())) {
             enterApp();
         }
     }
@@ -110,22 +107,22 @@ public class ControllerStart {
         enterApp();
     }
 
-    private void enterApp(){
-        if (adminService.checkAuthorization(adminDropBox.getSelectionModel().getSelectedItem(), passwordTextField.getText())){
+    private void enterApp() {
+        if (adminService.checkAuthorization(adminDropBox.getSelectionModel().getSelectedItem(), passwordTextField.getText())) {
             LOGGER.debug("[enterBtnAction] admin is authorized. Checking if dataBase tables are set");
-            if (dataBaseService.checkTables()){
+            if (dataBaseService.checkTables()) {
                 LOGGER.debug("[enterBtnAction] All DataBase tables are set. Starting Main Frame");
                 //Start Main Frame
                 frameRoot.start();
                 frameStart.stop();
-            }else {
+            } else {
                 LOGGER.debug("[enterBtnAction] Some or all database tables are not set. Starting dbTables Frame");
                 //Start Tables Frame
                 if (alertConfirmation()) {
                     frameDbTables.start();
                 }
             }
-        }else {
+        } else {
             LOGGER.debug("[enterBtnAction] admin is not authorized");
             authLabel.setText(NOT_AUTHORIZED);
         }
@@ -142,13 +139,13 @@ public class ControllerStart {
         return result.get() == ButtonType.OK;
     }
 
-    private void clearFields(){
+    private void clearFields() {
         LOGGER.debug("[clearFields] Clearing : authLabel, adminDropBox");
         authLabel.setText("");
         adminDropBox.getItems().clear();
     }
 
-    private void initDropBox(){
+    private void initDropBox() {
         LOGGER.debug("Initializing Admin drop box. Adding administrators to drop box");
         List<String> adminDropBoxNames = adminService.getAdminDropBoxNames();
         adminDropBox.getItems().addAll(adminDropBoxNames);

@@ -13,7 +13,7 @@ import ru.clinic.application.java.fx.controllers.ControllerAppointments;
  */
 
 @Component
-public class FrameAppointments extends FrameClass{
+public class FrameAppointments extends FrameClass {
 
     private final static Logger LOGGER = LogManager.getLogger(FrameWorkingDays.class.getName());
 

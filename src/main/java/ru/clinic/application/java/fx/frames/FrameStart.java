@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 
 @Component
-public class FrameStart extends FrameClass{
+public class FrameStart extends FrameClass {
 
     private final static Logger LOGGER = LogManager.getLogger(FrameStart.class.getName());
 
@@ -38,12 +38,12 @@ public class FrameStart extends FrameClass{
     @Autowired
     private ControllerStart controllerStart;
 
-    public FrameStart(){
+    public FrameStart() {
         super(STAGE_TITLE, FXML_PATH);
         stage = new Stage();
     }
 
-    public void start(Stage primaryStage){
+    public void start(Stage primaryStage) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PATH));
         loader.setController(controllerStart);
         AnchorPane root = null;
@@ -66,7 +66,7 @@ public class FrameStart extends FrameClass{
         controllerStart.postStart();
     }
 
-    public void stop(){
+    public void stop() {
         stage.close();
     }
 

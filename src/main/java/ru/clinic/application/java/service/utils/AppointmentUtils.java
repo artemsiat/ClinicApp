@@ -1,13 +1,17 @@
 package ru.clinic.application.java.service.utils;
 
+import javafx.collections.ObservableList;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.dao.entity.appointment.FreeTime;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
+import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.service.setting.SettingsService;
 
+import java.sql.Time;
 import java.util.*;
 
 /**
@@ -128,12 +132,105 @@ public class AppointmentUtils {
         });
     }
 
-    private String generateStringTime(Integer key, Integer minutes) {
-        return key + " : " + (minutes == 0 ? "00" : minutes);
+    public static String generateStringTime(Integer key, Integer minutes) {
+        return key + ":" + (minutes == 0 ? "00" : minutes);
     }
 
     public List<String> getEndTimeList(String startTime, TimeInterval selectedItem) {
         Map<Integer, List<Integer>> availableTimeMap = getAvailableTimeMap(selectedItem);
         return getAppointmentEndTime(startTime, availableTimeMap, selectedItem);
+    }
+
+    public ObservableList<TimeInterval> mergeFreeTimeAndAppointments(ObservableList<TimeInterval> freeTimeList, ObservableList<TimeInterval> appointments) {
+
+
+        freeTimeList.forEach(freeTime -> {
+
+        });
+
+
+        freeTimeList.forEach(System.out::println);
+        appointments.forEach(System.out::println);
+
+        int startHour = settingsService.getWorkingDayStartHour();
+        int interval = settingsService.getGetWorkingDayIntervals();
+
+        appointments.forEach(appointment -> {
+
+        });
+
+        return freeTimeList;
+    }
+
+    /*0 = free time , 1 = time is not free(either appointment or lunch)*/
+    public ObservableList<TimeInterval> calculateIntervals(ObservableList<TimeInterval> appointments, WorkingDay workingDay) {
+        int intervalLength = settingsService.getGetWorkingDayIntervals();// default = 15 minutes
+
+        String startTime = workingDay.getStartTime();//9:00
+        String endTime = workingDay.getEndTime();//21:00
+
+        int duration = ClinicAppUtils.calculateDuration(startTime, endTime);//720 minutes
+        int intervals = duration / intervalLength;//48
+
+        int[] totalIntervals = new int[intervals];
+
+        if (workingDay.isHaveLunch()) {
+            String startLunch = workingDay.getStartLunch();
+            String endLunch = workingDay.getEndLunch();
+            totalIntervals = addIntervals(totalIntervals, startTime, intervalLength, startLunch, endLunch);
+        }
+
+        for (TimeInterval timeInterval : appointments){
+            totalIntervals = addIntervals(totalIntervals, startTime, intervalLength, timeInterval.getStartTime(), timeInterval.getEndTime());
+        }
+
+        System.out.println("Total intervals " + Arrays.toString(totalIntervals));
+
+        int intervalStart = 0;
+        for (int index = 0 ; index < totalIntervals.length ; index ++){
+            System.out.println("index " + index + " intervalStart " + intervalStart + " int at index " + totalIntervals[index]);
+
+            if (totalIntervals[index] == 1){
+                if (index == 0){
+                    intervalStart = -1;
+                }else {
+                    if (intervalStart != -1){
+                        System.out.println("Adding new free time");
+                        appointments.add(createFreeTime(intervalStart, index, intervalLength, startTime, workingDay));
+                        intervalStart = -1;
+                    }
+                }
+            }else {
+                if (intervalStart == -1){
+                    intervalStart = index;
+                }
+            }
+        }
+        if (intervalStart != -1){
+            appointments.add(createFreeTime(intervalStart, totalIntervals.length, intervalLength, startTime, workingDay));
+
+        }
+        return appointments;
+    }
+
+    private TimeInterval createFreeTime(int intervalStart, int intervalEnd, int intervalLength, String startTime, WorkingDay workingDay) {
+        int duration = (intervalEnd - intervalStart) * intervalLength;
+        int durationToInterval = intervalStart * intervalLength;
+        String freeTimeStart = ClinicAppUtils.addMinutes(startTime, durationToInterval);
+        String freeTimeEnd = ClinicAppUtils.addMinutes(freeTimeStart, duration);;
+        return new FreeTime(freeTimeStart, freeTimeEnd, workingDay);
+    }
+
+    private int[] addIntervals(int[] totalIntervals, String startTime, int intervalLength, String newIntervalStart, String newIntervalEnd) {
+        int lunchDuration = ClinicAppUtils.calculateDuration(newIntervalStart, newIntervalEnd);
+        int lunchIntervals = lunchDuration / intervalLength;//4
+
+        int durationToLunch = ClinicAppUtils.calculateDuration(startTime, newIntervalStart);
+        int intervalsToLunch = durationToLunch / intervalLength;
+
+        for (int index = 0; index < lunchIntervals ; index++){
+            totalIntervals[index + intervalsToLunch] = 1;
+        }
+        return totalIntervals;
     }
 }

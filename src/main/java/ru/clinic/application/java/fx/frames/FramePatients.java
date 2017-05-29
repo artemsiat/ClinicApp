@@ -13,7 +13,7 @@ import ru.clinic.application.java.fx.controllers.ControllerPatients;
  */
 
 @Component
-public class FramePatients extends FrameClass{
+public class FramePatients extends FrameClass {
 
     private final static Logger LOGGER = LogManager.getLogger(FrameAdmins.class.getName());
 
@@ -27,7 +27,6 @@ public class FramePatients extends FrameClass{
     public FramePatients() {
         super(STAGE_TITLE, FXML_PATH);
     }
-
 
 
     @Override

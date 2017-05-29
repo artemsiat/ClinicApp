@@ -11,7 +11,7 @@ import ru.clinic.application.java.fx.controllers.ControllerDbTables;
  * Created by Artem Siatchinov on 1/28/2017.
  */
 @Component
-public class TableAppointments extends TableStatus{
+public class TableAppointments extends TableStatus {
 
     private final static Logger LOGGER = LogManager.getLogger(TableAppointments.class.getName());
 
@@ -30,7 +30,7 @@ public class TableAppointments extends TableStatus{
     @Override
     public boolean checkIfCreated() {
         boolean created = dataBaseDao.checkAppointmentTable();
-        LOGGER.debug("[TableAppointments][checkIfCreated] Table ["+ TABLE_NAME+"] is " + (created? "created" : "not created"));
+        LOGGER.debug("[TableAppointments][checkIfCreated] Table [" + TABLE_NAME + "] is " + (created ? "created" : "not created"));
         setCreated(created);
         controllerDbTables.setAppointmentStatus();
         return created;

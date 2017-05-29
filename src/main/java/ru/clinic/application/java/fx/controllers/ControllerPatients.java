@@ -173,12 +173,12 @@ public class ControllerPatients extends ControllerClass {
     @FXML
     void findBtnAction(ActionEvent event) {
         //populatePatients.populateRandomPatients(1500);
-        if (checkFindFields()){
+        if (checkFindFields()) {
             ObservableList<Patient> patients = patientsService.findPatient(firstNameFindFld.getText(), lastNameFindFld.getText(),
                     middleNameFindFld.getText(), phoneFindFld.getText(), emailFindFld.getText());
             patientsTable.setItems(patients);
             patientsTable.refresh();
-        }else {
+        } else {
             LOGGER.debug("[ControllerPatients][findBtnAction] Check find fields returned false. Alerting user");
             alertFindFieldsEmpty();
             patientsTable.setItems(patientsService.loadLastCreatedPatients());
@@ -275,7 +275,7 @@ public class ControllerPatients extends ControllerClass {
 
     @FXML
     void patientsTableMouseClicked(MouseEvent event) {
-        if (event.getClickCount() >= 2){
+        if (event.getClickCount() >= 2) {
             //Todo Display separate window displaying detailed info about the patient
         }
     }
@@ -334,11 +334,11 @@ public class ControllerPatients extends ControllerClass {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     String labelText = "";
-                    if (newValue != null && !newValue.isEmpty()){
+                    if (newValue != null && !newValue.isEmpty()) {
                         String resultDigits = "";
-                        for (int index = 0 ; index < newValue.length(); index ++){
+                        for (int index = 0; index < newValue.length(); index++) {
                             char charAt = newValue.charAt(index);
-                            if (Character.isDigit(charAt)){
+                            if (Character.isDigit(charAt)) {
                                 resultDigits += charAt;
                             }
                         }
@@ -346,7 +346,7 @@ public class ControllerPatients extends ControllerClass {
                         labelText = ClinicAppUtils.maskPhoneNumber(resultDigits);
                     }
 
-                    if (label != null){
+                    if (label != null) {
                         label.setText(labelText);
                     }
                 }
@@ -361,13 +361,13 @@ public class ControllerPatients extends ControllerClass {
         fioFieldToLabel.put(firstNameFld, firstNameLabel);
         fioFieldToLabel.put(lastNameFld, lastNameLabel);
         fioFieldToLabel.put(middleNameFld, middleNameLabel);
-        fioFieldToLabel.forEach((key, set) ->{
+        fioFieldToLabel.forEach((key, set) -> {
             key.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    if (newValue != null && !newValue.isEmpty()){
+                    if (newValue != null && !newValue.isEmpty()) {
                         set.setText(newValue.trim());
-                    }else {
+                    } else {
                         set.setText("");
                     }
                 }
@@ -434,7 +434,7 @@ public class ControllerPatients extends ControllerClass {
         commentFld.setText("");
     }
 
-    private void setFindLabel(){
+    private void setFindLabel() {
         int count = patientsService.getPatientsCount();
         findPatientsLabel.setText("Всего пациентов: " + count);
     }

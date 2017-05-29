@@ -6,12 +6,10 @@ import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
-import java.sql.Time;
-
 /**
  * Created by Artem Siatchinov on 1/20/2017.
  */
-public class Appointment extends TimeInterval{
+public class Appointment extends TimeInterval {
     private Long id;
     private String comment;
     private Patient patient;

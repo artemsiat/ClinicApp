@@ -11,7 +11,7 @@ import ru.clinic.application.java.fx.controllers.ControllerDbTables;
  * Created by Artem Siatchinov on 1/2/2017.
  */
 @Component
-public class TableAdmins extends TableStatus{
+public class TableAdmins extends TableStatus {
 
     private final static Logger LOGGER = LogManager.getLogger(TableAdmins.class.getName());
 
@@ -30,7 +30,7 @@ public class TableAdmins extends TableStatus{
     @Override
     public boolean checkIfCreated() {
         boolean created = dataBaseDao.checkAdminTable();
-        LOGGER.debug("[TableAdmins][checkIfCreated] Table ["+ TABLE_NAME+"] is " + (created? "created" : "not created"));
+        LOGGER.debug("[TableAdmins][checkIfCreated] Table [" + TABLE_NAME + "] is " + (created ? "created" : "not created"));
         setCreated(created);
         controllerDbTables.setAdminStatus();
         return created;

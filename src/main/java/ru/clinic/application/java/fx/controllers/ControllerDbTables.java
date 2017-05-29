@@ -128,8 +128,6 @@ public class ControllerDbTables {
     private Button refreshAppointmentBtn;
 
 
-
-
     public void startController() {
         dataBaseService.setAllTableStatuses();
     }
@@ -147,9 +145,9 @@ public class ControllerDbTables {
         alert.showAndWait();
     }
 
-    private void setCreatedStatus(boolean created, Label labelStatus, Button createBtn, Button dropBtn){
+    private void setCreatedStatus(boolean created, Label labelStatus, Button createBtn, Button dropBtn) {
         LOGGER.debug("Setting created status [{}] to [{}], [{}], [{}]", created, labelStatus, createBtn, dropBtn);
-        if (created){
+        if (created) {
             labelStatus.setText(CREATED);
             labelStatus.setTextFill(POS_COLOR);
             createBtn.setDisable(true);
@@ -162,14 +160,14 @@ public class ControllerDbTables {
         dropBtn.setDisable(true);
     }
 
-    private boolean confirmAction(){
+    private boolean confirmAction() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(CONFIRMATION_TITLE);
         alert.setHeaderText(CONFIRMATION_HEADER);
         alert.setContentText(CONFIRMATION_CONTENT);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             return true;
         }
         return false;
@@ -181,7 +179,7 @@ public class ControllerDbTables {
     }
 
     public void setAdminStatus() {
-        if (adminStatus != null && createAdmin != null && dropAdmin != null){
+        if (adminStatus != null && createAdmin != null && dropAdmin != null) {
             setCreatedStatus(tableAdmins.isCreated(), adminStatus, createAdmin, dropAdmin);
         }
     }
@@ -199,7 +197,7 @@ public class ControllerDbTables {
             if (confirmAction()) {
                 tableAdmins.dropTable();
             }
-        }else {
+        } else {
             alertNoAuth();
         }
     }
@@ -210,7 +208,7 @@ public class ControllerDbTables {
     }
 
     public void setDoctorsStatus() {
-        if (doctorStatus != null && createDoctor != null && dropDoctor != null){
+        if (doctorStatus != null && createDoctor != null && dropDoctor != null) {
             setCreatedStatus(tableDoctors.isCreated(), doctorStatus, createDoctor, dropDoctor);
         }
     }
@@ -228,7 +226,7 @@ public class ControllerDbTables {
             if (confirmAction()) {
                 tableDoctors.dropTable();
             }
-        }else {
+        } else {
             alertNoAuth();
         }
     }
@@ -240,7 +238,7 @@ public class ControllerDbTables {
 
 
     public void setPatientStatus() {
-        if (patientStatus != null && createPatientBtn != null && dropPatientBtn != null){
+        if (patientStatus != null && createPatientBtn != null && dropPatientBtn != null) {
             setCreatedStatus(tablePatients.isCreated(), patientStatus, createPatientBtn, dropPatientBtn);
         }
     }
@@ -256,7 +254,7 @@ public class ControllerDbTables {
             if (confirmAction()) {
                 tablePatients.dropTable();
             }
-        }else {
+        } else {
             alertNoAuth();
         }
     }
@@ -269,7 +267,7 @@ public class ControllerDbTables {
     }
 
     public void setWorkingDayStatus() {
-        if (workingDayStatus != null && createWorkingDay != null && dropWorkingDay != null){
+        if (workingDayStatus != null && createWorkingDay != null && dropWorkingDay != null) {
             setCreatedStatus(tableWorkingDays.isCreated(), workingDayStatus, createWorkingDay, dropWorkingDay);
         }
     }
@@ -285,7 +283,7 @@ public class ControllerDbTables {
             if (confirmAction()) {
                 tableWorkingDays.dropTable();
             }
-        }else {
+        } else {
             alertNoAuth();
         }
     }
@@ -298,7 +296,7 @@ public class ControllerDbTables {
     }
 
     public void setAppointmentStatus() {
-        if (appointmentStatus != null && createAppointmentBtn != null && dropAppointmentBtn != null){
+        if (appointmentStatus != null && createAppointmentBtn != null && dropAppointmentBtn != null) {
             setCreatedStatus(tableAppointments.isCreated(), appointmentStatus, createAppointmentBtn, dropAppointmentBtn);
         }
     }
@@ -316,7 +314,7 @@ public class ControllerDbTables {
             if (confirmAction()) {
                 tableAppointments.dropTable();
             }
-        }else {
+        } else {
             alertNoAuth();
         }
     }

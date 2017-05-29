@@ -24,11 +24,11 @@ public class Patient {
     private SimpleStringProperty cellPhoneProp = new SimpleStringProperty();
     private SimpleStringProperty emailProp = new SimpleStringProperty();
 
-    public void generateFio(){
+    public void generateFio() {
         String fio =
-                (StringUtils.isEmpty(lastName)? "": (lastName + " ")) +
-                (StringUtils.isEmpty(firstName)? "" : (firstName + " ")) +
-                (StringUtils.isEmpty(middleName)? "" : (middleName + " "));
+                (StringUtils.isEmpty(lastName) ? "" : (lastName + " ")) +
+                        (StringUtils.isEmpty(firstName) ? "" : (firstName + " ")) +
+                        (StringUtils.isEmpty(middleName) ? "" : (middleName + " "));
         setFio(fio);
     }
 
@@ -88,7 +88,7 @@ public class Patient {
 
     public void setCellPhoneTwo(String cellPhoneTwo) {
         this.cellPhoneTwo = cellPhoneTwo;
-        if (StringUtils.isEmpty(this.cellPhone)){
+        if (StringUtils.isEmpty(this.cellPhone)) {
             setCellPhoneProp(cellPhoneTwo);
         }
     }
@@ -164,20 +164,20 @@ public class Patient {
 
     public String getFullName() {
         String fullName = "";
-        if (StringUtils.isNoneBlank(lastName)){
+        if (StringUtils.isNoneBlank(lastName)) {
             fullName = lastName;
         }
-        if (StringUtils.isNoneBlank(firstName)){
-            if (StringUtils.isNoneBlank(fullName)){
+        if (StringUtils.isNoneBlank(firstName)) {
+            if (StringUtils.isNoneBlank(fullName)) {
                 fullName = fullName + " " + firstName;
-            }else {
+            } else {
                 fullName = firstName;
             }
         }
-        if (StringUtils.isNoneBlank(middleName)){
-            if (StringUtils.isNoneBlank(fullName)){
+        if (StringUtils.isNoneBlank(middleName)) {
+            if (StringUtils.isNoneBlank(fullName)) {
                 fullName = fullName + " " + middleName;
-            }else {
+            } else {
                 fullName = middleName;
             }
         }

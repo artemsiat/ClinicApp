@@ -2,6 +2,7 @@ package ru.clinic.application.java.fx.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -16,7 +17,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
-import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
@@ -27,8 +27,8 @@ import ru.clinic.application.java.service.PatientsService;
 import ru.clinic.application.java.service.WorkingDayService;
 import ru.clinic.application.java.service.utils.AppointmentUtils;
 
-import java.sql.Time;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -120,13 +120,13 @@ public class ControllerAppointments extends ControllerClass {
     private boolean checkOnCreateAppointment() {
         if (
                 doctorsService.getSelectedDoctor() != null
-                && patientsService.getSelectedPatient() != null
-                && this.selectedWorkingDay != null
-                && !dropBoxAppStart.isDisable()
-                && !dropBoxAppEnd.isDisable()
-                && !dropBoxAppStart.getSelectionModel().isEmpty()
-                && !dropBoxAppEnd.getSelectionModel().isEmpty()
-                ){
+                        && patientsService.getSelectedPatient() != null
+                        && this.selectedWorkingDay != null
+                        && !dropBoxAppStart.isDisable()
+                        && !dropBoxAppEnd.isDisable()
+                        && !dropBoxAppStart.getSelectionModel().isEmpty()
+                        && !dropBoxAppEnd.getSelectionModel().isEmpty()
+                ) {
             LOGGER.debug("New appointment can be created");
             return true;
         }
@@ -134,14 +134,17 @@ public class ControllerAppointments extends ControllerClass {
         return false;
     }
 
-    private void refreshAppointmentsTable(){
+    private void refreshAppointmentsTable() {
+        LOGGER.debug("Refreshing appointments table");
         Doctor doctor = doctorsService.getSelectedDoctor();
         Patient patient = patientsService.getSelectedPatient();
 
-        if (doctor != null && patient != null && selectedWorkingDay != null){
-            ObservableList<TimeInterval> appointments = appointmentService.loadAppointments(doctor, patient, selectedWorkingDay);
+        if (doctor != null && patient != null && selectedWorkingDay != null) {
+            LOGGER.debug("Loading appointments list for display");
+            ObservableList<TimeInterval> appointments = appointmentService.getAppointmentsByWd(selectedWorkingDay);
+            System.out.println("appointments size " + appointments.size());
             tableViewAppointments.setItems(appointments);
-        }else {
+        } else {
             LOGGER.debug("Can not load appointments. Not all instances present: doctor [{}], patient [{}], workingDay [{}]");
         }
     }
@@ -174,9 +177,10 @@ public class ControllerAppointments extends ControllerClass {
         tableColumnTime.setCellValueFactory(new PropertyValueFactory<>("timeProp"));
         tableColumnDuration.setCellValueFactory(new PropertyValueFactory<>("durationProp"));
 
-        ObservableList<TimeInterval> timeIntervals = appointmentService.getAppointmentsByWd(selectedWorkingDay);
+        refreshAppointmentsTable();
+        //ObservableList<TimeInterval> timeIntervals = appointmentService.getAppointmentsByWd(selectedWorkingDay);
 
-        tableViewAppointments.setItems(timeIntervals);
+        //tableViewAppointments.setItems(timeIntervals);
     }
 
     @Override
@@ -271,10 +275,12 @@ public class ControllerAppointments extends ControllerClass {
     }
 
     private void workingDaySelected(WorkingDay workingDay) {
+        LOGGER.debug("Working day selected [{}]" , workingDay);
         this.selectedWorkingDay = workingDay;
 
         if (selectedWorkingDay != null) {
-            tableViewAppointments.setItems(appointmentService.getAppointmentsByWd(selectedWorkingDay));
+            refreshAppointmentsTable();
+            //tableViewAppointments.setItems(appointmentService.getAppointmentsByWd(selectedWorkingDay));
         } else {
             tableViewAppointments.setItems(FXCollections.emptyObservableList());
         }

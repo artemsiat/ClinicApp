@@ -10,7 +10,7 @@ import ru.clinic.application.java.fx.controllers.ControllerDbTables;
  */
 
 @Component
-public class TableDoctors extends TableStatus{
+public class TableDoctors extends TableStatus {
 
     @Autowired
     DataBaseDao dataBaseDao;

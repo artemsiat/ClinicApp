@@ -13,7 +13,7 @@ import ru.clinic.application.java.fx.controllers.ControllerWorkingDays;
  */
 
 @Component
-public class FrameWorkingDays extends FrameClass{
+public class FrameWorkingDays extends FrameClass {
     private final static Logger LOGGER = LogManager.getLogger(FrameWorkingDays.class.getName());
 
     private final static String STAGE_TITLE = "\"ООО\" Классическая гомеопатия - Расписание Врачей";

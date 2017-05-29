@@ -32,7 +32,7 @@ public class PatientsService {
     @Autowired
     private ControllerRoot controllerRoot;
 
-    public PatientsService(){
+    public PatientsService() {
         patients = FXCollections.observableArrayList();
         selectedPatient = null;
     }
@@ -41,7 +41,7 @@ public class PatientsService {
         LOGGER.debug("[PatientsService][loadLastCreatedPatients] Loading last created patients from data base");
         ObservableList<Patient> patientObservableList = patientsDao.selectLastCreatedPatients();
         patients = patientObservableList;
-        LOGGER.debug("[PatientsService][loadLastCreatedPatients] Successfully loaded ["+ patientObservableList.size() + "] patients" );
+        LOGGER.debug("[PatientsService][loadLastCreatedPatients] Successfully loaded [" + patientObservableList.size() + "] patients");
         return patients;
     }
 
@@ -49,7 +49,7 @@ public class PatientsService {
         LOGGER.debug("[PatientsService][loadLastUpdatedPatients] Loading last updated patients from data base");
         ObservableList<Patient> patientObservableList = patientsDao.selectLastUpdatedPatients();
         patients = patientObservableList;
-        LOGGER.debug("[PatientsService][loadLastUpdatedPatients] Successfully loaded ["+ patientObservableList.size() + "] patients" );
+        LOGGER.debug("[PatientsService][loadLastUpdatedPatients] Successfully loaded [" + patientObservableList.size() + "] patients");
         return patients;
     }
 
@@ -76,8 +76,8 @@ public class PatientsService {
         return patientsList;
     }
 
-    public void setSelectedPatient(Patient patient){
-        LOGGER.debug("[setSelectedPatient] selecting patient [{}]", patient );
+    public void setSelectedPatient(Patient patient) {
+        LOGGER.debug("[setSelectedPatient] selecting patient [{}]", patient);
         selectedPatient = patient;
         controllerRoot.setSelectedPatient();
     }

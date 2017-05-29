@@ -1,12 +1,10 @@
 package ru.clinic.application.java.dao.rowmapper;
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Logger;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
-import ru.clinic.application.java.service.AppointmentService;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,12 +13,12 @@ import java.sql.SQLException;
  * Product clinicApp
  * Created by artem_000 on 5/27/2017.
  */
-public class AppointmentExtractor implements ResultSetExtractor<TimeInterval>{
+public class AppointmentExtractor implements ResultSetExtractor<TimeInterval> {
     private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger(AppointmentExtractor.class);
 
     @Override
     public TimeInterval extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-        if (resultSet.next()){
+        if (resultSet.next()) {
             return extractAppointment(resultSet);
         }
         return null;

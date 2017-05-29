@@ -11,7 +11,7 @@ import ru.clinic.application.java.fx.controllers.ControllerAdmins;
  */
 
 @Component
-public class FrameAdmins extends FrameClass{
+public class FrameAdmins extends FrameClass {
 
     private final static String STAGE_TITLE = "\"ООО\" Классическая гомеопатия - Администраторы";
 
@@ -25,7 +25,7 @@ public class FrameAdmins extends FrameClass{
         super(STAGE_TITLE, FXML_PATH);
     }
 
-    public ControllerClass getFrameController(){
+    public ControllerClass getFrameController() {
         return controller;
     }
 

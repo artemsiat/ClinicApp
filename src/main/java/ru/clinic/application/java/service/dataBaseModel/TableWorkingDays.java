@@ -10,7 +10,7 @@ import ru.clinic.application.java.fx.controllers.ControllerDbTables;
  */
 
 @Component
-public class TableWorkingDays extends TableStatus{
+public class TableWorkingDays extends TableStatus {
 
     @Autowired
     DataBaseDao dataBaseDao;

@@ -45,7 +45,7 @@ public class FrameRoot extends FrameClass {
         stage = new Stage();
     }
 
-    public void start(){
+    public void start() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PATH));
         loader.setController(controller);
         root = null;
@@ -67,7 +67,7 @@ public class FrameRoot extends FrameClass {
         stage.show();
     }
 
-    public void stop(){
+    public void stop() {
         controller.stopController();
         stage.close();
     }

@@ -15,7 +15,7 @@ public class SettingsService {
     private int workingDayStartHour = 8;
     private int WorkingDayIntervals = 15;
 
-    private int workingDayInitialStartTime = 4 ;
+    private int workingDayInitialStartTime = 4;
     private int workingDayInitialEndTime = 52;
     private int workingDayInitialLunchStartTime = 16;
     private int workingDayInitialLunchEndTime = 20;

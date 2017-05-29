@@ -18,17 +18,17 @@ public class TestDaoConfig {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public TestDaoConfig(){
+    public TestDaoConfig() {
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(DRIVER);
         dataSource.setUrl(URL);
 
         jdbcTemplate = new JdbcTemplate(dataSource);
-        namedParameterJdbcTemplate =new NamedParameterJdbcTemplate(dataSource);
+        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
-    public DriverManagerDataSource getDataSource(){
+    public DriverManagerDataSource getDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(DRIVER);
         dataSource.setUrl(URL);
@@ -37,12 +37,12 @@ public class TestDaoConfig {
     }
 
     @Bean
-    public JdbcTemplate getJdbcTemplate(){
+    public JdbcTemplate getJdbcTemplate() {
         return new JdbcTemplate(getDataSource());
     }
 
     @Bean
-    public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate(){
+    public NamedParameterJdbcTemplate getNamedParameterJdbcTemplate() {
         return new NamedParameterJdbcTemplate(getDataSource());
     }
 }

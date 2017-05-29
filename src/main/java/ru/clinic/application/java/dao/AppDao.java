@@ -22,7 +22,7 @@ public class AppDao {
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public AppDao(){
+    public AppDao() {
 
     }
 

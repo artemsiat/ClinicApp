@@ -125,7 +125,7 @@ public class AdminService {
         LOGGER.debug("[checkAuthorization] Checking if admin is authorised  fio [{}]  password [{}]", adminFio, password);
         Admin admin = getAdminByFio(adminFio);
         LOGGER.debug("Matching admin [{}]", admin);
-        if (admin != null && (StringUtils.isBlank(admin.getPassword()) || StringUtils.equals(admin.getPassword(), password))){
+        if (admin != null && (StringUtils.isBlank(admin.getPassword()) || StringUtils.equals(admin.getPassword(), password))) {
             currentAdmin = admin;
             return true;
         }

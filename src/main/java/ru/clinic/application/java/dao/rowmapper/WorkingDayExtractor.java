@@ -15,7 +15,7 @@ import java.sql.SQLException;
 /**
  * Created by Artem Siatchinov on 1/15/2017.
  */
-public class WorkingDayExtractor implements ResultSetExtractor<ObservableList<WorkingDay>>{
+public class WorkingDayExtractor implements ResultSetExtractor<ObservableList<WorkingDay>> {
 
     private final static Logger LOGGER = LogManager.getLogger(WorkingDayExtractor.class.getName());
 
@@ -27,7 +27,7 @@ ID  	DOCTOR_ID  	WORKING_DAY  	START_TIME  	END_TIME  	START_LUNCH  	END_LUNCH  
     @Override
     public ObservableList<WorkingDay> extractData(ResultSet rs) throws SQLException, DataAccessException {
         ObservableList<WorkingDay> workingDays = FXCollections.observableArrayList();
-        while (rs.next()){
+        while (rs.next()) {
             WorkingDay workingDay = new WorkingDay();
 
             workingDay.setId(rs.getInt("id"));

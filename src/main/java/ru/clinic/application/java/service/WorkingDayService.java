@@ -29,39 +29,39 @@ public class WorkingDayService {
     private LocalDate endDate;
 
     @Autowired
-    AdminService adminService;
+    private AdminService adminService;
 
     @Autowired
-    WorkingDayDao workingDayDao;
+    private WorkingDayDao workingDayDao;
 
     @Autowired
-    SettingsService settingsService;
+    private SettingsService settingsService;
 
     @Autowired
-    DoctorsService doctorsService;
+    private DoctorsService doctorsService;
 
-    public String convertStartSliderValue(int value){
+    public String convertStartSliderValue(int value) {
         return "с " + convertSliderValue(value);
     }
-    public String convertEndSliderValue(int value){
+
+    public String convertEndSliderValue(int value) {
         return "по " + convertSliderValue(value);
     }
 
-    public String convertSliderValue(int value){
+    public String convertSliderValue(int value) {
         int hours, minutes, intervalsMinutes, hourParts, startHour;
 
         intervalsMinutes = settingsService.getGetWorkingDayIntervals();// 15
-        hourParts = 60/intervalsMinutes; // 4
+        hourParts = 60 / intervalsMinutes; // 4
         startHour = settingsService.getWorkingDayStartHour();//8
 
         String answer;
 
-        hours = (value / hourParts ) + startHour;//56/4 = часы
+        hours = (value / hourParts) + startHour;//56/4 = часы
         minutes = value % hourParts * intervalsMinutes;
-        if(minutes == 0){
-            answer = (hours+ ":00");
-        }
-        else {
+        if (minutes == 0) {
+            answer = (hours + ":00");
+        } else {
             answer = (hours + ":" + minutes);
         }
         return answer;
@@ -76,7 +76,7 @@ public class WorkingDayService {
     }
 
     public void loadWorkingDaysRange(LocalDate date, Doctor doctor) {
-        if (date == null){
+        if (date == null) {
             date = LocalDate.now();
         }
         LocalDate startDate = date.minusDays(LOAD_DAYS_RANGE);
@@ -89,15 +89,15 @@ public class WorkingDayService {
     public double convertToSliderValue(String time) {
         int hours, minutes, intervalsMinutes, hourParts, startHour;
         intervalsMinutes = settingsService.getGetWorkingDayIntervals();// 15
-        hourParts = 60/intervalsMinutes; // 4
+        hourParts = 60 / intervalsMinutes; // 4
         startHour = settingsService.getWorkingDayStartHour();//8
 
         String[] split = time.split(":");
         hours = Integer.parseInt(split[0].trim());
         minutes = Integer.parseInt(split[1].trim());
 
-        if (minutes != 0){
-            minutes = minutes/intervalsMinutes;
+        if (minutes != 0) {
+            minutes = minutes / intervalsMinutes;
         }
 
         return ((hours - startHour) * hourParts) + minutes;
@@ -113,15 +113,15 @@ public class WorkingDayService {
         workingDayDao.updateWorkingDay(selectedWorkingDay.getId(), adminService.getCurrentAdmin().getId(), start, end, lunchStart, lunchEnd, comment);
     }
 
-    public ObservableList<TimeInterval> getTimeIntervals(WorkingDay workingDay) {
+    public ObservableList<TimeInterval> getFreeTime(WorkingDay workingDay) {
         ObservableList<TimeInterval> timeIntervals = FXCollections.observableArrayList();
-        if (workingDay.isHaveLunch()){
+        if (workingDay.isHaveLunch()) {
             TimeInterval beforeLunch = new FreeTime(workingDay.getStartTime(), workingDay.getStartLunch(), workingDay);
             TimeInterval afterLunch = new FreeTime(workingDay.getEndLunch(), workingDay.getEndTime(), workingDay);
 
             timeIntervals.add(beforeLunch);
             timeIntervals.add(afterLunch);
-        }else {
+        } else {
             TimeInterval timeInterval = new FreeTime(workingDay.getStartTime(), workingDay.getEndTime(), workingDay);
             timeIntervals.add(timeInterval);
         }

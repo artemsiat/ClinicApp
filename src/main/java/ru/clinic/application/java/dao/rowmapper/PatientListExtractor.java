@@ -18,7 +18,7 @@ public class PatientListExtractor implements ResultSetExtractor<ObservableList<P
     public ObservableList<Patient> extractData(ResultSet resultSet) throws SQLException, DataAccessException {
         ObservableList<Patient> patients = FXCollections.observableArrayList();
 
-        while (resultSet.next()){
+        while (resultSet.next()) {
             Patient patient = PatientExtractor.extractPatient(resultSet);
             patients.add(patient);
         }

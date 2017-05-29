@@ -13,7 +13,7 @@ import ru.clinic.application.java.fx.controllers.ControllerDoctors;
  */
 
 @Component
-public class FrameDoctors extends FrameClass{
+public class FrameDoctors extends FrameClass {
 
     private final static Logger LOGGER = LogManager.getLogger(FrameAdmins.class.getName());
 

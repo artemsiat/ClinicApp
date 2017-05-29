@@ -6,18 +6,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
-import ru.clinic.application.java.dao.rowmapper.PatientExtractor;
 import ru.clinic.application.java.dao.rowmapper.PatientListExtractor;
 import ru.clinic.application.java.service.setting.SettingsService;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -42,21 +37,21 @@ public class PatientsDao {
     private final static String FIND_PATIENT = "SELECT * FROM patient WHERE removed = false ";
     private static final String PATIENTS_COUNT = "SELECT count(*) FROM patient WHERE removed = false ";
 
-    private final static String PATIENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS PATIENT("+
-            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
-            "firstName varchar(125),"+
-            "lastName varchar(125),"+
-            "middleName varchar(125),"+
-            "phone varchar(25),"+
-            "phoneTwo varchar(25),"+
-            "email varchar(25),"+
-            "comment varchar(500),"+
-            "creator int,"+
-            "created timestamp,"+
-            "who_modified int,"+
-            "modified timestamp,"+
-            "who_removed int,"+
-            "when_removed timestamp,"+
+    private final static String PATIENT_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS PATIENT(" +
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
+            "firstName varchar(125)," +
+            "lastName varchar(125)," +
+            "middleName varchar(125)," +
+            "phone varchar(25)," +
+            "phoneTwo varchar(25)," +
+            "email varchar(25)," +
+            "comment varchar(500)," +
+            "creator int," +
+            "created timestamp," +
+            "who_modified int," +
+            "modified timestamp," +
+            "who_removed int," +
+            "when_removed timestamp," +
             "removed boolean)";
 
 
@@ -73,15 +68,15 @@ public class PatientsDao {
     public void addNewPatient(int creatorId, String lastName, String firstName, String middleName, String phoneNumber, String phoneNumberTwo, String email, String comment) {
         try {
             jdbcTemplate.update(INSERT_PATIENT, firstName, lastName, middleName, phoneNumber, phoneNumberTwo, email, comment, creatorId, false);
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error adding new patient", e);
         }
     }
 
-    private ObservableList<Patient> selectPatients(String sql){
+    private ObservableList<Patient> selectPatients(String sql) {
         try {
             return jdbcTemplate.query(sql, new PatientListExtractor());
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error selecting patients ", e);
         }
         return FXCollections.emptyObservableList();
@@ -100,7 +95,7 @@ public class PatientsDao {
     public void updatePatient(int patientId, int who_modified, String firstName, String lastName, String middleName, String phone, String phoneTwo, String email, String comment) {
         try {
             jdbcTemplate.update(UPDATE_PATIENT, firstName, lastName, middleName, phone, phoneTwo, email, comment, who_modified, patientId);
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error updating patient", e);
         }
     }
@@ -108,8 +103,8 @@ public class PatientsDao {
     public void deletePatient(int selectedPatientId, int id) {
         try {
             jdbcTemplate.update(REMOVE_PATIENT, id, selectedPatientId);
-        }catch (Exception e){
-            LOGGER.debug("Error, deleting patient " , e);
+        } catch (Exception e) {
+            LOGGER.debug("Error, deleting patient ", e);
         }
     }
 
@@ -117,25 +112,25 @@ public class PatientsDao {
         String sql = FIND_PATIENT;
         ArrayList<String> params = new ArrayList<>();
 
-        if (!StringUtils.isBlank(lastName)){
+        if (!StringUtils.isBlank(lastName)) {
             sql += " AND LOWER(lastname) like '%" + lastName.trim().toLowerCase() + "%' ";
             params.add(lastName.trim().toLowerCase());
         }
-        if (!StringUtils.isBlank(firstName)){
+        if (!StringUtils.isBlank(firstName)) {
             sql += " AND LOWER(firstName) like '%" + firstName.trim().toLowerCase() + "%' ";
             params.add(firstName.trim().toLowerCase());
         }
-        if (!StringUtils.isBlank(middleName)){
+        if (!StringUtils.isBlank(middleName)) {
             sql += " AND LOWER(middleName) like '%" + middleName.trim().toLowerCase() + "%' ";
             params.add(middleName.trim().toLowerCase());
         }
-        if (!StringUtils.isBlank(phone)){
+        if (!StringUtils.isBlank(phone)) {
             //AND (phone like '%101%' OR phone two like '%101%')
             sql += " AND (phone like '%" + phone + "%' OR phonetwo like '%" + phone + "%') ";
             params.add(phone);
             params.add(phone);
         }
-        if (!StringUtils.isBlank(email)){
+        if (!StringUtils.isBlank(email)) {
             sql += " AND LOWER(email) like '%" + email.trim().trim().toLowerCase() + "%' ";
             params.add(email.trim().trim().toLowerCase());
         }
@@ -148,7 +143,7 @@ public class PatientsDao {
     public int getPatientsCount() {
         try {
             return jdbcTemplate.queryForObject(PATIENTS_COUNT, Integer.class);
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error getting patients count", e);
         }
         return 0;

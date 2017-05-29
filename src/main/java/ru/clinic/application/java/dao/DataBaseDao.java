@@ -19,97 +19,97 @@ public class DataBaseDao {
 
     private final static String ADMIN_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'ADMIN'";
     private final static String DROP_ADMIN_TABLE = "DROP TABLE ADMIN";
-    private final static String ADMIN_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS ADMIN("+
-            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
-            "fio varchar(125),"+
-            "dob date,"+
-            "cellphone varchar(25),"+
-            "cellphone2 varchar(25),"+
-            "homephone varchar(25),"+
-            "email varchar(25),"+
-            "user_name varchar(25),"+
-            "password varchar(25),"+
-            "creator int,"+
-            "created timestamp,"+
-            "who_modified int,"+
-            "modified timestamp,"+
-            "who_removed int,"+
-            "when_removed timestamp,"+
+    private final static String ADMIN_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS ADMIN(" +
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
+            "fio varchar(125)," +
+            "dob date," +
+            "cellphone varchar(25)," +
+            "cellphone2 varchar(25)," +
+            "homephone varchar(25)," +
+            "email varchar(25)," +
+            "user_name varchar(25)," +
+            "password varchar(25)," +
+            "creator int," +
+            "created timestamp," +
+            "who_modified int," +
+            "modified timestamp," +
+            "who_removed int," +
+            "when_removed timestamp," +
             "removed boolean)";
 
     private final static String DOCTOR_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'DOCTOR'";
     private final static String DROP_DOCTOR_TABLE = "DROP TABLE DOCTOR";
-    private final static String DOCTOR_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS DOCTOR("+
-            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
-            "fio varchar(125),"+
-            "dob date,"+
-            "cellphone varchar(25),"+
-            "cellphone2 varchar(25),"+
-            "homephone varchar(25),"+
-            "email varchar(25),"+
-            "comment varchar(500),"+
-            "creator int,"+
-            "created timestamp,"+
-            "who_modified int,"+
-            "modified timestamp,"+
-            "who_removed int,"+
-            "when_removed timestamp,"+
+    private final static String DOCTOR_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS DOCTOR(" +
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
+            "fio varchar(125)," +
+            "dob date," +
+            "cellphone varchar(25)," +
+            "cellphone2 varchar(25)," +
+            "homephone varchar(25)," +
+            "email varchar(25)," +
+            "comment varchar(500)," +
+            "creator int," +
+            "created timestamp," +
+            "who_modified int," +
+            "modified timestamp," +
+            "who_removed int," +
+            "when_removed timestamp," +
             "removed boolean)";
 
     private final static String PATIENT_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'PATIENT'";
     private final static String DROP_PATIENT_TABLE = "DROP TABLE PATIENT";
-    private final static String PATIENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS PATIENT("+
-            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
-            "firstName varchar(125),"+
-            "lastName varchar(125),"+
-            "middleName varchar(125),"+
-            "phone varchar(25),"+
-            "phoneTwo varchar(25),"+
-            "email varchar(25),"+
-            "comment varchar(500),"+
-            "creator int,"+
-            "created timestamp,"+
-            "who_modified int,"+
-            "modified timestamp,"+
-            "who_removed int,"+
-            "when_removed timestamp,"+
+    private final static String PATIENT_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS PATIENT(" +
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
+            "firstName varchar(125)," +
+            "lastName varchar(125)," +
+            "middleName varchar(125)," +
+            "phone varchar(25)," +
+            "phoneTwo varchar(25)," +
+            "email varchar(25)," +
+            "comment varchar(500)," +
+            "creator int," +
+            "created timestamp," +
+            "who_modified int," +
+            "modified timestamp," +
+            "who_removed int," +
+            "when_removed timestamp," +
             "removed boolean)";
 
     private final static String WORKING_DAY_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'WORKING_DAY'";
     private final static String DROP_WORKING_DAY_TABLE = "DROP TABLE WORKING_DAY";
-    private final static String WORKING_DAY_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS WORKING_DAY("+
-            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
-            "doctor_id int,"+
-            "wd_id int,"+
-            "patient_id int,"+
-            "appointment_date date,"+
-            "start_time varchar(10),"+
-            "end_time varchar(10),"+
-            "comment varchar(500),"+
-            "creator int,"+
-            "created timestamp,"+
-            "who_modified int,"+
-            "modified timestamp,"+
-            "who_removed int,"+
-            "when_removed timestamp,"+
+    private final static String WORKING_DAY_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS WORKING_DAY(" +
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
+            "doctor_id int," +
+            "wd_id int," +
+            "patient_id int," +
+            "appointment_date date," +
+            "start_time varchar(10)," +
+            "end_time varchar(10)," +
+            "comment varchar(500)," +
+            "creator int," +
+            "created timestamp," +
+            "who_modified int," +
+            "modified timestamp," +
+            "who_removed int," +
+            "when_removed timestamp," +
             "removed boolean)";
 
     private final static String APPOINTMENT_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'APPOINTMENT'";
     private final static String APPOINTMENT_DROP_TABLE = "DROP TABLE APPOINTMENT";
-    private final static String APPOINTMENT_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS APPOINTMENT("+
-            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
-            "doctor_id int,"+
-            "patient_id int,"+
-            "working_day_id int,"+
-            "start_time varchar(10),"+
-            "end_time varchar(10),"+
-            "comment varchar(500),"+
-            "creator_id int,"+
-            "created timestamp,"+
-            "who_modified int,"+
-            "modified timestamp,"+
-            "who_removed int,"+
-            "when_removed timestamp,"+
+    private final static String APPOINTMENT_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS APPOINTMENT(" +
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
+            "doctor_id int," +
+            "patient_id int," +
+            "working_day_id int," +
+            "start_time varchar(10)," +
+            "end_time varchar(10)," +
+            "comment varchar(500)," +
+            "creator_id int," +
+            "created timestamp," +
+            "who_modified int," +
+            "modified timestamp," +
+            "who_removed int," +
+            "when_removed timestamp," +
             "removed boolean)";
 
     @Autowired
@@ -119,7 +119,7 @@ public class DataBaseDao {
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public boolean checkAdminTable(){
+    public boolean checkAdminTable() {
         LOGGER.debug("[checkAdminTable] Checking if Admin table is created");
         try {
             Integer count = jdbcTemplate.queryForObject(ADMIN_CHECK_TABLE, Integer.class);
@@ -176,7 +176,7 @@ public class DataBaseDao {
     public void dropAdminTable() {
         try {
             jdbcTemplate.execute(DROP_ADMIN_TABLE);
-        }catch (Exception e){
+        } catch (Exception e) {
             LOGGER.error("Error checking setting table");
         }
     }

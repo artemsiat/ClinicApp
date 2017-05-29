@@ -2,18 +2,20 @@ package ru.clinic.application.java.service;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.AppointmentDao;
-import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
-import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.service.setting.SettingsService;
+import ru.clinic.application.java.service.utils.AppointmentUtils;
+import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -43,6 +45,9 @@ public class AppointmentService {
     @Autowired
     private PatientsService patientsService;
 
+    @Autowired
+    private AppointmentUtils appointmentUtils;
+
     public ObservableList<Appointment> getAppsByWd(LocalDate workingDay) {
         //Todo check that there are no appointments for that day
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
@@ -50,28 +55,37 @@ public class AppointmentService {
         return appointments;
     }
 
-    public void addNewAppointment(WorkingDay workingDay, String startTime, String endTime, String comment){
+    public void addNewAppointment(WorkingDay workingDay, String startTime, String endTime, String comment) {
         Appointment appointment = new Appointment();
         appointment.setWorkingDay(workingDay);
         appointment.setPatient(patientsService.getSelectedPatient());
         appointment.setDoctor(doctorsService.getSelectedDoctor());
         appointment.setCreator(adminService.getCurrentAdmin());
 
-        appointment.setStartTime(startTime);
-        appointment.setEndTime(endTime);
+        appointment.setStartTime(StringUtils.replace(startTime, " ", ""));
+        appointment.setEndTime(StringUtils.replace(endTime, " ", ""));
         appointment.setComment(comment);
 
         appointmentDao.addAppointment(appointment);
     }
 
-    public ObservableList<TimeInterval> getAppointmentsByWd(WorkingDay selectedWorkingDay) {
+    public ObservableList<TimeInterval> getAppointmentsByWd(WorkingDay workingDay) {
 
-        if (selectedWorkingDay != null) {
-            ObservableList<TimeInterval> timeIntervals = workingDayService.getTimeIntervals(selectedWorkingDay);
-            timeIntervals.sort(Comparator.comparing(TimeInterval::getStartTime).reversed());
+        //Working day start time 9:00
+        if (workingDay != null) {
+            ObservableList<TimeInterval> appointments = appointmentDao.selectAppointments(workingDay);
+
+            ObservableList<TimeInterval> timeIntervals = prepareAppointments(appointments, workingDay);
+            timeIntervals.forEach(interval -> System.out.println(interval.getStartTime()));
+            timeIntervals.sort(Comparator.comparing(TimeInterval::forComparing));
             return timeIntervals;
+
         }
         return FXCollections.emptyObservableList();
+    }
+
+    private ObservableList<TimeInterval> prepareAppointments(ObservableList<TimeInterval> appointments, WorkingDay workingDay) {
+        return appointmentUtils.calculateIntervals(appointments, workingDay);//0 = free time , 1 = time is not free(either appointment or lunch
     }
 
     private void processTimeMap(HashMap<Integer, ArrayList<Integer>> dayTimeMap, HashMap<Integer, ArrayList<Integer>> appointmentsTimeMapList) {
@@ -142,7 +156,6 @@ public class AppointmentService {
     }
 
 
-
     private HashMap<Integer, ArrayList<Integer>> createTimeMap(int startTime, int endTime) {
 
         int intervalStart = startTime / 100;
@@ -180,7 +193,7 @@ public class AppointmentService {
         return timeMap;
     }
 
-    public ObservableList<TimeInterval> loadAppointments(Doctor doctor, Patient patient, WorkingDay workingDay) {
-        return appointmentDao.selectAppointments(doctor, workingDay);
+    public ObservableList<TimeInterval> loadAppointments(WorkingDay workingDay) {
+        return appointmentDao.selectAppointments(workingDay);
     }
 }

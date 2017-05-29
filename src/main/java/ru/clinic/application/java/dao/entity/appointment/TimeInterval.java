@@ -1,6 +1,7 @@
 package ru.clinic.application.java.dao.entity.appointment;
 
 import javafx.beans.property.SimpleStringProperty;
+import org.apache.commons.lang3.StringUtils;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 
 /**
@@ -107,5 +108,13 @@ public abstract class TimeInterval {
 
     public long getWorkingDayId() {
         return workingDayId;
+    }
+
+
+    public int forComparing(){
+        String[] split = this.startTime.split(":");
+        int hours = Integer.parseInt(StringUtils.trim(split[0]));
+        int minutes = Integer.parseInt(StringUtils.trim(split[1]));
+        return  ((hours * 60) + minutes);
     }
 }

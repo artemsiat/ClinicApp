@@ -1,119 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="609.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <VBox alignment="CENTER" layoutX="45.0" layoutY="45.0" spacing="30.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
-         <children>
-            <VBox spacing="5.0">
-               <children>
-                  <HBox spacing="15.0">
-                     <children>
-                        <Label text="Администраторы :" />
-                        <Label fx:id="adminStatus" text="status" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="10.0">
-                     <children>
-                        <Button fx:id="createAdmin" mnemonicParsing="false" onAction="#createAdminAction" text="Создать" />
-                        <Button fx:id="dropAdmin" mnemonicParsing="false" onAction="#dropAdminAction" text="Удалить" />
-                        <Button fx:id="refreshAdmin" mnemonicParsing="false" onAction="#refreshAdminAction" text="Обновить" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <HBox spacing="15.0">
-                     <children>
-                        <Label text="Врачи:" />
-                        <Label fx:id="doctorStatus" text="status" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="10.0">
-                     <children>
-                        <Button fx:id="createDoctor" mnemonicParsing="false" onAction="#createDoctorAction" text="Создать" />
-                        <Button fx:id="dropDoctor" mnemonicParsing="false" onAction="#dropDoctorAction" text="Удалить" />
-                        <Button fx:id="updateDoctor" mnemonicParsing="false" onAction="#updateDoctorAction" text="Обновить" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <HBox spacing="15.0">
-                     <children>
-                        <Label text="Расписание врачей:" />
-                        <Label fx:id="workingDayStatus" text="status" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="10.0">
-                     <children>
-                        <Button fx:id="createWorkingDay" mnemonicParsing="false" onAction="#createWorkingDayAction" text="Создать" />
-                        <Button fx:id="dropWorkingDay" mnemonicParsing="false" onAction="#dropWorkingDayAction" text="Удалить" />
-                        <Button fx:id="updateWorkingDay" mnemonicParsing="false" onAction="#updateWorkingDayAction" text="Обновить" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <HBox spacing="15.0">
-                     <children>
-                        <Label text="Пациенты :" />
-                        <Label fx:id="patientStatus" text="status" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="10.0">
-                     <children>
-                        <Button fx:id="createPatientBtn" mnemonicParsing="false" onAction="#createPatientBtnAction" text="Создать" />
-                        <Button fx:id="dropPatientBtn" mnemonicParsing="false" onAction="#dropPatientBtnAction" text="Удалить" />
-                        <Button fx:id="refreshPatientBtn" mnemonicParsing="false" onAction="#refreshPatientBtnAction" text="Обновить" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <HBox spacing="15.0">
-                     <children>
-                        <Label text="Приемы :" />
-                        <Label fx:id="appointmentStatus" text="status" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="10.0">
-                     <children>
-                        <Button fx:id="createAppointmentBtn" mnemonicParsing="false" onAction="#createAppointmentBtnAction" text="Создать" />
-                        <Button fx:id="dropAppointmentBtn" mnemonicParsing="false" onAction="#dropAppointmentBtnAction" text="Удалить" />
-                        <Button fx:id="refreshAppointmentBtn" mnemonicParsing="false" onAction="#refreshAppointmentBtnAction" text="Обновить" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <VBox spacing="5.0">
-               <children>
-                  <HBox spacing="15.0">
-                     <children>
-                        <Label text="Настройки :" />
-                        <Label text="status" />
-                     </children>
-                  </HBox>
-                  <HBox spacing="10.0">
-                     <children>
-                        <Button mnemonicParsing="false" text="Создать" />
-                        <Button mnemonicParsing="false" text="Удалить" />
-                        <Button mnemonicParsing="false" text="Обновить" />
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </children>
-      </VBox>
-      <Button fx:id="closeFrameBtn" alignment="CENTER" layoutX="357.0" layoutY="454.0" mnemonicParsing="false" onAction="#closeFrameAction" text="Закрыть" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0" />
-   </children>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="609.0"
+            prefWidth="505.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <VBox alignment="CENTER" layoutX="45.0" layoutY="45.0" spacing="30.0" AnchorPane.leftAnchor="15.0"
+              AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+            <children>
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox spacing="15.0">
+                            <children>
+                                <Label text="Администраторы :"/>
+                                <Label fx:id="adminStatus" text="status"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Button fx:id="createAdmin" mnemonicParsing="false" onAction="#createAdminAction"
+                                        text="Создать"/>
+                                <Button fx:id="dropAdmin" mnemonicParsing="false" onAction="#dropAdminAction"
+                                        text="Удалить"/>
+                                <Button fx:id="refreshAdmin" mnemonicParsing="false" onAction="#refreshAdminAction"
+                                        text="Обновить"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox spacing="15.0">
+                            <children>
+                                <Label text="Врачи:"/>
+                                <Label fx:id="doctorStatus" text="status"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Button fx:id="createDoctor" mnemonicParsing="false" onAction="#createDoctorAction"
+                                        text="Создать"/>
+                                <Button fx:id="dropDoctor" mnemonicParsing="false" onAction="#dropDoctorAction"
+                                        text="Удалить"/>
+                                <Button fx:id="updateDoctor" mnemonicParsing="false" onAction="#updateDoctorAction"
+                                        text="Обновить"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox spacing="15.0">
+                            <children>
+                                <Label text="Расписание врачей:"/>
+                                <Label fx:id="workingDayStatus" text="status"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Button fx:id="createWorkingDay" mnemonicParsing="false"
+                                        onAction="#createWorkingDayAction" text="Создать"/>
+                                <Button fx:id="dropWorkingDay" mnemonicParsing="false" onAction="#dropWorkingDayAction"
+                                        text="Удалить"/>
+                                <Button fx:id="updateWorkingDay" mnemonicParsing="false"
+                                        onAction="#updateWorkingDayAction" text="Обновить"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox spacing="15.0">
+                            <children>
+                                <Label text="Пациенты :"/>
+                                <Label fx:id="patientStatus" text="status"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Button fx:id="createPatientBtn" mnemonicParsing="false"
+                                        onAction="#createPatientBtnAction" text="Создать"/>
+                                <Button fx:id="dropPatientBtn" mnemonicParsing="false" onAction="#dropPatientBtnAction"
+                                        text="Удалить"/>
+                                <Button fx:id="refreshPatientBtn" mnemonicParsing="false"
+                                        onAction="#refreshPatientBtnAction" text="Обновить"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox spacing="15.0">
+                            <children>
+                                <Label text="Приемы :"/>
+                                <Label fx:id="appointmentStatus" text="status"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Button fx:id="createAppointmentBtn" mnemonicParsing="false"
+                                        onAction="#createAppointmentBtnAction" text="Создать"/>
+                                <Button fx:id="dropAppointmentBtn" mnemonicParsing="false"
+                                        onAction="#dropAppointmentBtnAction" text="Удалить"/>
+                                <Button fx:id="refreshAppointmentBtn" mnemonicParsing="false"
+                                        onAction="#refreshAppointmentBtnAction" text="Обновить"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <HBox spacing="15.0">
+                            <children>
+                                <Label text="Настройки :"/>
+                                <Label text="status"/>
+                            </children>
+                        </HBox>
+                        <HBox spacing="10.0">
+                            <children>
+                                <Button mnemonicParsing="false" text="Создать"/>
+                                <Button mnemonicParsing="false" text="Удалить"/>
+                                <Button mnemonicParsing="false" text="Обновить"/>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+        <Button fx:id="closeFrameBtn" alignment="CENTER" layoutX="357.0" layoutY="454.0" mnemonicParsing="false"
+                onAction="#closeFrameAction" text="Закрыть" AnchorPane.bottomAnchor="15.0"
+                AnchorPane.rightAnchor="15.0"/>
+    </children>
 </AnchorPane>

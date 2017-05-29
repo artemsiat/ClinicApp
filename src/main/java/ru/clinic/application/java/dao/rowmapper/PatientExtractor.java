@@ -15,7 +15,7 @@ public class PatientExtractor implements ResultSetExtractor<Patient> {
 
     @Override
     public Patient extractData(ResultSet resultSet) throws SQLException, DataAccessException {
-        if (resultSet.next()){
+        if (resultSet.next()) {
             return extractPatient(resultSet);
         }
         return null;

@@ -8,21 +8,20 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import ru.clinic.application.java.configuration.AppConfig;
 import ru.clinic.application.java.configuration.DaoConfiguration;
 import ru.clinic.application.java.fx.frames.FrameStart;
-import ru.clinic.application.java.service.setting.SettingsService;
 
 /**
  * Created by Artem Siatchinov on 1/1/2017.
  */
-public class Main extends Application{
+public class Main extends Application {
 
     private static final Logger LOGGER = LogManager.getLogger(Main.class.getName());
     private AnnotationConfigApplicationContext applicationContext;
 
-    public Main(){
+    public Main() {
         applicationContext = new AnnotationConfigApplicationContext();
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         LOGGER.debug("[main] Starting Application !!!", "hello");
         launch();
     }

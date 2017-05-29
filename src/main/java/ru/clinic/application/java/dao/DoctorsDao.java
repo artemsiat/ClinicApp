@@ -7,14 +7,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * Created by Artem Siatchinov on 1/4/2017.
@@ -35,21 +32,21 @@ public class DoctorsDao {
             "fio=?, dob=?, cellphone=?, cellphone2=?, homephone=?, email=?, comment=?, who_modified=?, modified=CURRENT_TIMESTAMP " +
             "WHERE id = ?";
 
-    String DOCTOR_CREATE_TABLE ="CREATE TABLE IF NOT EXISTS DOCTOR("+
-            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,"+
-            "fio varchar(125),"+
-            "dob date,"+
-            "cellphone varchar(25),"+
-            "cellphone2 varchar(25),"+
-            "homephone varchar(25),"+
-            "email varchar(25),"+
-            "comment varchar(500),"+
-            "creator int,"+
-            "created timestamp,"+
-            "who_modified int,"+
-            "modified timestamp,"+
-            "who_removed int,"+
-            "when_removed timestamp,"+
+    String DOCTOR_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS DOCTOR(" +
+            "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
+            "fio varchar(125)," +
+            "dob date," +
+            "cellphone varchar(25)," +
+            "cellphone2 varchar(25)," +
+            "homephone varchar(25)," +
+            "email varchar(25)," +
+            "comment varchar(500)," +
+            "creator int," +
+            "created timestamp," +
+            "who_modified int," +
+            "modified timestamp," +
+            "who_removed int," +
+            "when_removed timestamp," +
             "removed boolean)";
 
     @Autowired
@@ -59,7 +56,7 @@ public class DoctorsDao {
     @Autowired
     NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public DoctorsDao(){
+    public DoctorsDao() {
     }
 
     public void insertDoctor(String fio, Date dobDate, String cellPhone, String cellPhoneTwo, String homePhone, String email, String comment, int id) {
@@ -86,7 +83,7 @@ public class DoctorsDao {
                     doctor.setComment(rs.getString("comment"));
 
                     Date dob = rs.getDate("dob");
-                    if (dob != null){
+                    if (dob != null) {
                         doctor.setDob(dob.toLocalDate());
                     }
 

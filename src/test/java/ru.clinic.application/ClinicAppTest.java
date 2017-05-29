@@ -17,6 +17,7 @@ import ru.clinic.application.java.service.AppointmentService;
 import ru.clinic.application.java.service.DataBaseService;
 import ru.clinic.application.java.service.dataBaseModel.TableAdmins;
 import ru.clinic.application.java.service.utils.AppointmentUtils;
+import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,7 @@ public class ClinicAppTest {
     private AppointmentUtils appointmentUtils;
 
     @Test
-    public void testOne(){
+    public void testOne() {
         if (tableAdmins.checkIfCreated()) {
             tableAdmins.dropTable();
         }
@@ -62,14 +63,42 @@ public class ClinicAppTest {
     }
 
     @Test
-    public void adminTest(){
+    public void adminTest() {
         Admin mainAdmin = adminService.getMainAdmin();
         Assert.assertNotNull(mainAdmin);
         Assert.assertEquals(mainAdmin.getFio(), "Main Administrator");
     }
 
     @Test
-    public void testGetAvailableTime(){
+    public void calculateDuration(){
+        int duration = ClinicAppUtils.calculateDuration("9:00", "10:00");
+        Assert.assertEquals("expect 60 minutes", 60, duration);
+
+        int duration2 = ClinicAppUtils.calculateDuration("9:00", "10:30");
+        Assert.assertEquals("expect 90 minutes", 90, duration2);
+
+        int duration3 = ClinicAppUtils.calculateDuration("9:15", "10:00");
+        Assert.assertEquals("expect 45 minutes", 45, duration3);
+
+        int duration4 = ClinicAppUtils.calculateDuration("13:00", "15:00");
+        Assert.assertEquals("expect 120 minutes", 120, duration4);
+
+        int duration5 = ClinicAppUtils.calculateDuration("8:00", "20:00");
+        Assert.assertEquals("expect 720 minutes", 720, duration5);
+
+        int duration6 = ClinicAppUtils.calculateDuration("9:35", "21:15");
+        Assert.assertEquals("expect 60 minutes", 700, duration6);
+
+        int duration7 = ClinicAppUtils.calculateDuration("9:05", "10:45");
+        Assert.assertEquals("expect 60 minutes", 100, duration7);
+
+        int duration8 = ClinicAppUtils.calculateDuration("11:05", "11:45");
+        Assert.assertEquals("expect 40 minutes", 40, duration8);
+
+    }
+
+    @Test
+    public void testGetAvailableTime() {
 
         Map<Integer, List<Integer>> availableTimeMap = appointmentUtils.getAvailableTimeMap(generateFreeTime("11:00", "12:00", new WorkingDay()));
         Assert.assertEquals("no match", "{11=[0, 15, 30, 45]}", availableTimeMap.toString());

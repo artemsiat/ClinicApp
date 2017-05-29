@@ -23,13 +23,12 @@ public abstract class FrameClass {
     private final static String ICON_PATH = "/images/tree_icon.png";
 
 
-
     public FrameClass(String stageTitle, String fxmlPath) {
         this.stageTitle = stageTitle;
         this.fxml_path = fxmlPath;
     }
 
-    public AnchorPane getCenterPane(){
+    public AnchorPane getCenterPane() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml_path));
         ControllerClass frameController = getFrameController();
         loader.setController(frameController);
@@ -46,7 +45,7 @@ public abstract class FrameClass {
         return root;
     }
 
-    public void setIcon(Stage stage){
+    public void setIcon(Stage stage) {
         stage.getIcons().add(new Image(this.getClass().getResource(ICON_PATH).toString()));
     }
 

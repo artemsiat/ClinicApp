@@ -40,7 +40,7 @@ public class DoctorsService {
     @Autowired
     WorkingDayService workingDayService;
 
-    public DoctorsService(){
+    public DoctorsService() {
         doctors = FXCollections.observableArrayList();
         selectedDoctor = null;
     }
@@ -49,13 +49,13 @@ public class DoctorsService {
         LOGGER.debug("[loadDoctors] Loading doctors from data base");
         ObservableList<Doctor> doctorObservableList = doctorsDao.selectAllDoctors();
         doctors = doctorObservableList;
-        LOGGER.debug("[loadDoctors] Successfully loaded ["+ doctorObservableList.size() + "] doctors" );
+        LOGGER.debug("[loadDoctors] Successfully loaded [" + doctorObservableList.size() + "] doctors");
         return doctors;
     }
 
     public void addNewDoctor(String fio, LocalDate dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String comment) {
         Date dobDate = null;
-        if (dob != null){
+        if (dob != null) {
             dobDate = Date.valueOf(dob);
         }
         doctorsDao.insertDoctor(fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, comment, adminService.getCurrentAdmin().getId());
@@ -73,7 +73,7 @@ public class DoctorsService {
     public void updateDoctor(int doctorId, String fio, LocalDate dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String comment) {
         LOGGER.debug("[updateDoctor] Updating Doctor");
         Date dobDate = null;
-        if (dob != null){
+        if (dob != null) {
             dobDate = Date.valueOf(dob);
         }
         doctorsDao.updateDoctor(doctorId, adminService.getCurrentAdmin().getId(), fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, comment);

@@ -7,7 +7,7 @@ import ru.clinic.application.java.service.utils.ClinicAppUtils;
  * Product clinicApp
  * Created by artem_000 on 4/17/2017.
  */
-public class FreeTime extends TimeInterval{
+public class FreeTime extends TimeInterval {
 
     public FreeTime(String startTime, String endTime, WorkingDay workingDay) {
         setStartTime(startTime);

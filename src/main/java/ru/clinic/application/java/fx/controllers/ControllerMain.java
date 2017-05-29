@@ -10,7 +10,7 @@ import ru.clinic.application.java.fx.ControllerClass;
  */
 
 @Component
-public class ControllerMain extends ControllerClass{
+public class ControllerMain extends ControllerClass {
 
     private final static Logger LOGGER = LogManager.getLogger(ControllerMain.class.getName());
 

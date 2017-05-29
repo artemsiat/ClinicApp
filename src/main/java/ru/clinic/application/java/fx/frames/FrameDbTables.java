@@ -19,7 +19,7 @@ import java.io.IOException;
  * Created by Artem Siatchinov on 1/2/2017.
  */
 @Component
-public class FrameDbTables extends FrameClass{
+public class FrameDbTables extends FrameClass {
 
     private final static Logger LOGGER = LogManager.getLogger(FrameDbTables.class.getName());
 
@@ -37,12 +37,12 @@ public class FrameDbTables extends FrameClass{
     @Autowired
     private ControllerDbTables controller;
 
-    public FrameDbTables(){
+    public FrameDbTables() {
         super(STAGE_TITLE, FXML_PATH);
         stage = new Stage();
     }
 
-    public void start(){
+    public void start() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_PATH));
         loader.setController(controller);
         AnchorPane root = null;
@@ -65,7 +65,7 @@ public class FrameDbTables extends FrameClass{
         controller.postStart();
     }
 
-    public void stop(){
+    public void stop() {
         stage.close();
     }
 

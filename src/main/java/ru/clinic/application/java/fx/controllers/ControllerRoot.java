@@ -168,10 +168,10 @@ public class ControllerRoot {
     }
 
     private void initAdminLabel() {
-        if (adminService.getCurrentAdmin() != null){
-            LOGGER.debug("[ControllerMain][initAdminLabel] Administrator ["+ adminService.getCurrentAdmin().getFio() +"] initialized");
+        if (adminService.getCurrentAdmin() != null) {
+            LOGGER.debug("[ControllerMain][initAdminLabel] Administrator [" + adminService.getCurrentAdmin().getFio() + "] initialized");
             currAdminLabel.setText("Администратор: " + adminService.getCurrentAdmin().getFio());
-        }else {
+        } else {
             LOGGER.error("[ControllerMain][initAdminLabel] Error. Starting Main Stage without current Administrator ");
             currAdminLabel.setText("Администратор: ");
         }
@@ -179,18 +179,18 @@ public class ControllerRoot {
 
     public void setSelectedDoctor() {
         Doctor selectedDoctor = doctorsService.getSelectedDoctor();
-        if (selectedDoctor == null){
-            selectedDoctorLabel.setText("Врач: " );
-        }else {
+        if (selectedDoctor == null) {
+            selectedDoctorLabel.setText("Врач: ");
+        } else {
             selectedDoctorLabel.setText("Врач: " + selectedDoctor.getFio());
         }
     }
 
     public void setSelectedPatient() {
         Patient selectedPatient = patientsService.getSelectedPatient();
-        if (selectedPatient == null){
+        if (selectedPatient == null) {
             selectedPatientLabel.setText("Пациент: ");
-        }else {
+        } else {
             selectedPatientLabel.setText("Пациент: " + selectedPatient.getFio());
         }
     }

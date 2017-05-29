@@ -35,32 +35,32 @@ public class DataBaseService {
     private TableStatus[] tables;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         tables = new TableStatus[]{this.tableAdmins, this.tableDoctors, this.tablePatients, this.tableWorkingDays, this.tableAppointments};
     }
 
     public boolean checkTables() {
 
-        for (TableStatus tableStatus : tables){
+        for (TableStatus tableStatus : tables) {
 
-            if (!tableStatus.checkIfCreated()){
-                LOGGER.debug("[checkTables] Table ["+ tableStatus.getTableName()  + "] is not created");
+            if (!tableStatus.checkIfCreated()) {
+                LOGGER.debug("[checkTables] Table [" + tableStatus.getTableName() + "] is not created");
                 return false;
             }
-            LOGGER.debug("[checkTables] Table [" + tableStatus.getTableName()  + "] is created");
+            LOGGER.debug("[checkTables] Table [" + tableStatus.getTableName() + "] is created");
         }
         return true;
     }
 
-    public void setAllTableStatuses(){
+    public void setAllTableStatuses() {
         LOGGER.debug("Setting all table statuses");
-        for (TableStatus tableStatus : tables){
+        for (TableStatus tableStatus : tables) {
             tableStatus.checkIfCreated();
         }
     }
 
-    public boolean checkTable(TableStatus table){
-        if (!table.checkIfCreated()){
+    public boolean checkTable(TableStatus table) {
+        if (!table.checkIfCreated()) {
             LOGGER.debug("Table [{}] is not created", table.getTableName());
             return false;
         }

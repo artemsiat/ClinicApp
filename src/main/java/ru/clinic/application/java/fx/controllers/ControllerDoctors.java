@@ -127,7 +127,7 @@ public class ControllerDoctors extends ControllerClass {
             doctorsService.addNewDoctor(fioField.getText(), dobField.getValue(), cellField.getText(),
                     cellTwoField.getText(), homePhoneField.getText(), emailField.getText(), commentTextArea.getText());
             tableView.setItems(doctorsService.loadDoctors());
-        }else {
+        } else {
             LOGGER.debug("[ControllerDoctors][createDoctorBtnAction] Fio field is empty.");
             alertNoFio();
         }
@@ -266,11 +266,11 @@ public class ControllerDoctors extends ControllerClass {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     String labelText = "";
-                    if (newValue != null && !newValue.isEmpty()){
+                    if (newValue != null && !newValue.isEmpty()) {
                         String resultDigits = "";
-                        for (int index = 0 ; index < newValue.length(); index ++){
+                        for (int index = 0; index < newValue.length(); index++) {
                             char charAt = newValue.charAt(index);
-                            if (Character.isDigit(charAt)){
+                            if (Character.isDigit(charAt)) {
                                 resultDigits += charAt;
                             }
                         }
@@ -278,7 +278,7 @@ public class ControllerDoctors extends ControllerClass {
                         labelText = ClinicAppUtils.maskPhoneNumber(resultDigits);
                     }
 
-                    if (label != null){
+                    if (label != null) {
                         label.setText(labelText);
                     }
                 }

@@ -8,7 +8,7 @@ public abstract class TableStatus {
     private final String tableName;
     private boolean created = false;
 
-    TableStatus(String name){
+    TableStatus(String name) {
         this.tableName = name;
     }
 
@@ -20,7 +20,7 @@ public abstract class TableStatus {
         return created;
     }
 
-    public void setCreated(boolean created){
+    public void setCreated(boolean created) {
         this.created = created;
     }
 
