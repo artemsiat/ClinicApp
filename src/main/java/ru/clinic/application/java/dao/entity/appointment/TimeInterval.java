@@ -86,7 +86,7 @@ public abstract class TimeInterval {
 
     @Override
     public String toString() {
-        return "TimeInterval{" +
+        return getToString() + " TimeInterval{" +
                 "startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
                 ", doctorId=" + doctorId +
@@ -117,4 +117,6 @@ public abstract class TimeInterval {
         int minutes = Integer.parseInt(StringUtils.trim(split[1]));
         return  ((hours * 60) + minutes);
     }
+
+    public abstract String getToString();
 }

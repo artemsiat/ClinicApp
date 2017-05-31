@@ -17,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
+import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
@@ -39,6 +40,8 @@ public class ControllerAppointments extends ControllerClass {
     private final static Logger LOGGER = LogManager.getLogger(ControllerAppointments.class.getName());
 
     private WorkingDay selectedWorkingDay;
+
+    private TimeInterval selectedAppointment;
 
     @Autowired
     private DoctorsService doctorsService;
@@ -104,6 +107,12 @@ public class ControllerAppointments extends ControllerClass {
     private TextArea textAreaComment;
 
     @FXML
+    private Button buttonRemoveAppointment;
+
+    @FXML
+    private Button buttonChangeAppointment;
+
+    @FXML
     void mouseClickedButtonCreateAppointment(MouseEvent event) {
         LOGGER.debug("create new appointment clicked");
         if (checkOnCreateAppointment()) {
@@ -115,6 +124,16 @@ public class ControllerAppointments extends ControllerClass {
 
             refreshAppointmentsTable();
         }
+    }
+
+    @FXML
+    void mouseClickedButtonChangeAppointment(MouseEvent event) {
+        LOGGER.debug("change appointment clicked [{}]", selectedAppointment);
+    }
+
+    @FXML
+    void mouseClickedButtonRemoveAppointment(MouseEvent event) {
+        LOGGER.debug("remove appointment clicked [{}]", selectedAppointment);
     }
 
     private boolean checkOnCreateAppointment() {
@@ -142,7 +161,6 @@ public class ControllerAppointments extends ControllerClass {
         if (doctor != null && patient != null && selectedWorkingDay != null) {
             LOGGER.debug("Loading appointments list for display");
             ObservableList<TimeInterval> appointments = appointmentService.getAppointmentsByWd(selectedWorkingDay);
-            System.out.println("appointments size " + appointments.size());
             tableViewAppointments.setItems(appointments);
         } else {
             LOGGER.debug("Can not load appointments. Not all instances present: doctor [{}], patient [{}], workingDay [{}]");
@@ -216,8 +234,6 @@ public class ControllerAppointments extends ControllerClass {
         if (startTime != null) {
             dropBoxAppEnd.setDisable(false);
             TimeInterval selectedItem = tableViewAppointments.getSelectionModel().getSelectedItem();
-            System.out.println("start time " + startTime);
-            System.out.println("selected time interval " + selectedItem);
             List<String> endTime = appointmentUtils.getEndTimeList(startTime, selectedItem);
 
             dropBoxAppEnd.getItems().setAll(endTime);

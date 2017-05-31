@@ -23,4 +23,9 @@ public class FreeTime extends TimeInterval {
     public boolean isAppointment() {
         return false;
     }
+
+    @Override
+    public String getToString() {
+        return "FreeTime{}";
+    }
 }

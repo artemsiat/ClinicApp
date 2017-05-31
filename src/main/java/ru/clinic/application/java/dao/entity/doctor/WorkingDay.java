@@ -107,7 +107,6 @@ public class WorkingDay {
     }
 
     public boolean isHaveLunch() {
-        System.out.println(toString());
         return !StringUtils.equals(startLunch, endLunch);
     }
 }

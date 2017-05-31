@@ -84,7 +84,7 @@ public class Appointment extends TimeInterval {
     }
 
     @Override
-    public String toString() {
+    public String getToString() {
         return "Appointment{" +
                 "id=" + id +
                 ", comment='" + comment + '\'' +
@@ -94,12 +94,8 @@ public class Appointment extends TimeInterval {
                 ", patientFirstName='" + patientFirstName + '\'' +
                 ", patientMiddleName='" + patientMiddleName + '\'' +
                 ", patientLastName='" + patientLastName + '\'' +
-                " ," +
-                super.toString() +
                 '}';
-
     }
-
 
     public void setProperties() {
         setTimeProp("c " + getStartTime() + " до " + getEndTime());

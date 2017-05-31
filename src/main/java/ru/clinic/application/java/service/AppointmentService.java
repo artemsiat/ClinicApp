@@ -51,7 +51,6 @@ public class AppointmentService {
     public ObservableList<Appointment> getAppsByWd(LocalDate workingDay) {
         //Todo check that there are no appointments for that day
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-        //appointments.add(new Appointment());
         return appointments;
     }
 
@@ -76,7 +75,6 @@ public class AppointmentService {
             ObservableList<TimeInterval> appointments = appointmentDao.selectAppointments(workingDay);
 
             ObservableList<TimeInterval> timeIntervals = prepareAppointments(appointments, workingDay);
-            timeIntervals.forEach(interval -> System.out.println(interval.getStartTime()));
             timeIntervals.sort(Comparator.comparing(TimeInterval::forComparing));
             return timeIntervals;
 

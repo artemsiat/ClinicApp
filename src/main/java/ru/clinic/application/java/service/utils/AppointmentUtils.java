@@ -148,10 +148,6 @@ public class AppointmentUtils {
 
         });
 
-
-        freeTimeList.forEach(System.out::println);
-        appointments.forEach(System.out::println);
-
         int startHour = settingsService.getWorkingDayStartHour();
         int interval = settingsService.getGetWorkingDayIntervals();
 
@@ -183,19 +179,13 @@ public class AppointmentUtils {
         for (TimeInterval timeInterval : appointments){
             totalIntervals = addIntervals(totalIntervals, startTime, intervalLength, timeInterval.getStartTime(), timeInterval.getEndTime());
         }
-
-        System.out.println("Total intervals " + Arrays.toString(totalIntervals));
-
         int intervalStart = 0;
         for (int index = 0 ; index < totalIntervals.length ; index ++){
-            System.out.println("index " + index + " intervalStart " + intervalStart + " int at index " + totalIntervals[index]);
-
             if (totalIntervals[index] == 1){
                 if (index == 0){
                     intervalStart = -1;
                 }else {
                     if (intervalStart != -1){
-                        System.out.println("Adding new free time");
                         appointments.add(createFreeTime(intervalStart, index, intervalLength, startTime, workingDay));
                         intervalStart = -1;
                     }

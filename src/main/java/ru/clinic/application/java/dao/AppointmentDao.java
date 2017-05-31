@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -90,5 +91,13 @@ public class AppointmentDao {
             LOGGER.error("Error selecting appointments ", e);
         }
         return FXCollections.emptyObservableList();
+    }
+
+    public void deleteAppointment(int adminId, int appointmentId){
+        try {
+            jdbcTemplate.update(REMOVE_APPOINTMENT, adminId, appointmentId);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
