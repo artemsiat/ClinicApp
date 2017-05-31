@@ -36,6 +36,8 @@ public class AppointmentDao {
             "inner join patient pt on pt.id = ap.patient_id " +
             "where ap.working_day_id = ?";
 
+    private final static String REMOVE_APPOINTMENT = "UPDATE appointment SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
