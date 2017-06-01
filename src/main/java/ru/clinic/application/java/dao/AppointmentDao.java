@@ -93,7 +93,7 @@ public class AppointmentDao {
         return FXCollections.emptyObservableList();
     }
 
-    public void deleteAppointment(int adminId, int appointmentId){
+    public void deleteAppointment(int adminId, Long appointmentId){
         try {
             jdbcTemplate.update(REMOVE_APPOINTMENT, adminId, appointmentId);
         } catch (DataAccessException e) {

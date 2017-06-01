@@ -198,7 +198,6 @@ public class AppointmentUtils {
         }
         if (intervalStart != -1){
             appointments.add(createFreeTime(intervalStart, totalIntervals.length, intervalLength, startTime, workingDay));
-
         }
         return appointments;
     }

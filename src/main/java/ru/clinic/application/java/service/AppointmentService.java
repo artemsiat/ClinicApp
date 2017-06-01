@@ -194,4 +194,11 @@ public class AppointmentService {
     public ObservableList<TimeInterval> loadAppointments(WorkingDay workingDay) {
         return appointmentDao.selectAppointments(workingDay);
     }
+
+    public void removeAppointment(TimeInterval appointment) {
+        if (appointment.isAppointment()){
+            Long appointmentId = ((Appointment) appointment).getId();
+            appointmentDao.deleteAppointment(adminService.getCurrentAdmin().getId(), appointmentId);
+        }
+    }
 }

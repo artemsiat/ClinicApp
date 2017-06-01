@@ -134,6 +134,20 @@ public class ControllerAppointments extends ControllerClass {
     @FXML
     void mouseClickedButtonRemoveAppointment(MouseEvent event) {
         LOGGER.debug("remove appointment clicked [{}]", selectedAppointment);
+        if (checkOnDeleteAppointment()){
+            appointmentService.removeAppointment(selectedAppointment);
+        }
+    }
+
+    private boolean checkOnDeleteAppointment() {
+        LOGGER.debug("Checking on delete appointment [{}]", selectedAppointment);
+        if (selectedAppointment != null && selectedAppointment.isAppointment()){
+            LOGGER.debug("Appointment can be deleted");
+            return true;
+        }
+        //Todo confirm that user wants to delete appointment
+        LOGGER.debug("Appointment can not be deleted");
+        return false;
     }
 
     private boolean checkOnCreateAppointment() {
@@ -158,12 +172,13 @@ public class ControllerAppointments extends ControllerClass {
         Doctor doctor = doctorsService.getSelectedDoctor();
         Patient patient = patientsService.getSelectedPatient();
 
-        if (doctor != null && patient != null && selectedWorkingDay != null) {
+        if (doctor != null && selectedWorkingDay != null) {
             LOGGER.debug("Loading appointments list for display");
             ObservableList<TimeInterval> appointments = appointmentService.getAppointmentsByWd(selectedWorkingDay);
             tableViewAppointments.setItems(appointments);
         } else {
-            LOGGER.debug("Can not load appointments. Not all instances present: doctor [{}], patient [{}], workingDay [{}]");
+            LOGGER.debug("Can not load appointments. Not all instances present: doctor [{}], patient [{}], workingDay [{}]", doctor, patient, selectedWorkingDay);
+            tableViewAppointments.setItems(FXCollections.emptyObservableList());
         }
     }
 
@@ -179,6 +194,7 @@ public class ControllerAppointments extends ControllerClass {
 
     @Override
     public void startController() {
+        LOGGER.debug("Starting Appointment Controller ....");
         setDoctorComboBox();
         setDoctorComboBoxListener();
         setDatePickerListener();
@@ -196,9 +212,6 @@ public class ControllerAppointments extends ControllerClass {
         tableColumnDuration.setCellValueFactory(new PropertyValueFactory<>("durationProp"));
 
         refreshAppointmentsTable();
-        //ObservableList<TimeInterval> timeIntervals = appointmentService.getAppointmentsByWd(selectedWorkingDay);
-
-        //tableViewAppointments.setItems(timeIntervals);
     }
 
     @Override
@@ -296,7 +309,6 @@ public class ControllerAppointments extends ControllerClass {
 
         if (selectedWorkingDay != null) {
             refreshAppointmentsTable();
-            //tableViewAppointments.setItems(appointmentService.getAppointmentsByWd(selectedWorkingDay));
         } else {
             tableViewAppointments.setItems(FXCollections.emptyObservableList());
         }
@@ -312,6 +324,7 @@ public class ControllerAppointments extends ControllerClass {
     }
 
     private void setDatePickerListener() {
+        LOGGER.debug("Initializing date picker ....");
         wdDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             setWorkDayLabel();
             if (newValue != null) {
@@ -353,6 +366,10 @@ public class ControllerAppointments extends ControllerClass {
             }
         });
         wdDatePicker.setStyle("-fx-font-size: 10pt");
+
+        if (selectedWorkingDay != null){
+            wdDatePicker.setValue(selectedWorkingDay.getWorkingDay());
+        }
     }
 
     private void setDoctorComboBoxListener() {
