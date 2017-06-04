@@ -4,6 +4,10 @@ import javafx.beans.property.SimpleStringProperty;
 import org.apache.commons.lang3.StringUtils;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 /**
  * Product clinicApp
  * Created by artem_000 on 4/16/2017.
@@ -20,8 +24,8 @@ public abstract class TimeInterval {
     private SimpleStringProperty timeProp = new SimpleStringProperty();
     private SimpleStringProperty durationProp = new SimpleStringProperty();
 
-    //Todo add foloowing properties
-    dayProp doctorProp
+    private SimpleStringProperty dayProp = new SimpleStringProperty();
+    private SimpleStringProperty doctorProp = new SimpleStringProperty();
 
     private long doctorId;
     private long workingDayId;
@@ -88,6 +92,30 @@ public abstract class TimeInterval {
         this.durationProp.set(durationProp);
     }
 
+    public String getDayProp() {
+        return dayProp.get();
+    }
+
+    public SimpleStringProperty dayPropProperty() {
+        return dayProp;
+    }
+
+    public void setDayProp(String dayProp) {
+        this.dayProp.set(dayProp);
+    }
+
+    public String getDoctorProp() {
+        return doctorProp.get();
+    }
+
+    public SimpleStringProperty doctorPropProperty() {
+        return doctorProp;
+    }
+
+    public void setDoctorProp(String doctorProp) {
+        this.doctorProp.set(doctorProp);
+    }
+
     @Override
     public String toString() {
         return getToString() + " TimeInterval{" +
@@ -122,5 +150,21 @@ public abstract class TimeInterval {
         return  ((hours * 60) + minutes);
     }
 
+    public LocalDateTime calcAppointmentTime(){
+        int minutes = forComparing();
+        if (isAppointment()){
+            LocalDate appointmentDate = ((Appointment) this).getAppointmentDate();
+            return appointmentDate.atStartOfDay().plusMinutes(minutes);
+        }
+        return LocalDateTime.now();
+    }
+
+    public long forComparingWithDay(){
+        return calcAppointmentTime().toInstant(ZoneOffset.MIN).toEpochMilli();
+    }
+
     public abstract String getToString();
+
+    public abstract String getComment();
+
 }

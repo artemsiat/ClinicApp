@@ -422,7 +422,7 @@ public class ControllerAppointments extends ControllerClass {
         tableViewAppointments.setRowFactory(new Callback<TableView<TimeInterval>, TableRow<TimeInterval>>() {
             @Override
             public TableRow<TimeInterval> call(TableView<TimeInterval> param) {
-                final TableRow<TimeInterval> row = new TableRow<TimeInterval>(){
+                return new TableRow<TimeInterval>(){
                     @Override
                     protected void updateItem(TimeInterval item, boolean empty) {
                         super.updateItem(item, empty);
@@ -444,7 +444,6 @@ public class ControllerAppointments extends ControllerClass {
 
                     }
                 };
-                return row;
             }
         });
 

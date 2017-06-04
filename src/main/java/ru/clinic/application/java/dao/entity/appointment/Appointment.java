@@ -7,6 +7,7 @@ import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by Artem Siatchinov on 1/20/2017.
@@ -109,6 +110,10 @@ public class Appointment extends TimeInterval {
         setPatientProp(generatePatientFullName());
 
         setDurationProp(ClinicAppUtils.calculateDuration(getStartTime(), getEndTime()) + " минут");
+
+        setDoctorProp(getDoctorFio());
+
+        setDayProp(getAppointmentDate().format(DateTimeFormatter.ISO_LOCAL_DATE));
     }
 
     private String generatePatientFullName() {

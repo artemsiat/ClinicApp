@@ -9,12 +9,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
+import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.service.AdminService;
@@ -22,6 +24,8 @@ import ru.clinic.application.java.service.AppointmentService;
 import ru.clinic.application.java.service.PatientsService;
 import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -161,6 +165,42 @@ public class ControllerPatients extends ControllerClass {
 
     @FXML
     private Label findPatientsLabel;
+
+    @FXML
+    private Button buttonNewAppointment;
+
+    @FXML
+    private Button buttonModifyAppointment;
+
+    @FXML
+    private Button buttonRemoveAppointment;
+
+    @FXML
+    private TextArea textAreaApplicationComment;
+
+    @FXML
+    void mouseReleasedButtonModifyAppointment(MouseEvent event) {
+        LOGGER.debug("Mouse released modify application button");
+    }
+
+    @FXML
+    void mouseReleasedButtonNewAppointment(MouseEvent event) {
+        LOGGER.debug("Mouse released create new application button");
+
+    }
+
+    @FXML
+    void mouseReleasedButtonRemoveAppointment(MouseEvent event) {
+        LOGGER.debug("Mouse released remove application button");
+        TimeInterval selectedItem = tablePatientsAppointments.getSelectionModel().getSelectedItem();
+        if (selectedItem != null){
+            appointmentService.removeAppointment(selectedItem);
+            refreshAppointmentsTable();
+        }else {
+            LOGGER.debug("Mouse released remove application button. No appointment is selected");
+        }
+
+    }
 
     @FXML
     void addPatientBtnAction(ActionEvent event) {
@@ -309,6 +349,7 @@ public class ControllerPatients extends ControllerClass {
         setTable();
         setFindLabel();
         setTableAppointments();
+
     }
 
     private void setTable() {
@@ -419,18 +460,66 @@ public class ControllerPatients extends ControllerClass {
             tablePatientsAppointments.refresh();
         }else {
             ObservableList<TimeInterval> appointments = appointmentService.loadAppointmentsByPatient(selectedPatient.getId());
+            appointments.sort(Comparator.comparing(TimeInterval::forComparingWithDay).reversed());
             tablePatientsAppointments.setItems(appointments);
             tablePatientsAppointments.refresh();
         }
+        appointmentTableClicked();
     }
 
     private void setTableAppointments() {
-        tableColumnDoctor.setCellValueFactory(new PropertyValueFactory<>("dayProp"));
-        tableColumnDay.setCellValueFactory(new PropertyValueFactory<>("doctorProp"));
+        tableColumnDoctor.setCellValueFactory(new PropertyValueFactory<>("doctorProp"));
+        tableColumnDay.setCellValueFactory(new PropertyValueFactory<>("dayProp"));
         tableColumnTime.setCellValueFactory(new PropertyValueFactory<>("timeProp"));
         tableColumnDuration.setCellValueFactory(new PropertyValueFactory<>("durationProp"));
 
+        tablePatientsAppointments.setRowFactory(new Callback<TableView<TimeInterval>, TableRow<TimeInterval>>() {
+            @Override
+            public TableRow<TimeInterval> call(TableView<TimeInterval> param) {
+                return new TableRow<TimeInterval>(){
+                    @Override
+                    protected void updateItem(TimeInterval item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (item != null && item.isAppointment()){
+                            LocalDateTime appointmentTime = item.calcAppointmentTime();
+                            if (LocalDateTime.now().isAfter(appointmentTime)){
+                                this.setStyle("  -fx-control-inner-background: palegreen;\n" +
+                                        "  -fx-accent: derive(-fx-control-inner-background, -40%);\n" +
+                                        "  -fx-cell-hover-color: derive(-fx-control-inner-background, -20%);");
+                            }else {
+                                this.setStyle("  -fx-control-inner-background: skyblue;\n" +
+                                        "  -fx-accent: derive(-fx-control-inner-background, -40%);\n" +
+                                        "  -fx-cell-hover-color: derive(-fx-control-inner-background, -20%);");
+                            }
+                        }
+                    }
+                };
+            }
+        });
+
+        tablePatientsAppointments.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TimeInterval>() {
+            @Override
+            public void changed(ObservableValue<? extends TimeInterval> observable, TimeInterval oldValue, TimeInterval newValue) {
+                appointmentTableClicked();
+            }
+        });
+
         refreshAppointmentsTable();
+    }
+
+    private void appointmentTableClicked() {
+        LOGGER.debug("Appointment table clicked");
+        TimeInterval selectedItem = tablePatientsAppointments.getSelectionModel().getSelectedItem();
+        if (selectedItem == null){
+            buttonModifyAppointment.setDisable(true);
+            buttonRemoveAppointment.setDisable(true);
+            textAreaApplicationComment.setText("");
+        }else {
+            buttonModifyAppointment.setDisable(false);
+            buttonRemoveAppointment.setDisable(false);
+            textAreaApplicationComment.setText(selectedItem.getComment());
+        }
     }
 
     private void setSelectedPatient() {

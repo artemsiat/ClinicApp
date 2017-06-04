@@ -28,4 +28,9 @@ public class FreeTime extends TimeInterval {
     public String getToString() {
         return "FreeTime{}";
     }
+
+    @Override
+    public String getComment() {
+        return "is not appointment";
+    }
 }
