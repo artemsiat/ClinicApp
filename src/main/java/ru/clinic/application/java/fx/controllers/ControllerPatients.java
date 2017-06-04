@@ -2,6 +2,7 @@ package ru.clinic.application.java.fx.controllers;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,8 +15,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
+import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 import ru.clinic.application.java.fx.ControllerClass;
 import ru.clinic.application.java.service.AdminService;
+import ru.clinic.application.java.service.AppointmentService;
 import ru.clinic.application.java.service.PatientsService;
 import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
@@ -60,6 +63,9 @@ public class ControllerPatients extends ControllerClass {
     @Autowired
     AdminService adminService;
 
+    @Autowired
+    AppointmentService appointmentService;
+
     @FXML
     private TextField lastNameFindFld;
 
@@ -89,6 +95,21 @@ public class ControllerPatients extends ControllerClass {
 
     @FXML
     private TableColumn<Patient, String> emailCol;
+
+    @FXML
+    private TableView<TimeInterval> tablePatientsAppointments;
+
+    @FXML
+    private TableColumn<TimeInterval, String> tableColumnDoctor;
+
+    @FXML
+    private TableColumn<TimeInterval, String> tableColumnDay;
+
+    @FXML
+    private TableColumn<TimeInterval, String> tableColumnTime;
+
+    @FXML
+    private TableColumn<TimeInterval, String> tableColumnDuration;
 
     @FXML
     private TextField lastNameFld;
@@ -172,7 +193,6 @@ public class ControllerPatients extends ControllerClass {
 
     @FXML
     void findBtnAction(ActionEvent event) {
-        //populatePatients.populateRandomPatients(1500);
         if (checkFindFields()) {
             ObservableList<Patient> patients = patientsService.findPatient(firstNameFindFld.getText(), lastNameFindFld.getText(),
                     middleNameFindFld.getText(), phoneFindFld.getText(), emailFindFld.getText());
@@ -288,6 +308,7 @@ public class ControllerPatients extends ControllerClass {
         initListeners();
         setTable();
         setFindLabel();
+        setTableAppointments();
     }
 
     private void setTable() {
@@ -388,7 +409,28 @@ public class ControllerPatients extends ControllerClass {
     private void patientSelected() {
         selectedPatient = patientsService.getPatients().get(patientsTable.getSelectionModel().getSelectedIndex());
         patientsService.setSelectedPatient(selectedPatient);
+        refreshAppointmentsTable();
         setSelectedPatient();
+    }
+
+    private void refreshAppointmentsTable() {
+        if (selectedPatient == null){
+            tablePatientsAppointments.setItems(FXCollections.emptyObservableList());
+            tablePatientsAppointments.refresh();
+        }else {
+            ObservableList<TimeInterval> appointments = appointmentService.loadAppointmentsByPatient(selectedPatient.getId());
+            tablePatientsAppointments.setItems(appointments);
+            tablePatientsAppointments.refresh();
+        }
+    }
+
+    private void setTableAppointments() {
+        tableColumnDoctor.setCellValueFactory(new PropertyValueFactory<>("dayProp"));
+        tableColumnDay.setCellValueFactory(new PropertyValueFactory<>("doctorProp"));
+        tableColumnTime.setCellValueFactory(new PropertyValueFactory<>("timeProp"));
+        tableColumnDuration.setCellValueFactory(new PropertyValueFactory<>("durationProp"));
+
+        refreshAppointmentsTable();
     }
 
     private void setSelectedPatient() {

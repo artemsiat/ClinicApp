@@ -112,6 +112,23 @@ public class ControllerAppointments extends ControllerClass {
     @FXML
     private Button buttonChangeAppointment;
 
+    private void action(){
+
+        //Check if Appointment is selected
+        TimeInterval selectedItem = tableViewAppointments.getSelectionModel().getSelectedItem();
+        if (selectedItem != null && selectedItem.isAppointment()){
+            selectedAppointment = selectedItem;
+            buttonChangeAppointment.setDisable(false);
+            buttonRemoveAppointment.setDisable(false);
+        }else {
+            selectedAppointment = null;
+            buttonChangeAppointment.setDisable(true);
+            buttonRemoveAppointment.setDisable(true);
+        }
+    }
+
+
+
     @FXML
     void mouseClickedButtonCreateAppointment(MouseEvent event) {
         LOGGER.debug("create new appointment clicked");
@@ -135,7 +152,10 @@ public class ControllerAppointments extends ControllerClass {
     void mouseClickedButtonRemoveAppointment(MouseEvent event) {
         LOGGER.debug("remove appointment clicked [{}]", selectedAppointment);
         if (checkOnDeleteAppointment()){
+            LOGGER.debug("Appointment will be deleted [{}]", selectedAppointment);
             appointmentService.removeAppointment(selectedAppointment);
+            refreshAppointmentsTable();
+            action();
         }
     }
 
@@ -176,10 +196,12 @@ public class ControllerAppointments extends ControllerClass {
             LOGGER.debug("Loading appointments list for display");
             ObservableList<TimeInterval> appointments = appointmentService.getAppointmentsByWd(selectedWorkingDay);
             tableViewAppointments.setItems(appointments);
+
         } else {
             LOGGER.debug("Can not load appointments. Not all instances present: doctor [{}], patient [{}], workingDay [{}]", doctor, patient, selectedWorkingDay);
             tableViewAppointments.setItems(FXCollections.emptyObservableList());
         }
+        tableViewAppointments.refresh();
     }
 
     @FXML
@@ -204,6 +226,8 @@ public class ControllerAppointments extends ControllerClass {
         setDoctorLabel();
         setPatientLabel();
         setWorkDayLabel();
+
+        action();
     }
 
     private void setTableAppointments() {
@@ -387,11 +411,59 @@ public class ControllerAppointments extends ControllerClass {
 
     private void setTableAppointmentListener() {
         tableViewAppointments.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            action();
             if (newValue == null) {
                 appointmentTableSelected();
             } else {
                 appointmentTableSelected();
             }
         });
+
+        tableViewAppointments.setRowFactory(new Callback<TableView<TimeInterval>, TableRow<TimeInterval>>() {
+            @Override
+            public TableRow<TimeInterval> call(TableView<TimeInterval> param) {
+                final TableRow<TimeInterval> row = new TableRow<TimeInterval>(){
+                    @Override
+                    protected void updateItem(TimeInterval item, boolean empty) {
+                        super.updateItem(item, empty);
+
+
+                        //Todo add style for different types of timeInterval
+                        if (item != null && item.getDurationProp() != null && !item.isAppointment()){
+                            //this.setStyle("-fx-background-color:yellow");
+                            this.setStyle("  -fx-control-inner-background: palegreen;\n" +
+                                    "  -fx-accent: derive(-fx-control-inner-background, -40%);\n" +
+                                    "  -fx-cell-hover-color: derive(-fx-control-inner-background, -20%);");
+                        }else if (item != null && item.getDurationProp() != null && item.isAppointment()){
+                            this.setStyle("  -fx-control-inner-background: skyblue;\n" +
+                                    "  -fx-accent: derive(-fx-control-inner-background, -40%);\n" +
+                                    "  -fx-cell-hover-color: derive(-fx-control-inner-background, -20%);");
+                        }
+
+
+
+                    }
+                };
+                return row;
+            }
+        });
+
+
+/*        //Change color on a column
+        tableColumnPatient.setCellFactory(new Callback<TableColumn<TimeInterval, String>, TableCell<TimeInterval, String>>() {
+            @Override
+            public TableCell<TimeInterval, String> call(TableColumn<TimeInterval, String> param) {
+                return new TableCell<TimeInterval, String>(){
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (!empty){
+                            this.setStyle("-fx-background-color:red");
+                            this.setText(item);
+                        }
+                    }
+                };
+            }
+        });*/
     }
 }

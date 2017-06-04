@@ -196,9 +196,14 @@ public class AppointmentService {
     }
 
     public void removeAppointment(TimeInterval appointment) {
+        LOGGER.debug("Removing appointment [{}]", appointment);
         if (appointment.isAppointment()){
             Long appointmentId = ((Appointment) appointment).getId();
             appointmentDao.deleteAppointment(adminService.getCurrentAdmin().getId(), appointmentId);
         }
+    }
+
+    public ObservableList<TimeInterval> loadAppointmentsByPatient(int patientId) {
+        return appointmentDao.selectAppointmentsByPatient(patientId);
     }
 }

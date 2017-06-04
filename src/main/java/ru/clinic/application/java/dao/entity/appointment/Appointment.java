@@ -6,6 +6,8 @@ import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.service.utils.ClinicAppUtils;
 
+import java.time.LocalDate;
+
 /**
  * Created by Artem Siatchinov on 1/20/2017.
  */
@@ -21,6 +23,8 @@ public class Appointment extends TimeInterval {
     private String patientFirstName;
     private String patientMiddleName;
     private String patientLastName;
+    private String doctorFio;
+    private LocalDate appointmentDate;
 
     @Override
     public boolean isAppointment() {
@@ -94,6 +98,8 @@ public class Appointment extends TimeInterval {
                 ", patientFirstName='" + patientFirstName + '\'' +
                 ", patientMiddleName='" + patientMiddleName + '\'' +
                 ", patientLastName='" + patientLastName + '\'' +
+                ", doctorFio='" + doctorFio + '\'' +
+                ", appointmentDate='" + appointmentDate + '\'' +
                 '}';
     }
 
@@ -157,5 +163,21 @@ public class Appointment extends TimeInterval {
 
     public String getPatientLastName() {
         return patientLastName;
+    }
+
+    public void setDoctorFio(String doctorFio) {
+        this.doctorFio = doctorFio;
+    }
+
+    public String getDoctorFio() {
+        return doctorFio;
+    }
+
+    public void setAppointmentDate(LocalDate appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public LocalDate getAppointmentDate() {
+        return appointmentDate;
     }
 }

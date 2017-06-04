@@ -172,6 +172,8 @@ public class ControllerWorkingDays extends ControllerClass {
 
     @FXML
     void removeWdBtnAction(ActionEvent event) {
+        //Todo when working day is deleted all appointments on that wd should be deleted as well
+        //Todo before deleting display a list of appointments that will be also deleted
         if (alertDoctorSelected() && alertWdSelected() && alertWdiSNotWorking() && alertCheckAppointments()) {
             workingDayService.removeWorkingDay(selectedWorkingDay);
             workingDayService.loadWorkingDaysRange(wdDatePicker.getValue(), doctorsService.getSelectedDoctor());
