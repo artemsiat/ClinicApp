@@ -20,8 +20,8 @@
                     <children>
                         <TableView fx:id="tableViewAppointments" prefHeight="605.0" prefWidth="737.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
                             <columns>
-                                <TableColumn fx:id="tableColumnPatient" prefWidth="145.0" text="Пациент" />
                                 <TableColumn fx:id="tableColumnTime" prefWidth="255.0" text="Время" />
+                                <TableColumn fx:id="tableColumnPatient" prefWidth="145.0" text="Пациент" />
                                 <TableColumn fx:id="tableColumnDuration" prefWidth="235.0" text="Продолжительность" />
                             </columns>
                             <columnResizePolicy>

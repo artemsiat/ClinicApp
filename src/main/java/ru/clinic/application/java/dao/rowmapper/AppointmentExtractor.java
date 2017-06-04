@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -38,6 +39,13 @@ public class AppointmentExtractor implements ResultSetExtractor<TimeInterval> {
         appointment.setPatientFirstName(resultSet.getString("patient_first_name"));
         appointment.setPatientMiddleName(resultSet.getString("patient_middle_name"));
         appointment.setPatientLastName(resultSet.getString("patient_last_name"));
+
+        appointment.setDoctorFio(resultSet.getString("fio"));
+
+        Date day = resultSet.getDate("working_day");
+        if (day != null) {
+            appointment.setAppointmentDate(day.toLocalDate());
+        }
 
         LOGGER.debug("Loaded appointment [{}]", appointment);
 

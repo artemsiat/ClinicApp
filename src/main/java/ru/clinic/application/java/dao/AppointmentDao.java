@@ -32,10 +32,29 @@ public class AppointmentDao {
             "pt.firstname as patient_first_name, " +
             "pt.middlename as patient_middle_name, " +
             "pt.lastname as patient_last_name, " +
+            "doc.fio as fio, " +
+            "wd.working_day as working_day, " +
             "ap.* " +
             "FROM APPOINTMENT ap " +
-            "inner join patient pt on pt.id = ap.patient_id " +
-            "where ap.working_day_id = ?";
+            "INNER JOIN patient pt on pt.id = ap.patient_id " +
+            "INNER JOIN doctor doc ON doc.id = ap.doctor_id " +
+            "INNER JOIN working_day wd ON wd.id = ap.working_day_id " +
+            "WHERE ap.working_day_id = ? " +
+            "AND ap.removed = false";
+
+    private final String GET_BY_PATIENT_ID = "SELECT " +
+            "pt.firstname as patient_first_name, " +
+            "pt.middlename as patient_middle_name, " +
+            "pt.lastname as patient_last_name, " +
+            "doc.fio as fio, " +
+            "wd.working_day as working_day, " +
+            "ap.* " +
+            "FROM APPOINTMENT ap " +
+            "INNER JOIN patient pt on pt.id = ap.patient_id " +
+            "INNER JOIN doctor doc ON doc.id = ap.doctor_id " +
+            "INNER JOIN working_day wd ON wd.id = ap.working_day_id " +
+            "WHERE ap.patient_id = ? " +
+            "AND ap.removed = false";
 
     private final static String REMOVE_APPOINTMENT = "UPDATE appointment SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
 
@@ -94,10 +113,20 @@ public class AppointmentDao {
     }
 
     public void deleteAppointment(int adminId, Long appointmentId){
+        LOGGER.debug("Removing appointment id [{}], admin id [{}]", appointmentId, adminId);
         try {
             jdbcTemplate.update(REMOVE_APPOINTMENT, adminId, appointmentId);
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public ObservableList<TimeInterval> selectAppointmentsByPatient(int patientId) {
+        try {
+            return jdbcTemplate.query(GET_BY_PATIENT_ID, new Object[]{patientId}, new AppointmentListExtractor());
+        } catch (Exception e) {
+            LOGGER.error("Error selecting appointments ", e);
+        }
+        return FXCollections.emptyObservableList();
     }
 }
