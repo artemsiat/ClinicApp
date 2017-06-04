@@ -308,6 +308,7 @@ public class ControllerPatients extends ControllerClass {
         initListeners();
         setTable();
         setFindLabel();
+        setTableAppointments();
     }
 
     private void setTable() {
@@ -417,9 +418,20 @@ public class ControllerPatients extends ControllerClass {
             tablePatientsAppointments.setItems(FXCollections.emptyObservableList());
             tablePatientsAppointments.refresh();
         }else {
-            appointmentService.loadAppointmentsByPatient(selectedPatient.getId());
+            ObservableList<TimeInterval> appointments = appointmentService.loadAppointmentsByPatient(selectedPatient.getId());
+            tablePatientsAppointments.setItems(appointments);
+            tablePatientsAppointments.refresh();
         }
 
+    }
+
+    private void setTableAppointments() {
+        tableColumnDoctor.setCellValueFactory(new PropertyValueFactory<>("dayProp"));
+        tableColumnDay.setCellValueFactory(new PropertyValueFactory<>("doctorProp"));
+        tableColumnTime.setCellValueFactory(new PropertyValueFactory<>("timeProp"));
+        tableColumnDuration.setCellValueFactory(new PropertyValueFactory<>("durationProp"));
+
+        refreshAppointmentsTable();
     }
 
     private void setSelectedPatient() {

@@ -19,6 +19,10 @@ public abstract class TimeInterval {
     private SimpleStringProperty patientProp = new SimpleStringProperty();
     private SimpleStringProperty timeProp = new SimpleStringProperty();
     private SimpleStringProperty durationProp = new SimpleStringProperty();
+
+    //Todo add foloowing properties
+    dayProp doctorProp
+
     private long doctorId;
     private long workingDayId;
 
