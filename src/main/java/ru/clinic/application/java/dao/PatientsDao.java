@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.Patient;
+import ru.clinic.application.java.dao.rowmapper.PatientExtractor;
 import ru.clinic.application.java.dao.rowmapper.PatientListExtractor;
 import ru.clinic.application.java.service.setting.SettingsService;
 
@@ -28,13 +29,21 @@ public class PatientsDao {
             "(firstName, lastName, middleName, phone, phoneTwo, email, comment, creator, removed," +
             "created) " +
             "VALUES(?,?,?,?,?,?,?,?,?,CURRENT_TIMESTAMP)";
+
     private final static String SELECT_LAST_CREATED_PATIENTS = "SELECT * FROM (SELECT * FROM patient WHERE removed = false  ORDER BY id DESC) WHERE ROWNUM <= ";
+
     private final static String SELECT_LAST_UPDATED_PATIENTS = "SELECT * FROM (SELECT * FROM patient WHERE removed = false  ORDER BY modified DESC) WHERE ROWNUM <= ";
+
+    private final static String SELECT_PATIENT_BY_ID = "SELECT * FROM patient where id = ?";
+
     private final static String UPDATE_PATIENT = "UPDATE patient SET " +
             "firstName=?, lastName=?, middleName=?, phone=?, phoneTwo=?, email=?, comment=?, who_modified=?, modified=CURRENT_TIMESTAMP " +
             "WHERE id = ?";
+
     private final static String REMOVE_PATIENT = "UPDATE patient SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
+
     private final static String FIND_PATIENT = "SELECT * FROM patient WHERE removed = false ";
+
     private static final String PATIENTS_COUNT = "SELECT count(*) FROM patient WHERE removed = false ";
 
     private final static String PATIENT_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS PATIENT(" +
@@ -147,5 +156,14 @@ public class PatientsDao {
             LOGGER.error("Error getting patients count", e);
         }
         return 0;
+    }
+
+    public Patient loadPatient(int id) {
+        try {
+            return jdbcTemplate.query(SELECT_PATIENT_BY_ID, new Object[]{id}, new PatientExtractor());
+        }catch (Exception e){
+            LOGGER.error("Error loading patient " , e);
+        }
+        return null;
     }
 }

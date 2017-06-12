@@ -33,4 +33,11 @@ public class FreeTime extends TimeInterval {
     public String getComment() {
         return "is not appointment";
     }
+
+    @Override
+    public long getId() {
+        return 0;
+    }
+
+
 }

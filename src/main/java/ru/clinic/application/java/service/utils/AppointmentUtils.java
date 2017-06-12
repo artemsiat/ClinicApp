@@ -123,13 +123,16 @@ public class AppointmentUtils {
     }
 
     private void sortTimeList(List<String> timeList) {
-        //Todo add exception handler
-        timeList.sort((o1, o2) -> {
-            String trim1 = StringUtils.replace(o1, ":", "").trim().replace(" ", "");
-            String trim2 = StringUtils.replace(o2, ":", "").trim().replace(" ", "");
+        try {
+            timeList.sort((o1, o2) -> {
+                String trim1 = StringUtils.replace(o1, ":", "").trim().replace(" ", "");
+                String trim2 = StringUtils.replace(o2, ":", "").trim().replace(" ", "");
 
-            return Integer.compare(Integer.valueOf(trim1), Integer.valueOf(trim2));
-        });
+                return Integer.compare(Integer.valueOf(trim1), Integer.valueOf(trim2));
+            });
+        }catch (Exception e){
+            LOGGER.error("Sorting timeList", e);
+        }
     }
 
     public static String generateStringTime(Integer key, Integer minutes) {

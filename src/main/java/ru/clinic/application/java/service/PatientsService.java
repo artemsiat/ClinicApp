@@ -93,4 +93,8 @@ public class PatientsService {
     public Patient getSelectedPatient() {
         return selectedPatient;
     }
+
+    public Patient loadPatient(Patient selectedPatient) {
+        return patientsDao.loadPatient(selectedPatient.getId());
+    }
 }

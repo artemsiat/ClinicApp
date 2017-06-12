@@ -64,7 +64,7 @@ public class Appointment extends TimeInterval {
         return creator;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

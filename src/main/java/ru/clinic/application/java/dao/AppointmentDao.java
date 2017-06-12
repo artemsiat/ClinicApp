@@ -13,6 +13,7 @@ import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
 import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
 import ru.clinic.application.java.dao.rowmapper.AppointmentListExtractor;
+import ru.clinic.application.java.service.AdminService;
 
 /**
  * Product clinicApp
@@ -22,6 +23,9 @@ import ru.clinic.application.java.dao.rowmapper.AppointmentListExtractor;
 public class AppointmentDao {
 
     private final static Logger LOGGER = LogManager.getLogger(AppointmentDao.class);
+
+    @Autowired
+    private AdminService adminService;
 
     private final static String INSERT_APPOINTMENT =
             "INSERT INTO appointment " +
@@ -58,6 +62,8 @@ public class AppointmentDao {
 
     private final static String REMOVE_APPOINTMENT = "UPDATE appointment SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
 
+    private static final String UPDATE_APPOINTMENT_COMMENT = "UPDATE appointment SET comment=?, modified=CURRENT_TIMESTAMP, who_modified=? WHERE id=?";
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -83,24 +89,6 @@ public class AppointmentDao {
             LOGGER.error("Error inserting new appointment ", ex);
         }
     }
-
-    //Todo to be removed
-    String createTableSql =
-            "CREATE TABLE IF NOT EXISTS APPOINTMENT(" +
-                    "id INT PRIMARY KEY AUTO_INCREMENT NOT NULL," +
-                    "doctor_id int," +
-                    "patient_id int," +
-                    "working_day_id int," +
-                    "start_time varchar(10)," +
-                    "end_time varchar(10)," +
-                    "comment varchar(500)," +
-                    "creator_id int," +
-                    "created timestamp," +
-                    "who_modified int," +
-                    "modified timestamp," +
-                    "who_removed int," +
-                    "when_removed timestamp," +
-                    "removed boolean)";
 
     public ObservableList<TimeInterval> selectAppointments(WorkingDay workingDay) {
 
@@ -128,5 +116,14 @@ public class AppointmentDao {
             LOGGER.error("Error selecting appointments ", e);
         }
         return FXCollections.emptyObservableList();
+    }
+
+    //UPDATE appointment SET comment=?, modified=CURRENT_TIMESTAMP, who_modified=? WHERE id=?
+    public void updateAppointmentComment(TimeInterval timeInterval) {
+        try{
+            jdbcTemplate.update(UPDATE_APPOINTMENT_COMMENT, timeInterval.getComment(), adminService.getCurrentAdmin().getId(), timeInterval.getId());
+        }catch (Exception e){
+            LOGGER.error("Error updating appointment ", e);
+        }
     }
 }

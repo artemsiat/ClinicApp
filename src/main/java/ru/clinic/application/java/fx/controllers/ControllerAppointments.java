@@ -16,6 +16,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.common.alerts.AlertHeader;
+import ru.clinic.application.java.common.alerts.AlertMessage;
+import ru.clinic.application.java.common.alerts.AlertType;
+import ru.clinic.application.java.common.alerts.AppAllerts;
 import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
@@ -161,11 +165,10 @@ public class ControllerAppointments extends ControllerClass {
 
     private boolean checkOnDeleteAppointment() {
         LOGGER.debug("Checking on delete appointment [{}]", selectedAppointment);
-        if (selectedAppointment != null && selectedAppointment.isAppointment()){
+        if (selectedAppointment != null && selectedAppointment.isAppointment() && AppAllerts.confirm(AlertType.UPDATE_TITLE, AlertHeader.CONFIRMATION_DELETE_APPOINTMENT, AlertMessage.CONFIRMATION_QUESTION)){
             LOGGER.debug("Appointment can be deleted");
             return true;
         }
-        //Todo confirm that user wants to delete appointment
         LOGGER.debug("Appointment can not be deleted");
         return false;
     }

@@ -206,4 +206,8 @@ public class AppointmentService {
     public ObservableList<TimeInterval> loadAppointmentsByPatient(int patientId) {
         return appointmentDao.selectAppointmentsByPatient(patientId);
     }
+
+    public void updateAppointment(TimeInterval timeInterval) {
+        appointmentDao.updateAppointmentComment(timeInterval);
+    }
 }

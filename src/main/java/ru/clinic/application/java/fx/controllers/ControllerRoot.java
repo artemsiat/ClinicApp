@@ -198,4 +198,8 @@ public class ControllerRoot {
     public void startPatientsFrame() {
         frameRoot.getRoot().setCenter(framePatients.getCenterPane());
     }
+
+    public void startAppointmentFrame() {
+        frameRoot.getRoot().setCenter(frameAppointments.getCenterPane());
+    }
 }

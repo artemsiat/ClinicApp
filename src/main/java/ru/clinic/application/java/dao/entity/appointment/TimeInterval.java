@@ -167,4 +167,5 @@ public abstract class TimeInterval {
 
     public abstract String getComment();
 
+    public abstract long getId();
 }

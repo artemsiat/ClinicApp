@@ -15,6 +15,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.java.common.alerts.AlertHeader;
+import ru.clinic.application.java.common.alerts.AlertMessage;
+import ru.clinic.application.java.common.alerts.AlertType;
+import ru.clinic.application.java.common.alerts.AppAllerts;
 import ru.clinic.application.java.dao.entity.Patient;
 import ru.clinic.application.java.dao.entity.appointment.Appointment;
 import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
@@ -40,27 +44,6 @@ public class ControllerPatients extends ControllerClass {
 
     private Patient selectedPatient = null;
 
-    /*Information Dialog no patient selected*/
-    private static final String INFORMATION_TITLE = "Информационное окно";
-    private static final String INFORMATION_CONTEXT_NOT_SELECTED = "Вы не выбрали пациента для выполнения данной операции.";
-
-    /*Information Dialog no patient selected*/
-    private static final String INFORMATION_EMPTY_FIO_TITLE = "Информационное окно";
-    private static final String INFORMATION_EMPTY_FIO_CONTEXT_NOT_SELECTED = "Для внесения нового пациента в базу данных необходимо заполнить как минимум одно поле.";
-
-    /*Information Dialog Find fieldsEmpty*/
-    private static final String INFORMATION_EMPTY_FIND_FIELDS = "Для поиска пациента необходимо заполнить поля.";
-
-    /*Confirmation Dialog removing patient*/
-    private final static String CONFIRMATION_DELETE_TITLE = "Подтверждение";
-    private final static String CONFIRMATION_DELETE_HEADER = "Вы собираетесь удалить пациента. ";
-    private final static String CONFIRMATION_DELETE_CONTENT = "Вы уверены, что хотите продолжить?";
-
-    /*Confirmation Dialog updating patient*/
-    private final static String CONFIRMATION_UPDATE_TITLE = "Подтверждение";
-    private final static String CONFIRMATION_UPDATE_HEADER = "Вы собираетесь изменить существующего пациента. ";
-    private final static String CONFIRMATION_UPDATE_CONTENT = "Вы уверены, что хотите продолжить?";
-
     @Autowired
     PatientsService patientsService;
 
@@ -69,6 +52,9 @@ public class ControllerPatients extends ControllerClass {
 
     @Autowired
     AppointmentService appointmentService;
+
+    @Autowired
+    private ControllerRoot controllerRoot;
 
     @FXML
     private TextField lastNameFindFld;
@@ -181,12 +167,25 @@ public class ControllerPatients extends ControllerClass {
     @FXML
     void mouseReleasedButtonModifyAppointment(MouseEvent event) {
         LOGGER.debug("Mouse released modify application button");
+        TimeInterval timeInterval = tablePatientsAppointments.getSelectionModel().getSelectedItem();
+        if (timeInterval != null && timeInterval.isAppointment()){
+            ((Appointment)timeInterval).setComment(textAreaApplicationComment.getText());
+            appointmentService.updateAppointment(timeInterval);
+            refreshAppointmentsTable();
+        }else {
+            LOGGER.debug("Mouse released modify application button. No appointment was selected");
+        }
+
     }
 
     @FXML
     void mouseReleasedButtonNewAppointment(MouseEvent event) {
-        LOGGER.debug("Mouse released create new application button");
-
+        LOGGER.debug("Mouse released create new appointment button");
+        if (selectedPatient != null){
+            controllerRoot.startAppointmentFrame();
+        }else {
+            AppAllerts.alertUser(AlertType.INFORMATION_TITLE, AlertMessage.PATIENT_NOT_SELECTED);
+        }
     }
 
     @FXML
@@ -211,17 +210,8 @@ public class ControllerPatients extends ControllerClass {
             setFindLabel();
         } else {
             LOGGER.debug("[ControllerDoctors][createDoctorBtnAction] Fio field is empty.");
-            alertAllFieldsEmpty();
+            AppAllerts.alertUser(AlertType.INFORMATION_TITLE, AlertMessage.NOT_ALL_FIELDS_ARE_FILLED_FOR_NEW_PATIENT);
         }
-    }
-
-    private void alertAllFieldsEmpty() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(INFORMATION_EMPTY_FIO_TITLE);
-        alert.setHeaderText(null);
-        alert.setContentText(INFORMATION_EMPTY_FIO_CONTEXT_NOT_SELECTED);
-
-        alert.showAndWait();
     }
 
     private boolean checkInputFields() {
@@ -240,20 +230,11 @@ public class ControllerPatients extends ControllerClass {
             patientsTable.refresh();
         } else {
             LOGGER.debug("[ControllerPatients][findBtnAction] Check find fields returned false. Alerting user");
-            alertFindFieldsEmpty();
+            AppAllerts.alertUser(AlertType.INFORMATION_TITLE, AlertMessage.FILL_FIELDS_FOR_PATIENT_SEARCH);
             patientsTable.setItems(patientsService.loadLastCreatedPatients());
             patientsTable.refresh();
         }
 
-    }
-
-    private void alertFindFieldsEmpty() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(INFORMATION_TITLE);
-        alert.setHeaderText(null);
-        alert.setContentText(INFORMATION_EMPTY_FIND_FIELDS);
-
-        alert.showAndWait();
     }
 
     private boolean checkFindFields() {
@@ -268,7 +249,7 @@ public class ControllerPatients extends ControllerClass {
     void removePatientBtnAction(ActionEvent event) {
         LOGGER.debug("[ControllerPatients][removePatientBtnAction] Delete Button Clicked. ");
         if (selectedPatient != null) {
-            if (confirmRemoveAction()) {
+            if (AppAllerts.confirm(AlertType.UPDATE_TITLE, AlertHeader.CONFIRMATION_DELETE_PATIENT, AlertMessage.CONFIRMATION_QUESTION)) {
                 LOGGER.debug("[ControllerPatients][removePatientBtnAction] Operation confirmed by current Administrator[" + adminService.getCurrentAdmin().getFio() + "] to remove doctor["
                         + selectedPatient.getFio() + "]");
                 patientsService.deletePatient(selectedPatient.getId(), adminService.getCurrentAdmin().getId());
@@ -279,58 +260,42 @@ public class ControllerPatients extends ControllerClass {
             }
         } else {
             LOGGER.debug("[ControllerDoctors][removeDoctorBtnAction] Delete Button Clicked. No doctor selected");
-            alertNotSelected();
+            AppAllerts.alertUser(AlertType.INFORMATION_TITLE, AlertMessage.PATIENT_NOT_SELECTED);
         }
-    }
-
-    private boolean confirmRemoveAction() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(CONFIRMATION_DELETE_TITLE);
-        alert.setHeaderText(CONFIRMATION_DELETE_HEADER);
-        alert.setContentText(CONFIRMATION_DELETE_CONTENT);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            return true;
-        }
-        return false;
     }
 
     @FXML
     void updatePatientBtnAction(ActionEvent event) {
         LOGGER.debug("[ControllerPatients][updatePatientBtnAction] Update Button Clicked. ");
-        if (selectedPatient != null && checkInputFields() && confirmUpdateAction()) {
+        if (selectedPatient != null && checkInputFields() &&
+                AppAllerts.confirm(AlertType.UPDATE_TITLE, AlertHeader.CONFIRMATION_UPDATE_PATENT, AlertMessage.CONFIRMATION_QUESTION)) {
             LOGGER.debug("[ControllerPatients][updatePatientBtnAction] Updating patient [" + selectedPatient.getFio() + "] id [" + selectedPatient.getId() + "]");
-            patientsService.updatePatient(selectedPatient.getId(), firstNameFld.getText(), lastNameFld.getText(), middleNameFld.getText(), phoneNumberFld.getText(), phoneNumberTwoFld.getText(),
-                    emailFld.getText(), commentFld.getText());
-            patientsTable.setItems(patientsService.loadLastUpdatedPatients());
-            //Todo set Selected patient as last updated
+            patientsService.updatePatient(selectedPatient.getId(), firstNameFld.getText(), lastNameFld.getText(), middleNameFld.getText(), phoneNumberFld.getText(), phoneNumberTwoFld.getText(), emailFld.getText(), commentFld.getText());
+            loadAndSelectPatients();
         } else {
             LOGGER.debug("[ControllerPatients][updatePatientBtnAction] No Patient selected");
-            alertNotSelected();
+            AppAllerts.alertUser(AlertType.INFORMATION_TITLE, AlertMessage.PATIENT_NOT_SELECTED);
         }
     }
 
-    private boolean confirmUpdateAction() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(CONFIRMATION_UPDATE_TITLE);
-        alert.setHeaderText(CONFIRMATION_UPDATE_HEADER);
-        alert.setContentText(CONFIRMATION_UPDATE_CONTENT);
+    private void loadAndSelectPatients() {
+        ObservableList<Patient> patients = patientsService.loadLastUpdatedPatients();
+        patientsTable.setItems(patients);
+        if (selectedPatient != null) {
+            Optional<Patient> patientOptional = patients.stream().filter(patient -> patient.getId() == selectedPatient.getId()).findFirst();
+            if (patientOptional.isPresent()){
+                patientsTable.getSelectionModel().select(patientOptional.get());
+            }else {
+                Patient patient = patientsService.loadPatient(selectedPatient);
+                if (patient != null){
+                    ObservableList<Patient> list = patientsTable.getItems();
 
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            return true;
+                    list.add(0, patient);
+                    patientsTable.setItems(list);
+                    patientsTable.getSelectionModel().select(patient);
+                }
+            }
         }
-        return false;
-    }
-
-    private void alertNotSelected() {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(INFORMATION_TITLE);
-        alert.setHeaderText(null);
-        alert.setContentText(INFORMATION_CONTEXT_NOT_SELECTED);
-
-        alert.showAndWait();
     }
 
     @FXML
@@ -341,42 +306,22 @@ public class ControllerPatients extends ControllerClass {
     }
 
     public void startController() {
-        //Todo When loading patients and patient is already selected. Have to load selected patient also and select that patient.
         clearFields();
         clearFieldsFind();
         clearLabels();
         initListeners();
-        setTable();
+        setPatientsTable();
         setFindLabel();
         setTableAppointments();
 
     }
 
-    private void setTable() {
-        fioCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("fioProp"));
-        phoneCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("cellPhoneProp"));
-        emailCol.setCellValueFactory(new PropertyValueFactory<Patient, String>("emailProp"));
+    private void setPatientsTable() {
+        fioCol.setCellValueFactory(new PropertyValueFactory<>("fioProp"));
+        phoneCol.setCellValueFactory(new PropertyValueFactory<>("cellPhoneProp"));
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("emailProp"));
 
-        //Todo remove. This is example of how to change color of a row
-/*        emailCol.setCellFactory(new Callback<TableColumn<Patient, String>, TableCell<Patient, String>>() {
-            @Override
-            public TableCell<Patient, String> call(TableColumn<Patient, String> param) {
-                return new TableCell<Patient, String>(){
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (!empty){
-                            this.setStyle("-fx-background-color:red");
-                            this.setText(item);
-                        }
-                    }
-                };
-            }
-        });*/
-
-        ObservableList<Patient> patients = patientsService.loadLastCreatedPatients();
-
-        patientsTable.setItems(patients);
+        loadAndSelectPatients();
     }
 
     private void initListeners() {
