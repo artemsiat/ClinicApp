@@ -188,22 +188,32 @@ public class ControllerDoctors extends ControllerClass {
         setTable();
         setTableListener();
         setPhoneListeners();
+        doctorSelected();
     }
 
     private void setTableListener() {
         tableView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                doctorCleared();
-            } else {
-                doctorSelected();
-            }
+            doctorSelected();
         });
     }
 
-    private void doctorCleared() {
-        doctorsService.setSelectedDoctor(null);
-        clearFields();
-        clearLabels();
+    private void doctorSelected() {
+        Doctor selectedItem = tableView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            Optional<Doctor> doctorOptional = doctorsService.loadDoctors().stream().filter(doctor -> doctor.getId() == selectedItem.getId()).findFirst();
+            selectedDoctor = doctorOptional.orElse(null);
+
+            doctorsService.setSelectedDoctor(selectedDoctor);
+            removeDoctorBtn.setDisable(false);
+            updateDoctorBtn.setDisable(false);
+            setSelectedDoctor();
+        }else {
+            doctorsService.setSelectedDoctor(null);
+            removeDoctorBtn.setDisable(true);
+            updateDoctorBtn.setDisable(true);
+            clearFields();
+            clearLabels();
+        }
     }
 
     private void setSelectedDoctor() {
@@ -214,12 +224,6 @@ public class ControllerDoctors extends ControllerClass {
         homePhoneField.setText(selectedDoctor.getHomePhone());
         emailField.setText(selectedDoctor.getEmail());
         commentTextArea.setText(selectedDoctor.getComment());
-    }
-
-    private void doctorSelected() {
-        selectedDoctor = doctorsService.getDoctors().get(tableView.getSelectionModel().getSelectedIndex());
-        doctorsService.setSelectedDoctor(selectedDoctor);
-        setSelectedDoctor();
     }
 
     private void setTable() {

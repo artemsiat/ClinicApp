@@ -91,7 +91,7 @@ public class ControllerWorkingDays extends ControllerClass {
     private TextArea commentField;
 
     public void startController() {
-        LOGGER.debug("[startController] Working Day controller starting");
+        LOGGER.debug("[startController] Working Day controller starting....");
         // Todo add functionality to create multiple wd for multiple doctors in seperate popup window
         // Todo, can create time picking with time buttons . example 10  10 15   10 30   10 45.. and the same for 11 on the next row. generate buttons dynamicaly.
         clearLabels();
@@ -209,7 +209,7 @@ public class ControllerWorkingDays extends ControllerClass {
     private void setDoctorComboBoxListener() {
         doctorComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (!StringUtils.isEmpty(newValue)) {
-                Optional<Doctor> doctorOptional = doctorsService.getDoctors().stream().filter(doctor -> StringUtils.equals(doctor.getFio(), newValue)).findFirst();
+                Optional<Doctor> doctorOptional = doctorsService.loadDoctors().stream().filter(doctor -> StringUtils.equals(doctor.getFio(), newValue)).findFirst();
                 if (doctorOptional.isPresent()) {
                     doctorsService.setSelectedDoctor(doctorOptional.get());
                     setDoctorLabel();
@@ -245,11 +245,15 @@ public class ControllerWorkingDays extends ControllerClass {
     private void setDoctorComboBox() {
         LOGGER.debug("[setDoctorComboBox] Setting Doctors ComboBox");
         doctorComboBox.getItems().clear();
-        if (doctorsService.getDoctors().isEmpty()) {
-            LOGGER.debug("[setDoctorComboBox] doctors observable arrayList is empty. Loading Doctors from Data Base");
-            doctorsService.loadDoctors();
-        }
-        doctorsService.getDoctors().forEach(doctor -> {
+//        if (doctorsService.getDoctors().isEmpty()) {
+//            LOGGER.debug("[setDoctorComboBox] doctors observable arrayList is empty. Loading Doctors from Data Base");
+//            doctorsService.loadDoctors();
+//        }
+//        doctorsService.getDoctors().forEach(doctor -> {
+//            doctorComboBox.getItems().add(doctor.getFio());
+//            LOGGER.debug("[setDoctorComboBox] adding doctor to dropBox: " + doctor.getFio());
+//        });
+        doctorsService.loadDoctors().forEach(doctor -> {
             doctorComboBox.getItems().add(doctor.getFio());
             LOGGER.debug("[setDoctorComboBox] adding doctor to dropBox: " + doctor.getFio());
         });

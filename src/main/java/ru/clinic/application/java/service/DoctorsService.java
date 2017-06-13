@@ -23,7 +23,7 @@ public class DoctorsService {
 
     private final static Logger LOGGER = LogManager.getLogger(DoctorsService.class.getName());
     private Doctor selectedDoctor;
-    private ObservableList<Doctor> doctors;
+    //private ObservableList<Doctor> doctors;
 
     @Autowired
     DoctorsDao doctorsDao;
@@ -41,16 +41,17 @@ public class DoctorsService {
     WorkingDayService workingDayService;
 
     public DoctorsService() {
-        doctors = FXCollections.observableArrayList();
+        //doctors = FXCollections.observableArrayList();
         selectedDoctor = null;
     }
 
     public ObservableList<Doctor> loadDoctors() {
         LOGGER.debug("[loadDoctors] Loading doctors from data base");
         ObservableList<Doctor> doctorObservableList = doctorsDao.selectAllDoctors();
-        doctors = doctorObservableList;
+        //doctors = doctorObservableList;
         LOGGER.debug("[loadDoctors] Successfully loaded [" + doctorObservableList.size() + "] doctors");
-        return doctors;
+        //return doctors;
+        return doctorObservableList;
     }
 
     public void addNewDoctor(String fio, LocalDate dob, String cellPhone, String cellPhoneTwo, String homePhone, String email, String comment) {
@@ -61,9 +62,9 @@ public class DoctorsService {
         doctorsDao.insertDoctor(fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, comment, adminService.getCurrentAdmin().getId());
     }
 
-    public ObservableList<Doctor> getDoctors() {
-        return doctors;
-    }
+//    public ObservableList<Doctor> getDoctors() {
+//        return doctors;
+//    }
 
     public void deleteDoctor(int selectedDoctorId, int id) {
         LOGGER.debug("[deleteDoctor] Marking doctor as removed");
@@ -87,7 +88,9 @@ public class DoctorsService {
         LOGGER.debug("[setSelectedDoctor] selected doctor [{}]", selectedDoctor);
         this.selectedDoctor = selectedDoctor;
         controllerRoot.setSelectedDoctor();
-        workingDayService.loadWorkingDaysRange(LocalDate.now(), selectedDoctor);
+        if (selectedDoctor != null) {
+            workingDayService.loadWorkingDaysRange(LocalDate.now(), selectedDoctor);
+        }
     }
 
 }

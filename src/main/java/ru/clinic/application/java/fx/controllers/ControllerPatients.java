@@ -306,6 +306,9 @@ public class ControllerPatients extends ControllerClass {
     }
 
     public void startController() {
+        LOGGER.debug("Starting PATIENT controller...");
+        //Todo Add dropBox for type of search(By last updated, created , by alphabet by most appointments etc.).
+
         clearFields();
         clearFieldsFind();
         clearLabels();
@@ -313,7 +316,7 @@ public class ControllerPatients extends ControllerClass {
         setPatientsTable();
         setFindLabel();
         setTableAppointments();
-
+        patientSelected();
     }
 
     private void setPatientsTable() {
@@ -384,19 +387,28 @@ public class ControllerPatients extends ControllerClass {
 
     private void setTableListener() {
         patientsTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                patientCleared();
-            } else {
-                patientSelected();
-            }
+            patientSelected();
         });
     }
 
     private void patientSelected() {
-        selectedPatient = patientsService.getPatients().get(patientsTable.getSelectionModel().getSelectedIndex());
-        patientsService.setSelectedPatient(selectedPatient);
-        refreshAppointmentsTable();
-        setSelectedPatient();
+        Patient selectedItem = patientsTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null){
+            selectedPatient = patientsService.getPatients().get(patientsTable.getSelectionModel().getSelectedIndex());
+            patientsService.setSelectedPatient(selectedPatient);
+            updatePatientBtn.setDisable(false);
+            removePatientBtn.setDisable(false);
+            buttonNewAppointment.setDisable(false);
+            refreshAppointmentsTable();
+            setSelectedPatient();
+        }else {
+            selectedPatient = null;
+            updatePatientBtn.setDisable(true);
+            removePatientBtn.setDisable(true);
+            buttonNewAppointment.setDisable(true);
+            clearLabels();
+            clearFields();
+        }
     }
 
     private void refreshAppointmentsTable() {
@@ -477,12 +489,6 @@ public class ControllerPatients extends ControllerClass {
         commentFld.setText(selectedPatient.getComment());
     }
 
-    private void patientCleared() {
-        selectedPatient = null;
-        clearLabels();
-        clearFields();
-    }
-
     private void clearFieldsFind() {
         firstNameFindFld.setText("");
         middleNameFindFld.setText("");
@@ -515,8 +521,6 @@ public class ControllerPatients extends ControllerClass {
         findPatientsLabel.setText("Всего пациентов: " + count);
     }
 
-
     public void stopController() {
-
     }
 }

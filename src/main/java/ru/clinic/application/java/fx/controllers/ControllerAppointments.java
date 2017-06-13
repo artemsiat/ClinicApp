@@ -284,11 +284,16 @@ public class ControllerAppointments extends ControllerClass {
 
         LOGGER.debug("[setDoctorComboBox] Setting Doctors ComboBox");
         doctorComboBox.getItems().clear();
-        if (doctorsService.getDoctors().isEmpty()) {
-            LOGGER.debug("[setDoctorComboBox] doctors observable arrayList is empty. Loading Doctors from Data Base");
-            doctorsService.loadDoctors();
-        }
-        doctorsService.getDoctors().forEach(doctor -> {
+//        if (doctorsService.getDoctors().isEmpty()) {
+//            LOGGER.debug("[setDoctorComboBox] doctors observable arrayList is empty. Loading Doctors from Data Base");
+//            doctorsService.loadDoctors();
+//        }
+//        doctorsService.getDoctors().forEach(doctor -> {
+//            doctorComboBox.getItems().add(doctor.getFio());
+//            //Comment
+//            LOGGER.debug("[setDoctorComboBox] adding doctor to dropBox: " + doctor.getFio());
+//        });
+        doctorsService.loadDoctors().forEach(doctor -> {
             doctorComboBox.getItems().add(doctor.getFio());
             //Comment
             LOGGER.debug("[setDoctorComboBox] adding doctor to dropBox: " + doctor.getFio());
@@ -402,7 +407,7 @@ public class ControllerAppointments extends ControllerClass {
     private void setDoctorComboBoxListener() {
         doctorComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (!StringUtils.isEmpty(newValue)) {
-                Optional<Doctor> doctorOptional = doctorsService.getDoctors().stream().filter(doctor -> StringUtils.equals(doctor.getFio(), newValue)).findFirst();
+                Optional<Doctor> doctorOptional = doctorsService.loadDoctors().stream().filter(doctor -> StringUtils.equals(doctor.getFio(), newValue)).findFirst();
                 if (doctorOptional.isPresent()) {
                     doctorsService.setSelectedDoctor(doctorOptional.get());
                     setDoctorLabel();

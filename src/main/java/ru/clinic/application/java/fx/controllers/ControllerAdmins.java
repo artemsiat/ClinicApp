@@ -228,13 +228,14 @@ public class ControllerAdmins extends ControllerClass {
     }
 
     public void startController() {
+        LOGGER.debug("Starting ADMINS controller...");
+
         clearFields();
         clearLabels();
         setTable();
         setTableListener();
         setPhoneListeners();
-
-        //TODO Add phone number listeners
+        adminSelected();
     }
 
     private void setPhoneListeners() {
@@ -271,18 +272,8 @@ public class ControllerAdmins extends ControllerClass {
 
     private void setTableListener() {
         adminTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                adminCleared();
-            } else {
-                adminSelected();
-            }
+            adminSelected();
         });
-    }
-
-    private void adminCleared() {
-        selectedAdmin = null;
-        clearFields();
-        clearLabels();
     }
 
     private void setSelectedAdmin() {
@@ -305,8 +296,19 @@ public class ControllerAdmins extends ControllerClass {
     }
 
     private void adminSelected() {
-        selectedAdmin = adminService.getAdmins().get(adminTable.getSelectionModel().getSelectedIndex());
-        setSelectedAdmin();
+        Admin selectedItem = adminTable.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+            selectedAdmin = adminService.getAdmins().get(adminTable.getSelectionModel().getSelectedIndex());
+            setSelectedAdmin();
+            deleteBtn.setDisable(false);
+            updateBtn.setDisable(false);
+        }else {
+            selectedAdmin = null;
+            clearFields();
+            clearLabels();
+            deleteBtn.setDisable(true);
+            updateBtn.setDisable(true);
+        }
     }
 
     private void setTable() {
