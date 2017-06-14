@@ -127,4 +127,9 @@ public class WorkingDayService {
         }
         return timeIntervals;
     }
+
+    public void loadWorkingDays(LocalDate date, ObservableList<Doctor> doctors) {
+        LOGGER.debug("Loading working days for doctors");
+    }
+
 }

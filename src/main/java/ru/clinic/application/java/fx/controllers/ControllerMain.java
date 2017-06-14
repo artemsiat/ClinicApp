@@ -1,5 +1,7 @@
 package ru.clinic.application.java.fx.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.java.dao.entity.doctor.Doctor;
 import ru.clinic.application.java.fx.ControllerClass;
+import ru.clinic.application.java.service.AppointmentService;
 import ru.clinic.application.java.service.DoctorsService;
+import ru.clinic.application.java.service.MainService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Created by Artem Siatchinov on 1/2/2017.
@@ -25,10 +30,16 @@ public class ControllerMain extends ControllerClass {
 
     private final static Logger LOGGER = LogManager.getLogger(ControllerMain.class.getName());
 
-    private static final String ALL_DOCTORS_RUS = "Все Врачи";
+    public static final String ALL_DOCTORS_RUS = "Все Врачи";
 
     @Autowired
     private DoctorsService doctorsService;
+
+    @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
+    private MainService mainService;
 
     @FXML
     private Button btnPrevious;
@@ -66,10 +77,9 @@ public class ControllerMain extends ControllerClass {
 
     public void startController() {
         LOGGER.debug("Starting MAIN controller...");
-
+        initComboBoxDoctors();
         initDatePicker();
         initButtons();
-        initComboBoxDoctors();
     }
 
     private void initComboBoxDoctors() {
@@ -90,7 +100,26 @@ public class ControllerMain extends ControllerClass {
     }
 
     private void initDatePicker() {
+        datePicker.valueProperty().addListener(new ChangeListener<LocalDate>() {
+            @Override
+            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+                LOGGER.debug("DatePicker value changed from [{}] to [{}]", oldValue, newValue);
+                dateChanged();
+            }
+        });
         datePicker.setValue(LocalDate.now());
+    }
+
+    private void dateChanged() {
+        LocalDate newValue = datePicker.getValue();
+        String doctorsValue = comboBoxDoctors.getValue();
+        LOGGER.debug("New date value [{}] doctor [{}] " , newValue, doctorsValue);
+        if (newValue != null && doctorsValue != null){
+            mainService.loadAppointments(newValue, doctorsValue);
+        }else {
+            LOGGER.warn("Error loading appointment!!!");
+        }
+
     }
 
     public void stopController() {

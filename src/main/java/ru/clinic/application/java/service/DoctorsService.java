@@ -23,7 +23,6 @@ public class DoctorsService {
 
     private final static Logger LOGGER = LogManager.getLogger(DoctorsService.class.getName());
     private Doctor selectedDoctor;
-    //private ObservableList<Doctor> doctors;
 
     @Autowired
     DoctorsDao doctorsDao;
