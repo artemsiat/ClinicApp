@@ -4,20 +4,23 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import ru.clinic.application.config.JavaFxJUnit4ClassRunner;
 import ru.clinic.application.config.TestDaoConfig;
-import ru.clinic.application.java.configuration.AppConfig;
-import ru.clinic.application.java.dao.entity.Admin;
-import ru.clinic.application.java.dao.entity.appointment.FreeTime;
-import ru.clinic.application.java.dao.entity.appointment.TimeInterval;
-import ru.clinic.application.java.dao.entity.doctor.WorkingDay;
-import ru.clinic.application.java.service.AdminService;
-import ru.clinic.application.java.service.AppointmentService;
-import ru.clinic.application.java.service.DataBaseService;
-import ru.clinic.application.java.service.dataBaseModel.TableAdmins;
-import ru.clinic.application.java.service.utils.AppointmentUtils;
-import ru.clinic.application.java.service.utils.ClinicAppUtils;
+import ru.clinic.application.configuration.AppConfig;
+import ru.clinic.application.dao.entity.Admin;
+import ru.clinic.application.dao.entity.appointment.FreeTime;
+import ru.clinic.application.dao.entity.appointment.TimeInterval;
+import ru.clinic.application.dao.entity.doctor.WorkingDay;
+import ru.clinic.application.service.controllerServices.AdminService;
+import ru.clinic.application.service.controllerServices.AppointmentService;
+import ru.clinic.application.service.controllerServices.DataBaseService;
+import ru.clinic.application.service.dataBaseModel.TableAdmins;
+import ru.clinic.application.service.utils.AppointmentUtils;
+import ru.clinic.application.service.utils.ClinicAppUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -26,8 +29,11 @@ import java.util.Map;
  * Product clinicApp
  * Created by artem_000 on 4/15/2017.
  */
+//@RunWith(JavaFxJUnit4ClassRunner.class)
+//@ContextConfiguration(classes = {AppConfig.class, TestDaoConfig.class})
+@SpringBootTest
 @RunWith(JavaFxJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {AppConfig.class, TestDaoConfig.class})
+@Import(TestDaoConfig.class)
 public class ClinicAppTest {
 
     @Autowired

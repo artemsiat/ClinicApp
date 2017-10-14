@@ -1,7 +1,7 @@
 package groovy
 
 import org.springframework.beans.factory.annotation.Autowired
-import ru.clinic.application.java.service.AppointmentService
+import ru.clinic.application.service.controllerServices.AppointmentService
 
 /**
  * Product clinicApp

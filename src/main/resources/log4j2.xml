@@ -1,64 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
+<configuration monitorInterval="60">
+
+    <properties>
+        <Property name="pattern">%date [%thread] %-5level %logger{50} - %msg%n</Property>
+    </properties>
 
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
         </Console>
 
-        <!--Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
-        </Console-->
-        <File name="MyFile" fileName="logs/main.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
-        <File name="spring-file" fileName="logs/spring-file.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
-        <File name="spring-jdbc" fileName="logs/spring-jdbc.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
+        <RollingFile name="main"
+                     fileName="logs/main.log"
+                     filePattern="backup/logs/main.log-%d{yyyy-MM-dd}.%i.zip">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="spring"
+                     fileName="logs/spring.log"
+                     filePattern="backup/logs/spring.log-%d{yyyy-MM-dd}.%i.zip">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="jobs"
+                     fileName="logs/jobs.log"
+                     filePattern="backup/logs/jobs.log-%d{yyyy-MM-dd}.%i.zip">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
     </Appenders>
 
     <Loggers>
         <Root level="error">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="main"/>
         </Root>
 
         <logger name="org.springframework" level="DEBUG" additivity="false">
-            <AppenderRef ref="spring-file"/>
+            <AppenderRef ref="spring"/>
         </logger>
 
-        <logger name="org.springframework.jdbc" level="DEBUG" additivity="false">
-            <AppenderRef ref="spring-jdbc"/>
-        </logger>
-
-        <logger name="ru.clinic.application.java.Main" level="DEBUG" additivity="false">
+        <logger name="ru.clinic.application.ClinicApplicationStarter" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="main"/>
         </logger>
 
-        <logger name="ru.clinic.application.java.fx.frames" level="DEBUG" additivity="false">
+        <logger name="ru.clinic.application.fx.frames" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="main"/>
         </logger>
 
-        <logger name="ru.clinic.application.java.dao" level="DEBUG" additivity="false">
+        <logger name="ru.clinic.application.dao" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="main"/>
         </logger>
 
-        <logger name="ru.clinic.application.java.service" level="DEBUG" additivity="false">
+        <logger name="ru.clinic.application.service" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="main"/>
         </logger>
 
-        <logger name="ru.clinic.application.java.fx.controllers" level="DEBUG" additivity="false">
+        <logger name="ru.clinic.application.fx.controllers" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="main"/>
+        </logger>
+
+        <logger name="ru.clinic.application.service.AppSchedules" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="jobs"/>
         </logger>
 
     </Loggers>
-
 </configuration>

@@ -1,9 +1,9 @@
 package groovy.service
 
 import groovy.CommonServiceTest
-import ru.clinic.application.java.dao.entity.appointment.FreeTime
-import ru.clinic.application.java.dao.entity.appointment.TimeInterval
-import ru.clinic.application.java.dao.entity.doctor.WorkingDay
+import ru.clinic.application.dao.entity.appointment.FreeTime
+import ru.clinic.application.dao.entity.appointment.TimeInterval
+import ru.clinic.application.dao.entity.doctor.WorkingDay
 
 /**
  * Product clinicApp
