@@ -7,7 +7,8 @@ package ru.clinic.application.common.alerts;
 public enum AlertType {
 
     INFORMATION_TITLE("Информационное окно"),
-    UPDATE_TITLE("Подтверждение");
+    UPDATE_TITLE("Подтверждение"),
+    INTERNAL_ERROR("Внутренняя ошибка");
 
     private final String value;
 

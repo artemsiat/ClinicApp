@@ -65,6 +65,9 @@ public class ControllerDbTables {
     TableTasks tableTasks;
 
     @Autowired
+    TableTaskFields tableTaskFields;
+
+    @Autowired
     TableSettings tableSettings;
 
     @Autowired
@@ -156,6 +159,18 @@ public class ControllerDbTables {
 
     @FXML
     private Button refreshTasksBtn;
+
+    @FXML
+    private Label taskFieldsStatus;
+
+    @FXML
+    private Button createTaskFieldsBtn;
+
+    @FXML
+    private Button dropTaskFieldsBtn;
+
+    @FXML
+    private Button refreshTaskFieldsBtn;
 
 
     public void startController() {
@@ -381,6 +396,12 @@ public class ControllerDbTables {
         }
     }
 
+    public void setTaskFieldsTableStatus() {
+        if (taskFieldsStatus != null && createTaskFieldsBtn != null && dropTaskFieldsBtn != null) {
+            setCreatedStatus(tableTaskFields.isCreated(), taskFieldsStatus, createTaskFieldsBtn, dropTaskFieldsBtn);
+        }
+    }
+
     @FXML
     void refreshSettingsBtnAction(ActionEvent event) {
         LOGGER.debug("Button clicked. refreshSettingsBtnAction");
@@ -432,4 +453,31 @@ public class ControllerDbTables {
             tableTasks.createTable();
         }
     }
+
+    @FXML
+    void createTaskFieldsBtnAction(ActionEvent event) {
+        LOGGER.debug("Button clicked. createTaskFieldsBtnAction");
+        if (confirmAction()) {
+            tableTaskFields.createTable();
+        }
+    }
+
+    @FXML
+    void dropTaskFieldsBtnAction(ActionEvent event) {
+        LOGGER.debug("Button clicked. dropTaskFieldsBtnAction");
+        if (adminService.getCurrentAdmin().getId() == 0) {
+            if (confirmAction()) {
+                tableTaskFields.dropTable();
+            }
+        } else {
+            alertNoAuth();
+        }
+    }
+
+    @FXML
+    void refreshTaskFieldsBtnAction(ActionEvent event) {
+        LOGGER.debug("Button clicked. refreshTaskFieldsBtnAction");
+        tableTaskFields.checkIfCreated();
+    }
+
 }

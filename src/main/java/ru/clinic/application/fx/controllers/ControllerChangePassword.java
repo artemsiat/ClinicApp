@@ -14,9 +14,11 @@ import org.springframework.stereotype.Component;
 import ru.clinic.application.common.alerts.AlertMessage;
 import ru.clinic.application.common.alerts.AlertType;
 import ru.clinic.application.common.alerts.AppAllerts;
+import ru.clinic.application.dao.AdminDao;
 import ru.clinic.application.dao.entity.Admin;
 import ru.clinic.application.fx.ControllerClass;
 import ru.clinic.application.fx.frames.FrameChangePassword;
+import ru.clinic.application.service.controllerServices.AdminService;
 
 /**
  * Product clinicApp
@@ -37,6 +39,9 @@ public class ControllerChangePassword extends ControllerClass{
 
     @Autowired
     private FrameChangePassword frameChangePassword;
+
+    @Autowired
+    private AdminService adminService;
 
     @FXML
     private PasswordField oldPasswordField;
@@ -81,9 +86,13 @@ public class ControllerChangePassword extends ControllerClass{
             AppAllerts.informationAlert(AlertType.INFORMATION_TITLE, AlertMessage.NEW_PASSWORDS_DO_NOT_MATCH);
             return;
         }
-        if (StringUtils.isBlank(newPasswordField.getText())){
-
+        if(adminService.updateAdminPassword(selectedAdmin, newPasswordField.getText())){
+            AppAllerts.informationAlert(AlertType.INFORMATION_TITLE, AlertMessage.ADMIN_UPDATED);
+            selectedAdmin.setPassword(newPasswordField.getText());
+        }else {
+            AppAllerts.informationAlert(AlertType.INTERNAL_ERROR, AlertMessage.ERROR_UPDATING_ADMIN);
         }
+        frameChangePassword.stop();
     }
 
     @Override

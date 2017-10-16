@@ -31,37 +31,40 @@ public class ControllerRoot {
     private final static Logger LOGGER = LogManager.getLogger(ControllerRoot.class.getName());
 
     @Autowired
-    FrameRoot frameRoot;
+    private FrameRoot frameRoot;
 
     @Autowired
-    FrameAdmins frameAdmins;
+    private FrameAdmins frameAdmins;
 
     @Autowired
-    FrameMain frameMain;
+    private FrameMain frameMain;
 
     @Autowired
-    FrameDoctors frameDoctors;
+    private FrameDoctors frameDoctors;
 
     @Autowired
-    FramePatients framePatients;
+    private FramePatients framePatients;
 
     @Autowired
-    FrameDbTables frameDbTables;
+    private FrameDbTables frameDbTables;
 
     @Autowired
-    AdminService adminService;
+    private AdminService adminService;
 
     @Autowired
-    PatientsService patientsService;
+    private PatientsService patientsService;
 
     @Autowired
-    FrameWorkingDays frameWorkingDays;
+    private FrameWorkingDays frameWorkingDays;
 
     @Autowired
-    DoctorsService doctorsService;
+    private DoctorsService doctorsService;
 
     @Autowired
-    FrameAppointments frameAppointments;
+    private FrameAppointments frameAppointments;
+
+    @Autowired
+    private FrameSettings frameSettings;
 
     @FXML
     private Label selectedPatientLabel;
@@ -95,6 +98,9 @@ public class ControllerRoot {
 
     @FXML
     private Button scheduleBtn;
+
+    @FXML
+    private Button settingsBtn;
 
     @FXML
     void menuDbTablesAction(ActionEvent event) {
@@ -131,6 +137,11 @@ public class ControllerRoot {
         frameRoot.getRoot().setCenter(frameWorkingDays.getCenterPane());
     }
 
+    @FXML
+    void settingsBtnAction(ActionEvent event) {
+        frameRoot.getRoot().setCenter(frameSettings.getCenterPane());
+    }
+
     public void startController() {
         setMainPane();
         initAdminLabel();
@@ -147,6 +158,7 @@ public class ControllerRoot {
         setImage(appointmentBtn, "/images/appointment.png");
         setImage(scheduleBtn, "/images/schedule.png");
         setImage(mainBtn, "/images/tree.png");
+        setImage(settingsBtn, "/images/setting.png");
     }
 
     private void setImage(Button btn, String path) {

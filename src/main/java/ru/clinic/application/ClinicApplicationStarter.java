@@ -4,13 +4,18 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hsqldb.util.DatabaseManager;
+import org.hsqldb.util.DatabaseManagerSwing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 import ru.clinic.application.configuration.AppConfig;
 import ru.clinic.application.configuration.DaoConfiguration;
 import ru.clinic.application.fx.frames.FrameStart;
+
+import java.awt.*;
 
 /**
  * Created by Artem Siatchinov on 1/1/2017.
@@ -36,8 +41,9 @@ public class ClinicApplicationStarter extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         LOGGER.debug("[start] configuring spring framework");
-        context = SpringApplication.run(ClinicApplicationStarter.class);
-        context.getBean(FrameStart.class).start(primaryStage);
+        this.context = new SpringApplicationBuilder(ClinicApplicationStarter.class).headless(false).run();
+        //this.context = SpringApplication.run(ClinicApplicationStarter.class);
+        this.context.getBean(FrameStart.class).start(primaryStage);
         LOGGER.debug("Application started successfully !!!");
         LOGGER.debug("================================================================");
         LOGGER.debug("Application is running !!!");
@@ -58,5 +64,13 @@ public class ClinicApplicationStarter extends Application {
         LOGGER.debug("Closing Spring boot");
         context.close();
         LOGGER.debug("================================================================");
+    }
+
+    public void getDbManager(){
+        try {
+            DatabaseManager.threadedDBM();
+        }catch (Exception ex){
+            LOGGER.error("Error getting DataBase console ", ex);
+        }
     }
 }

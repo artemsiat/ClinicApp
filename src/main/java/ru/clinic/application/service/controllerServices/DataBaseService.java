@@ -18,31 +18,43 @@ public class DataBaseService {
     private final static Logger LOGGER = LogManager.getLogger(DataBaseService.class.getName());
 
     @Autowired
-    TableAdmins tableAdmins;
+    private TableAdmins tableAdmins;
 
     @Autowired
-    TableDoctors tableDoctors;
+    private TableDoctors tableDoctors;
 
     @Autowired
-    TablePatients tablePatients;
+    private TablePatients tablePatients;
 
     @Autowired
-    TableWorkingDays tableWorkingDays;
+    private TableWorkingDays tableWorkingDays;
 
     @Autowired
-    TableAppointments tableAppointments;
+    private TableAppointments tableAppointments;
 
     @Autowired
-    TableTasks tableTasks;
+    private TableTasks tableTasks;
 
     @Autowired
-    TableSettings tableSettings;
+    private TableSettings tableSettings;
+
+    @Autowired
+    private TableTaskFields tableTaskFields;
 
     private TableStatus[] tables;
 
     @PostConstruct
     public void init() {
-        tables = new TableStatus[]{this.tableAdmins, this.tableDoctors, this.tablePatients, this.tableWorkingDays, this.tableAppointments, this.tableTasks, this.tableSettings};
+        tables = new TableStatus[]{
+                this.tableAdmins,
+                this.tableDoctors,
+                this.tablePatients,
+                this.tableWorkingDays,
+                this.tableAppointments,
+                this.tableTasks,
+                this.tableSettings,
+                this.tableTaskFields
+        };
     }
 
     public boolean checkTables() {

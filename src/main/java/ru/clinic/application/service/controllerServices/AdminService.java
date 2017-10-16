@@ -144,4 +144,13 @@ public class AdminService {
         });
         return names;
     }
+
+    public boolean updateAdminPassword(Admin selectedAdmin, String passwordNew) {
+        try {
+            return adminDao.updateAdminPassword(selectedAdmin.getId(), passwordNew, currentAdmin.getId());
+        }catch (Exception ex){
+            LOGGER.error("Error updating password[{}] for admin [{}]", selectedAdmin, passwordNew);
+            return false;
+        }
+    }
 }

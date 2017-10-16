@@ -137,6 +137,15 @@ public class DataBaseDao {
             "status varchar(15)," +
             "comment varchar(500))";
 
+    private static final String TASK_FIELDS_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'APP_TASK_FIELDS'";
+    private static final String TASK_FIELDS_DROP_TABLE = "DROP TABLE APP_TASK_FIELDS";
+    private static final String TASK_FIELDS_CREATE_TABLE =
+            "CREATE TABLE APP_TASK_FIELDS(" +
+            "id INT PRIMARY KEY IDENTITY," +
+            "task_id int," +
+            "field_type varchar(100)," +
+            "field_code varchar(100)," +
+            "field_value varchar(500))";
 
     @Autowired
     private
@@ -338,6 +347,33 @@ public class DataBaseDao {
             jdbcTemplate.update(sql);
         }catch (Exception e){
             LOGGER.error("Error backing up files " , e);
+        }
+    }
+
+    public boolean checkTaskFieldsTable() {
+        LOGGER.debug("[checkTaskFieldsTable] Checking if Tasks table is created");
+        try {
+            Integer count = jdbcTemplate.queryForObject(TASK_FIELDS_CHECK_TABLE, Integer.class);
+            return count == 1;
+        } catch (DataAccessException e) {
+            LOGGER.error("Error executing sql statement ", e);
+        }
+        return false;
+    }
+
+    public void dropTaskFieldsTable() {
+        try {
+            jdbcTemplate.execute(TASK_FIELDS_DROP_TABLE);
+        } catch (DataAccessException e) {
+            LOGGER.error("Error executing sql statement ", e);
+        }
+    }
+
+    public void createTasksFieldsTable() {
+        try {
+            jdbcTemplate.execute(TASK_FIELDS_CREATE_TABLE);
+        } catch (DataAccessException e) {
+            LOGGER.error("Error executing sql statement ", e);
         }
     }
 }

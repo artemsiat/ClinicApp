@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="609.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="774.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <VBox alignment="CENTER" layoutX="45.0" layoutY="45.0" spacing="30.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
             <children>
@@ -125,6 +125,23 @@
                         <Button fx:id="createTasksBtn" mnemonicParsing="false" onAction="#createTasksBtnAction" text="Создать" />
                         <Button fx:id="dropTasksBtn" mnemonicParsing="false" onAction="#dropTasksBtnAction" text="Удалить" />
                         <Button fx:id="refreshTasksBtn" mnemonicParsing="false" onAction="#refreshTasksBtnAction" text="Обновить" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox spacing="5.0">
+               <children>
+                  <HBox spacing="15.0">
+                     <children>
+                        <Label text="Поля (задания) :" />
+                        <Label fx:id="taskFieldsStatus" text="status" />
+                     </children>
+                  </HBox>
+                  <HBox spacing="10.0">
+                     <children>
+                        <Button fx:id="createTaskFieldsBtn" mnemonicParsing="false" onAction="#createTaskFieldsBtnAction" text="Создать" />
+                        <Button fx:id="dropTaskFieldsBtn" mnemonicParsing="false" onAction="#dropTaskFieldsBtnAction" text="Удалить" />
+                        <Button fx:id="refreshTaskFieldsBtn" mnemonicParsing="false" onAction="#refreshTaskFieldsBtnAction" text="Обновить" />
                      </children>
                   </HBox>
                </children>

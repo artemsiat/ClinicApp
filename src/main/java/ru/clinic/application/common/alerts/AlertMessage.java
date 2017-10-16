@@ -11,7 +11,9 @@ public enum AlertMessage {
     FILL_FIELDS_FOR_PATIENT_SEARCH("Для поиска пациента необходимо заполнить поля."),
     CONFIRMATION_QUESTION("Вы уверены, что хотите продолжить?"),
     WRONG_PASSWORD("Введеный пароль не верный"),
-    NEW_PASSWORDS_DO_NOT_MATCH("Новый пароль не совпадает");
+    NEW_PASSWORDS_DO_NOT_MATCH("Новый пароль не совпадает"),
+    ERROR_UPDATING_ADMIN("Возникла ошибка при обновлении администратора"),
+    ADMIN_UPDATED("Администратор успешно обновлен");
 
     private final String value;
 

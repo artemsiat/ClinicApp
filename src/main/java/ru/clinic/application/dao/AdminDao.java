@@ -33,6 +33,10 @@ public class AdminDao {
             "fio=?, dob=?, cellphone=?, cellphone2=?, homephone=?, email=?, user_name=?, password=?, who_modified=?, modified=CURRENT_TIMESTAMP " +
             "WHERE id = ?";
 
+    private final static String UPDATE_ADMIN_PASSWORD = "UPDATE admin SET " +
+            "password=?, who_modified=?, modified=CURRENT_TIMESTAMP " +
+            "WHERE id = ?";
+
     private final static String REMOVE_ADMIN = "UPDATE admin SET removed=true, when_removed=CURRENT_TIMESTAMP, who_removed=? WHERE id=?";
 
     public String tabl = "CREATE TABLE IF NOT EXISTS ADMIN(" +
@@ -109,7 +113,7 @@ public class AdminDao {
         try {
             jdbcTemplate.update(UPDATE_ADMIN, fio, dobDate, cellPhone, cellPhoneTwo, homePhone, email, login, password, whoModified, selectedAdminId);
         } catch (DataAccessException e) {
-            e.printStackTrace();
+            LOGGER.error("Error Updating database", e);
         }
     }
 
@@ -117,7 +121,17 @@ public class AdminDao {
         try {
             jdbcTemplate.update(REMOVE_ADMIN, whoRemoved, selectedAdminId);
         } catch (DataAccessException e) {
-            e.printStackTrace();
+            LOGGER.error("Error Updating database", e);
         }
+    }
+
+    public boolean updateAdminPassword(int adminId, String passwordNew, int currentAdminId) {
+        try{
+            jdbcTemplate.update(UPDATE_ADMIN_PASSWORD, passwordNew, currentAdminId, adminId);
+        }catch (DataAccessException e){
+            LOGGER.error("Error Updating database", e);
+            return false;
+        }
+        return true;
     }
 }
