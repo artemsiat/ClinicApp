@@ -119,11 +119,13 @@ public class DataBaseDao {
     private final static String SETTINGS_CREATE_TABLE = "CREATE TABLE  APP_SETTINGS(" +
             "id INT PRIMARY KEY IDENTITY," +
             "setting_group varchar(100)," +
-            "setting_type varchar(100)," +
             "setting_code varchar(100)," +
+            "setting_name varchar(100)," +
+            "setting_default_value varchar(100)," +
             "setting_value varchar(100)," +
-            "name_displayed varchar(100)," +
-            "comment varchar(500))";
+            "setting_type varchar(100)," +
+            "comment varchar(500)," +
+            "editable boolean)";
 
     private final static String TASKS_CHECK_TABLE = "SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='PUBLIC' AND TABLE_NAME = 'APP_TASKS'";
     private final static String TASKS_DROP_TABLE = "DROP TABLE APP_TASKS";
@@ -218,7 +220,7 @@ public class DataBaseDao {
     public boolean checkTasksTable() {
         LOGGER.debug("[checkTasksTable] Checking if Tasks table is created");
         try {
-            Integer count = jdbcTemplate.queryForObject(SETTINGS_CHECK_TABLE, Integer.class);
+            Integer count = jdbcTemplate.queryForObject(TASKS_CHECK_TABLE, Integer.class);
             return count == 1;
         } catch (DataAccessException e) {
             LOGGER.error("Error executing sql statement ", e);

@@ -66,11 +66,4 @@ public class ClinicApplicationStarter extends Application {
         LOGGER.debug("================================================================");
     }
 
-    public void getDbManager(){
-        try {
-            DatabaseManager.threadedDBM();
-        }catch (Exception ex){
-            LOGGER.error("Error getting DataBase console ", ex);
-        }
-    }
 }

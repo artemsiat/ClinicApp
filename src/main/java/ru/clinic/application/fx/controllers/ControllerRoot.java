@@ -140,6 +140,7 @@ public class ControllerRoot {
     @FXML
     void settingsBtnAction(ActionEvent event) {
         frameRoot.getRoot().setCenter(frameSettings.getCenterPane());
+        frameSettings.getFrameController().postStart();
     }
 
     public void startController() {

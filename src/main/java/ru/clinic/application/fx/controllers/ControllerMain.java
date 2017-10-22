@@ -168,4 +168,9 @@ public class ControllerMain extends ControllerClass {
     public void stopController() {
 
     }
+
+    @Override
+    public void postStart() {
+
+    }
 }

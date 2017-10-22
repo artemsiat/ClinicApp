@@ -242,6 +242,11 @@ public class ControllerAppointments extends ControllerClass {
     public void stopController() {
     }
 
+    @Override
+    public void postStart() {
+
+    }
+
     private void appointmentTableSelected() {
         TimeInterval selectedItem = tableViewAppointments.getSelectionModel().getSelectedItem();
         clearTimePicker();

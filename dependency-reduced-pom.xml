@@ -25,7 +25,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>ru.clinic.application.java.Main</mainClass>
+                  <mainClass>ru.clinic.application.ClinicApplicationStarter</mainClass>
                 </transformer>
               </transformers>
             </configuration>

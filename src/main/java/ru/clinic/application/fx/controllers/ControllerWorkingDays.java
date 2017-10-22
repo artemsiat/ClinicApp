@@ -344,6 +344,11 @@ public class ControllerWorkingDays extends ControllerClass {
 
     }
 
+    @Override
+    public void postStart() {
+
+    }
+
     private void setDatePickerListener() {
         wdDatePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             setWorkDayLabel();

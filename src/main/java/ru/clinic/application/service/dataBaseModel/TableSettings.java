@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.clinic.application.dao.DataBaseDao;
 import ru.clinic.application.fx.controllers.ControllerDbTables;
+import ru.clinic.application.service.setting.SettingsService;
 
 /**
  * Product clinicApp
@@ -17,6 +18,9 @@ public class TableSettings extends TableStatus {
 
     @Autowired
     ControllerDbTables controllerDbTables;
+
+    @Autowired
+    private SettingsService settingsService;
 
     private final static String TABLE_NAME = "APP_SETTINGS";
 
@@ -42,6 +46,7 @@ public class TableSettings extends TableStatus {
     public void createTable() {
         dataBaseDao.createSettingsTable();
         checkIfCreated();
-        //Todo insert default settings
+
+        settingsService.insertDefaultSettings();
     }
 }

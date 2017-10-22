@@ -523,4 +523,9 @@ public class ControllerPatients extends ControllerClass {
 
     public void stopController() {
     }
+
+    @Override
+    public void postStart() {
+
+    }
 }

@@ -259,6 +259,11 @@ public class ControllerDoctors extends ControllerClass {
         clearLabels();
     }
 
+    @Override
+    public void postStart() {
+
+    }
+
     private void setPhoneListeners() {
         HashMap<TextField, Label> phoneFieldToLabel = new HashMap<>();
         phoneFieldToLabel.put(cellField, cellPhoneLabel);
