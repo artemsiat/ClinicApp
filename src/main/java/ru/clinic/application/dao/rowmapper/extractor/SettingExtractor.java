@@ -3,6 +3,7 @@ package ru.clinic.application.dao.rowmapper.extractor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import ru.clinic.application.dao.entity.settings.Setting;
+import ru.clinic.application.model.settings.SettingValueType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,7 +41,7 @@ public class SettingExtractor implements ResultSetExtractor<Setting>{
         setting.setName(resultSet.getString("setting_name"));
         setting.setDefaultValue(resultSet.getString("setting_default_value"));
         setting.setValue(resultSet.getString("setting_value"));
-        setting.setType(resultSet.getString("setting_type"));
+        setting.setType(SettingValueType.getByCode(resultSet.getString("setting_type")));
         setting.setHint(resultSet.getString("comment"));
         setting.setEditable(resultSet.getBoolean("editable"));
 

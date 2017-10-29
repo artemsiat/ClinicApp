@@ -1,26 +1,29 @@
 package ru.clinic.application.fx.controllers;
 
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
-import javafx.scene.text.Font;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ru.clinic.application.common.alerts.*;
 import ru.clinic.application.dao.entity.settings.Setting;
 import ru.clinic.application.fx.ControllerClass;
 import ru.clinic.application.fx.frames.FrameDbTables;
 import ru.clinic.application.model.settings.SettingGroup;
 import ru.clinic.application.service.setting.SettingsService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +44,8 @@ public class ControllerSettings extends ControllerClass {
 
     @FXML
     private ScrollPane scrollPane;
+
+    private Button saveButton;
 
     @Override
     public void startController() {
@@ -70,7 +75,7 @@ public class ControllerSettings extends ControllerClass {
         VBox allSettings = new VBox();
         allSettings.setSpacing(40);
 
-        settingsMap.forEach((key, value)->{
+        settingsMap.forEach((key, value) -> {
             GridPane gridPane = createSettingGroup(value);
 
             VBox vBox = new VBox();
@@ -82,53 +87,105 @@ public class ControllerSettings extends ControllerClass {
         HBox buttons = createButtons();
 
         allSettings.getChildren().add(buttons);
-        allSettings.setLayoutX(25);
-        allSettings.setLayoutY(25);
+
+        allSettings.setPadding(new Insets(25, 25, 35, 25));
+
         return allSettings;
     }
 
     private HBox createButtons() {
         HBox buttons = new HBox();
+        buttons.setSpacing(10);
 
         Button dbTables = new Button("База данных");
-        dbTables.setOnAction(event -> {frameDbTables.start(); settingsService.getDbManager();});
+        dbTables.setOnAction(event -> {
+            frameDbTables.start();
+            settingsService.getDbManager();
+        });
 
-        buttons.getChildren().add(new Button("save"));
+        saveButton = new Button("Сохранить изменения");
+        saveButton.setDisable(true);
+        saveButton.setOnAction(this::saveButtonClicked);
+
+        buttons.getChildren().add(saveButton);
         buttons.getChildren().add(dbTables);
         return buttons;
     }
 
+    private void saveButtonClicked(ActionEvent event) {
+        LOGGER.debug("SaveButton clicked");
+        //Todo alert user
+        if (ConfirmationDialog.UPDATE_SETTINGS.confirm()){
+            Map<Setting, List<String>> validationResult = settingsService.validateNewValues();
+            if (validationResult.isEmpty()) {
+                settingsService.updateSettings();
+                postStart();// Redraw frame
+            }else {
+                LOGGER.debug("VALIDATION ERROR ");
+
+                String validationMsg = settingsService.generateValidationErrorMsg(validationResult);
+                LOGGER.debug("validationMessage \n" + validationMsg );
+                AppAllerts.informationAlert(AlertType.VALIDATION_ERROR, validationMsg);
+            }
+        }
+    }
+
+    private void textFieldValueChanged(ObservableValue<? extends String> observable, String oldValue, String newValue, Setting setting) {
+        setting.setNewValue(newValue);
+
+        String initialValue = setting.getValue();
+        LOGGER.debug("Setting Text field value changed. initial value [{}]. changed from [{}] to [{}]", initialValue, oldValue, newValue);
+
+        if (StringUtils.equals(StringUtils.trim(initialValue), StringUtils.trim(newValue))) {
+            saveButton.setDisable(true);
+        } else {
+            saveButton.setDisable(false);
+        }
+    }
+
     private GridPane createSettingGroup(List<Setting> groupSettings) {
         GridPane gridPane = new GridPane();
-        gridPane.setHgap(15);
-        gridPane.setVgap(15);
+        gridPane.setHgap(5);
+        gridPane.setVgap(5);
         for (int index = 0; index < groupSettings.size(); index++) {
             Setting setting = groupSettings.get(index);
-            Label settingName = new Label(setting.getName());
-            Label settingHint = new Label(setting.getHint());
-            TextField settingValue = new TextField();
-            settingValue.setMinWidth(270);
-            if (StringUtils.isBlank(setting.getValue())) {
-                settingValue.setText(setting.getDefaultValue());
-            } else {
-                settingValue.setText(setting.getValue());
-            }
-            System.out.println(setting.getCode() + "  " + setting.isEditable());
-            if (setting.isEditable()){
-                settingValue.textProperty().addListener(setting::onChange);
-            }else {
-                settingValue.setEditable(setting.isEditable());
-            }
-            gridPane.add(settingName, 0, index);
+            TextField settingValue = createValueTextField(setting);
+
+            gridPane.add(getLable(setting.getName()), 0, index);
             gridPane.add(settingValue, 1, index);
-            gridPane.add(settingHint, 2, index);
+            gridPane.add(getLable(setting.getHint()), 2, index);
         }
         return gridPane;
     }
 
+    private TextField createValueTextField(Setting setting) {
+        TextField settingValue = new TextField();
+        settingValue.setStyle("-fx-font-size: 10pt;");
+        settingValue.setMinWidth(270);
+
+        settingValue.setText(setting.getValue());
+
+        if (setting.isEditable()) {
+            settingValue.textProperty().addListener(setting::onChange);
+        } else {
+            settingValue.setEditable(setting.isEditable());
+        }
+        settingValue.textProperty().addListener((observable, oldValue, newValue) -> {
+            textFieldValueChanged(observable, oldValue, newValue, setting);
+        });
+
+        return settingValue;
+    }
+
+    private Label getLable(String text) {
+        Label label = new Label(text);
+        label.setStyle("-fx-font-size: 10pt;");
+        return label;
+    }
+
     private Label getGroupLabel(String groupCode) {
         Label label = new Label(SettingGroup.getByCode(groupCode).getName());
-        label.setStyle("-fx-font-weight: bold");
+        label.setStyle("-fx-font-weight: bold;-fx-font-size: 12pt;");
         return label;
     }
 }

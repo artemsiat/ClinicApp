@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import ru.clinic.application.dao.entity.Patient;
 import ru.clinic.application.dao.rowmapper.extractor.PatientExtractor;
 import ru.clinic.application.dao.rowmapper.list_extractor.PatientListExtractor;
+import ru.clinic.application.model.settings.SettingCode;
 import ru.clinic.application.service.setting.SettingsService;
 
 import java.util.ArrayList;
@@ -92,12 +93,12 @@ public class PatientsDao {
     }
 
     public ObservableList<Patient> selectLastCreatedPatients() {
-        String sql = (SELECT_LAST_CREATED_PATIENTS + settingsService.getMaxPatientsLoadCount());
+        String sql = (SELECT_LAST_CREATED_PATIENTS + settingsService.getSettingValueByCode(SettingCode.MAX_PATIENT_LOAD_COUNT));
         return selectPatients(sql);
     }
 
     public ObservableList<Patient> selectLastUpdatedPatients() {
-        String sql = (SELECT_LAST_UPDATED_PATIENTS + settingsService.getMaxPatientsLoadCount());
+        String sql = (SELECT_LAST_UPDATED_PATIENTS + settingsService.getSettingValueByCode(SettingCode.MAX_PATIENT_LOAD_COUNT));
         return selectPatients(sql);
     }
 
@@ -143,7 +144,7 @@ public class PatientsDao {
             sql += " AND LOWER(email) like '%" + email.trim().trim().toLowerCase() + "%' ";
             params.add(email.trim().trim().toLowerCase());
         }
-        sql = "SELECT * FROM (" + sql + ") WHERE ROWNUM <= " + settingsService.getMaxPatientsLoadCount();
+        sql = "SELECT * FROM (" + sql + ") WHERE ROWNUM <= " + settingsService.getSettingValueByCode(SettingCode.MAX_PATIENT_LOAD_COUNT);
 
         return selectPatients(sql);
 

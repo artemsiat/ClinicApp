@@ -8,7 +8,8 @@ public enum AlertType {
 
     INFORMATION_TITLE("Информационное окно"),
     UPDATE_TITLE("Подтверждение"),
-    INTERNAL_ERROR("Внутренняя ошибка");
+    INTERNAL_ERROR("Внутренняя ошибка"),
+    VALIDATION_ERROR("Ошибка влидации");
 
     private final String value;
 

@@ -1,6 +1,11 @@
 package ru.clinic.application.dao.entity.settings;
 
-import javafx.beans.value.ObservableValue; /**
+import javafx.beans.value.ObservableValue;
+import org.apache.commons.lang3.StringUtils;
+import ru.clinic.application.model.settings.SettingValueType;
+import ru.clinic.application.service.setting.validator.SettingValueValidator;
+
+/**
  * Product clinicApp
  * Created by artem_000 on 10/17/2017.
  */
@@ -11,14 +16,15 @@ public class Setting {
     private String name;
     private String defaultValue;
     private String value;
-    private String type;
+    private SettingValueType type;
     private String hint;
     private boolean editable;
+    private String newValue;
 
     public Setting() {
     }
 
-    public Setting(String group, String code, String name, String defaultValue, String value, String type, String hint, boolean editable) {
+    public Setting(String group, String code, String name, String defaultValue, String value, SettingValueType type, String hint, boolean editable) {
         this.group = group;
         this.code = code;
         this.name = name;
@@ -69,11 +75,11 @@ public class Setting {
         return value;
     }
 
-    public void setType(String type) {
+    public void setType(SettingValueType type) {
         this.type = type;
     }
 
-    public String getType() {
+    public SettingValueType getType() {
         return type;
     }
 
@@ -86,7 +92,6 @@ public class Setting {
     }
 
     public void onChange(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        System.out.println("Value Change from " + oldValue + " to " +  newValue);
     }
 
     public void setId(long id) {
@@ -104,4 +109,29 @@ public class Setting {
     public void setEditable(boolean editable) {
         this.editable = editable;
     }
+
+    public void setNewValue(String newValue) {
+        this.newValue = newValue;
+    }
+
+    public String getNewValue() {
+        return newValue;
+    }
+
+    @Override
+    public String toString() {
+        return "Setting{" +
+                "id=" + id +
+                ", group='" + group + '\'' +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", defaultValue='" + defaultValue + '\'' +
+                ", value='" + value + '\'' +
+                ", type='" + type + '\'' +
+                ", hint='" + hint + '\'' +
+                ", editable=" + editable +
+                ", newValue='" + newValue + '\'' +
+                '}';
+    }
+
 }

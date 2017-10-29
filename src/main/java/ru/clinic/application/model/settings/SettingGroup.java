@@ -12,6 +12,7 @@ public enum SettingGroup {
     BACKUP("2", "Настройки для создания резервных копий"),
     DATA_BASE("3", "Настройки базы данных"),
     WORKING_DAY("4", "Настройки рабочего дня"),
+    COMPANY("5", "Настройки организации"),
     ;
 
     private final String code;

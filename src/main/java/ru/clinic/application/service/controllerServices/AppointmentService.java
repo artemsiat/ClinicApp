@@ -124,8 +124,6 @@ public class AppointmentService {
             lengths.add(length);
         }
 
-        //System.err.println("Time map: " + timeMap);
-        //System.err.println("Available lengths: " + lengths);
         return lengths;
     }
 

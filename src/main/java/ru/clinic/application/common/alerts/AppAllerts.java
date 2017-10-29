@@ -11,12 +11,15 @@ import java.util.Optional;
  */
 public class AppAllerts {
 
-
     public static void informationAlert(AlertType title, AlertMessage message) {
+        informationAlert(title, message.getValue());
+    }
+
+    public static void informationAlert(AlertType title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title.getValue());
         alert.setHeaderText(null);
-        alert.setContentText(message.getValue());
+        alert.setContentText(message);
 
         alert.showAndWait();
     }
