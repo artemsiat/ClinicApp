@@ -29,21 +29,23 @@ public class SettingsService {
 
 
     private final Setting[] DEFAULT_SETTINGS = {
-            /*Mail settings*/
-            new Setting(SettingGroup.EMAIL.getCode(), "mail.host", "mail host", "smtp.gmail.com", "", SettingValueType.TEXT, "The host name of the incoming mail server", true),
-            new Setting(SettingGroup.EMAIL.getCode(), "mail.port", "mail port", "587", "", SettingValueType.NUMBER, "порт", true),
-            new Setting(SettingGroup.EMAIL.getCode(), "mail.username", "mail username", "artemsiat@gmail.com", "", SettingValueType.EMAIL, "username", true),//Todo change to other
-            new Setting(SettingGroup.EMAIL.getCode(), "mail.password", "mail password", "moskva9054175746", "", SettingValueType.TEXT, "password", true),//Todo change to other
-            new Setting(SettingGroup.EMAIL.getCode(), "mail.properties.mail.smtp.auth", "mail smtp auth", "true", "", SettingValueType.BOOLEAN, "SMTP авторизация. Возможные значения 'true' или 'false'", true),
             //new Setting("1", null, null, null, null, null, null),
 
+            /*Mail settings*/
+            new Setting(SettingGroup.EMAIL.getCode(), SettingCode.MAIL_HOST,  "smtp.gmail.com", "", SettingValueType.TEXT, "The host name of the incoming mail server", true),
+            new Setting(SettingGroup.EMAIL.getCode(), SettingCode.MAIL_PORT,  "587", "", SettingValueType.NUMBER, "порт", true),
+            new Setting(SettingGroup.EMAIL.getCode(), SettingCode.MAIL_USERNAME,  "homeopathyMos@gmail.com", "", SettingValueType.EMAIL, "username", true),//Todo change to other
+            new Setting(SettingGroup.EMAIL.getCode(), SettingCode.MAIL_PASSWORD,  "homopathy", "", SettingValueType.TEXT, "password", true),//Todo change to other
+            new Setting(SettingGroup.EMAIL.getCode(), SettingCode.MAIL_PROPERTIES_MAIL_SMTP_AUTH,  "true", "", SettingValueType.BOOLEAN, "SMTP авторизация. Возможные значения 'true' или 'false'", true),
+
             /*Backup Settings*/
-            new Setting(SettingGroup.BACKUP.getCode(), "backup.recipients", "backup recipients", "artemsiat@gmail.com", "", SettingValueType.EMAIL_LIST, "получатели резервных копий", true),
-            new Setting(SettingGroup.BACKUP.getCode(), "database.backup.dir", "database backup dir", "backup/database/", "", SettingValueType.DIR, "директория сохранения резервных копий базы данных", true),
-            //new Setting("2", null, null, null, null, null, null),
+            new Setting(SettingGroup.BACKUP.getCode(), SettingCode.BACKUP_RECIPIENTS,  "homeopathyMos@gmail.com;artemsiat@gmail.com", "", SettingValueType.EMAIL_LIST, "получатели резервных копий. использовать ; в качестве разделителя", true),
+            new Setting(SettingGroup.BACKUP.getCode(), SettingCode.BACKUP_DATABASE_DIR,  "backup/database/", "", SettingValueType.DIR, "директория сохранения резервных копий базы данных", false),
+            new Setting(SettingGroup.BACKUP.getCode(), SettingCode.BACKUP_DATABASE_FREQUENCY_MINUTES,  "60", "", SettingValueType.NUMBER, "как часто буду создаваться резервные копии базы данных", true),
+            new Setting(SettingGroup.BACKUP.getCode(), SettingCode.BACKUP_LOGS_KEEP_DURATION,  "30", "", SettingValueType.NUMBER, "как долго будут храниться логи в днях", true),
 
             /*DataBase Settings*/
-            new Setting(SettingGroup.DATA_BASE.getCode(), SettingCode.MAX_PATIENT_LOAD_COUNT.getCode(), "Максимальная выгрузка пациентов", "30", "", SettingValueType.NUMBER, "Максимальное количество пациентов при выгрузки из базы данных", true),
+            new Setting(SettingGroup.DATA_BASE.getCode(), SettingCode.MAX_PATIENT_LOAD_COUNT, "30", "", SettingValueType.NUMBER, "Максимальное количество пациентов при выгрузки из базы данных", true),
 
             /*Working day settings*/
             new Setting(SettingGroup.WORKING_DAY.getCode(), "workingDayStartHour", "Начало рабочего дня", "8", "", SettingValueType.NUMBER, "В часах", false),
@@ -56,7 +58,7 @@ public class SettingsService {
             new Setting(SettingGroup.WORKING_DAY.getCode(), "workingDayInitialLunchEndTime", "working.Day.Initial.Lunch.End.Time", "20", "", SettingValueType.NUMBER, "under development", false),
 
             /*Company settings*/
-            new Setting(SettingGroup.COMPANY.getCode(), "company.name", "Наименование компании", "\"ООО\" Классическая гомеопатия", "", SettingValueType.TEXT, "", true),
+            new Setting(SettingGroup.COMPANY.getCode(), SettingCode.COMPANY_NAME, "\"ООО\" Классическая гомеопатия", "", SettingValueType.TEXT, "", true),
     };
 
     @Autowired
@@ -71,6 +73,11 @@ public class SettingsService {
     private int workingDayInitialEndTime = 52;
     private int workingDayInitialLunchStartTime = 16;
     private int workingDayInitialLunchEndTime = 20;
+    private static String commentSeparator = "];;[";
+
+    public static String getCommentSeparator() {
+        return commentSeparator;
+    }
 
     @PostConstruct
     public void init() {

@@ -15,14 +15,12 @@ public class SettingNumberValueValidator implements SettingValueValidator {
     private final static String MUST_BE_NUMERIC = "Новое значение должно состоять только из чисел.";
     @Override
     public List<String> validate(String value) {
-        System.out.println("Validating");
         List<String> result = new ArrayList<>();
         if (value != null){
             String trim = StringUtils.trim(value);
             for (char number : trim.toCharArray()) {
                 if (!Character.isDigit(number)){
                     result.add(MUST_BE_NUMERIC);
-                    System.out.println("failed validation");
                     return result;
                 }
             }

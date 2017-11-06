@@ -345,7 +345,6 @@ public class DataBaseDao {
         try{
             LOGGER.debug("Backing up database files");
             String sql = " BACKUP DATABASE TO '" + dir + "' NOT BLOCKING";
-            //jdbcTemplate.update(BACKUP_AS_FILES, dir);
             jdbcTemplate.update(sql);
         }catch (Exception e){
             LOGGER.error("Error backing up files " , e);

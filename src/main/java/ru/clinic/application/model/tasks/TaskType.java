@@ -6,16 +6,16 @@ package ru.clinic.application.model.tasks;
  */
 public enum TaskType {
 
-    BACK_UP_LOGS(1),
-    BACK_UP_DATA_BASE(2);
+    BACK_UP_LOGS("BCK_LOGS"),
+    BACK_UP_DATA_BASE("BCK_DB");
 
-    private final int code;
+    private final String code;
 
-    TaskType(int code) {
+    TaskType(String code) {
         this.code = code;
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 }

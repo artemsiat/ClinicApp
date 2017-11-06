@@ -7,6 +7,7 @@ package ru.clinic.application.model.tasks;
 public enum TaskStatus {
 
     INITIAL("I"),
+    PROCESSING("P"),
     SUCCESS("S"),
     FAILED("F"),
     WAITING("W"),

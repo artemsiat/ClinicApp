@@ -2,6 +2,7 @@ package ru.clinic.application.dao.entity.settings;
 
 import javafx.beans.value.ObservableValue;
 import org.apache.commons.lang3.StringUtils;
+import ru.clinic.application.model.settings.SettingCode;
 import ru.clinic.application.model.settings.SettingValueType;
 import ru.clinic.application.service.setting.validator.SettingValueValidator;
 
@@ -28,6 +29,17 @@ public class Setting {
         this.group = group;
         this.code = code;
         this.name = name;
+        this.defaultValue = defaultValue;
+        this.value = value;
+        this.type = type;
+        this.hint = hint;
+        this.editable = editable;
+    }
+
+    public Setting(String group, SettingCode settingCode, String defaultValue, String value, SettingValueType type, String hint, boolean editable) {
+        this.group = group;
+        this.code = settingCode.getCode();
+        this.name = settingCode.getName();
         this.defaultValue = defaultValue;
         this.value = value;
         this.type = type;
