@@ -16,6 +16,7 @@ import ru.clinic.application.model.settings.SettingCode;
 import ru.clinic.application.model.tasks.TaskStatus;
 import ru.clinic.application.service.mail.MailService;
 import ru.clinic.application.service.setting.SettingsService;
+import ru.clinic.application.service.task.TaskService;
 
 import javax.mail.MessagingException;
 import java.io.File;
@@ -62,8 +63,8 @@ public class BackUpDbService {
         this.settingsService = settingsService;
     }
 
-    public void processBackUpDB(Task task) {
-        BackUpService.moveFiles(newBackUpDir, notProcessedBackUpDir);
+    public void processBackup(Task task) {
+        TaskService.moveFiles(newBackUpDir, notProcessedBackUpDir);
 
         LOGGER.debug("Creating backup database files to dir [{}]", newBackUpDir);
         baseDao.backUpDataBase(newBackUpDir);
@@ -87,7 +88,7 @@ public class BackUpDbService {
                 tasksDao.finishTask(task);
             }
             LOGGER.debug("Finished processing task");
-            BackUpService.moveFiles(newBackUpDir, processedBackUpDir);
+            TaskService.moveFiles(newBackUpDir, processedBackUpDir);
         } catch (IOException e) {
             LOGGER.error("Error loading newly created file");
         }

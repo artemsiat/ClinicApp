@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import ru.clinic.application.service.backup.BackUpService;
+import ru.clinic.application.service.task.TaskService;
 
 /**
  * Product clinicApp
@@ -17,42 +17,54 @@ public class AppSchedules {
 
     private final static Logger LOGGER = LogManager.getLogger(AppSchedules.class);
 
-    private BackUpService backUpService;
+    private TaskService taskService;
 
-    public AppSchedules(BackUpService backUpService) {
-        this.backUpService = backUpService;
+    public AppSchedules(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @Scheduled(fixedRateString = "${schedule.backup.db.rate}", initialDelayString = "${schedule.backup.db.delay}")
     private void backUpDB() {
-        LOGGER.debug("Job ============ backing up database Started !!!!!!!!!");
+        LOGGER.debug("Task Started ============ backing up database");
         try {
-            backUpService.scheduledBackUpDataBase();
+            taskService.backupDb();
         } catch (Exception ex) {
-            LOGGER.error("Error backing up Data Base ", ex);
+            LOGGER.error("Error executing task ---> backing up database", ex);
         }
-        LOGGER.debug("Job ============ backing up database Finished !!!!!!!!!");
+        LOGGER.debug("Task Finished ============ backing up database");
     }
 
     @Scheduled(fixedRateString = "${schedule.backup.logs.rate}", initialDelayString = "${schedule.backup.logs.delay}")
     private void backUpLogs() {
-        LOGGER.debug("Job ============ backing up logs Started !!!!!!!!!!!!");
-
+        LOGGER.debug("Task Started ============ backing up logs");
         try {
-            backUpService.scheduledBackUpLogs();
+            taskService.backupLogs();
         } catch (Exception ex) {
-            LOGGER.error("Error backing up Data Base ", ex);
+            LOGGER.error("Error executing task ---> backing up logs", ex);
         }
-        LOGGER.debug("Job ============ backing up logs Finished !!!!!!!!!!!!");
-
+        LOGGER.debug("Task Finished ============ backing up logs");
     }
 
+    @Scheduled(fixedRateString = "${schedule.clear.old.logs.rate}", initialDelayString = "${schedule.clear.old.logs.delay}")
     private void clearOldLogs(){
-        //todo implement
+        LOGGER.debug("Task Started ============ clearing old logs");
+        try{
+            taskService.clearOldLogs();
+        }catch (Exception ex){
+            LOGGER.error("Error executing task ---> clearing old logs", ex);
+        }
+        LOGGER.debug("Task Finished ============ clearing old logs");
     }
 
+    @Scheduled(fixedRateString = "${schedule.clear.old.backup.files.rate}", initialDelayString = "${schedule.clear.old.backup.files.delay}")
     private void clearOldBdBackUps(){
-        //todo implement
+        LOGGER.debug("Task Started ============ clearing old database backup files");
+        try{
+            taskService.clearOldDbFiles();
+        }catch (Exception ex){
+            LOGGER.error("Error executing task ---> clearing old database backup files", ex);
+        }
+        LOGGER.debug("Task Finished ============ clearing old database backup files");
     }
 
 }

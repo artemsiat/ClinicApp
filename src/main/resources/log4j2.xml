@@ -14,7 +14,7 @@
 
         <RollingFile name="main"
                      fileName="logs/main.log"
-                     filePattern="backup/logs/main.log-%d{yyyy-MM-dd}.%i.zip">
+                     filePattern="backup/logs/new/main.log-%d{yyyy-MM-dd}.%i.zip">
             <PatternLayout>
                 <Pattern>${pattern}</Pattern>
             </PatternLayout>
@@ -26,7 +26,7 @@
 
         <RollingFile name="spring"
                      fileName="logs/spring.log"
-                     filePattern="backup/logs/spring.log-%d{yyyy-MM-dd}.%i.zip">
+                     filePattern="backup/logs/new/spring.log-%d{yyyy-MM-dd}.%i.zip">
             <PatternLayout>
                 <Pattern>${pattern}</Pattern>
             </PatternLayout>
@@ -38,7 +38,19 @@
 
         <RollingFile name="jobs"
                      fileName="logs/jobs.log"
-                     filePattern="backup/logs/jobs.log-%d{yyyy-MM-dd}.%i.zip">
+                     filePattern="backup/logs/new/jobs.log-%d{yyyy-MM-dd}.%i.zip">
+            <PatternLayout>
+                <Pattern>${pattern}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="100 MB"/>
+            </Policies>
+        </RollingFile>
+
+        <RollingFile name="tasks"
+                     fileName="logs/tasks.log"
+                     filePattern="backup/logs/new/tasks.log-%d{yyyy-MM-dd}.%i.zip">
             <PatternLayout>
                 <Pattern>${pattern}</Pattern>
             </PatternLayout>
@@ -56,7 +68,8 @@
             <AppenderRef ref="main"/>
         </Root>
 
-        <logger name="org.springframework" level="DEBUG" additivity="false">
+        <logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
             <AppenderRef ref="spring"/>
         </logger>
 
@@ -87,7 +100,17 @@
 
         <logger name="ru.clinic.application.service.AppSchedules" level="DEBUG" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="jobs"/>
+            <AppenderRef ref="tasks"/>
+        </logger>
+
+        <logger name="ru.clinic.application.service.task" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="tasks"/>
+        </logger>
+
+        <logger name="ru.clinic.application.service.backup" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="tasks"/>
         </logger>
 
     </Loggers>

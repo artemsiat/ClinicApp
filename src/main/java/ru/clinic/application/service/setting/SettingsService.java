@@ -42,6 +42,7 @@ public class SettingsService {
             new Setting(SettingGroup.BACKUP.getCode(), SettingCode.BACKUP_RECIPIENTS,  "homeopathyMos@gmail.com;artemsiat@gmail.com", "", SettingValueType.EMAIL_LIST, "получатели резервных копий. использовать ; в качестве разделителя", true),
             new Setting(SettingGroup.BACKUP.getCode(), SettingCode.BACKUP_DATABASE_DIR,  "backup/database/", "", SettingValueType.DIR, "директория сохранения резервных копий базы данных", false),
             new Setting(SettingGroup.BACKUP.getCode(), SettingCode.BACKUP_DATABASE_FREQUENCY_MINUTES,  "60", "", SettingValueType.NUMBER, "как часто буду создаваться резервные копии базы данных", true),
+            new Setting(SettingGroup.BACKUP.getCode(), SettingCode.BACKUP_DATABASE_KEEP_DURATION,  "30", "", SettingValueType.NUMBER, "как долго будут храниться резервные копии базы данных в днях", true),
             new Setting(SettingGroup.BACKUP.getCode(), SettingCode.BACKUP_LOGS_KEEP_DURATION,  "30", "", SettingValueType.NUMBER, "как долго будут храниться логи в днях", true),
 
             /*DataBase Settings*/

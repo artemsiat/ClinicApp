@@ -16,10 +16,12 @@ public enum SettingCode {
     BACKUP_RECIPIENTS("backup.recipients", "backup recipients"),
     BACKUP_DATABASE_DIR("database.backup.dir", "database backup dir"),
     BACKUP_DATABASE_FREQUENCY_MINUTES("database.backup.frequency.minutes", "database.backup.frequency.minutes"),
+    BACKUP_DATABASE_KEEP_DURATION("backup.db.keep.duration", "back up database max keep duration"),
     BACKUP_LOGS_KEEP_DURATION("backup.logs.keep.duration", "Максимальная давность логирования"),
 
     MAX_PATIENT_LOAD_COUNT("max.patient.load.count", "Максимальная выгрузка пациентов"),
-    COMPANY_NAME("company.name", "Наименование компании");
+    COMPANY_NAME("company.name", "Наименование компании"),
+    ;
 
     private String code;
     private String name;
