@@ -249,7 +249,7 @@ public class ControllerPatients extends ControllerClass {
     void removePatientBtnAction(ActionEvent event) {
         LOGGER.debug("[ControllerPatients][removePatientBtnAction] Delete Button Clicked. ");
         if (selectedPatient != null) {
-            if (AppAllerts.confirm(AlertType.UPDATE_TITLE, AlertHeader.CONFIRMATION_DELETE_PATIENT, AlertMessage.CONFIRMATION_QUESTION)) {
+            if (AppAllerts.confirm(AlertType.CONFIRMATION_TITLE, AlertHeader.CONFIRMATION_DELETE_PATIENT, AlertMessage.CONFIRMATION_QUESTION)) {
                 LOGGER.debug("[ControllerPatients][removePatientBtnAction] Operation confirmed by current Administrator[" + adminService.getCurrentAdmin().getFio() + "] to remove doctor["
                         + selectedPatient.getFio() + "]");
                 patientsService.deletePatient(selectedPatient.getId(), adminService.getCurrentAdmin().getId());
@@ -268,7 +268,7 @@ public class ControllerPatients extends ControllerClass {
     void updatePatientBtnAction(ActionEvent event) {
         LOGGER.debug("[ControllerPatients][updatePatientBtnAction] Update Button Clicked. ");
         if (selectedPatient != null && checkInputFields() &&
-                AppAllerts.confirm(AlertType.UPDATE_TITLE, AlertHeader.CONFIRMATION_UPDATE_PATENT, AlertMessage.CONFIRMATION_QUESTION)) {
+                AppAllerts.confirm(AlertType.CONFIRMATION_TITLE, AlertHeader.CONFIRMATION_UPDATE_PATENT, AlertMessage.CONFIRMATION_QUESTION)) {
             LOGGER.debug("[ControllerPatients][updatePatientBtnAction] Updating patient [" + selectedPatient.getFio() + "] id [" + selectedPatient.getId() + "]");
             patientsService.updatePatient(selectedPatient.getId(), firstNameFld.getText(), lastNameFld.getText(), middleNameFld.getText(), phoneNumberFld.getText(), phoneNumberTwoFld.getText(), emailFld.getText(), commentFld.getText());
             loadAndSelectPatients();

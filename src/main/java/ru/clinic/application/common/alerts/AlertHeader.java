@@ -9,7 +9,8 @@ public enum AlertHeader {
     CONFIRMATION_UPDATE_PATENT ("Вы собираетесь изменить существующего пациента. "),
     CONFIRMATION_DELETE_PATIENT ("Вы собираетесь удалить пациента. "),
     CONFIRMATION_DELETE_APPOINTMENT("Вы собираетесь удалить запись пациента на прием. "),
-    CONFIRMATION_UPDATE_SETTINGS("Вы собираетесь изменить настройки. ");
+    CONFIRMATION_UPDATE_SETTINGS("Вы собираетесь изменить настройки. "),
+    BACK_UP_DATABASE_CONFIRM("Создание резервной копии базы данных. ");
 
     private final String value;
 

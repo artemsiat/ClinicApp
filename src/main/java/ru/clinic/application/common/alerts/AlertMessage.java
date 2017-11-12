@@ -13,7 +13,8 @@ public enum AlertMessage {
     WRONG_PASSWORD("Введеный пароль не верный"),
     NEW_PASSWORDS_DO_NOT_MATCH("Новый пароль не совпадает"),
     ERROR_UPDATING_ADMIN("Возникла ошибка при обновлении администратора"),
-    ADMIN_UPDATED("Администратор успешно обновлен");
+    ADMIN_UPDATED("Администратор успешно обновлен"),
+    BACK_UP_DATABASE_CONFIRM("Вы хотите создать резервную копию базы данных перед закрытием программы?");
 
     private final String value;
 

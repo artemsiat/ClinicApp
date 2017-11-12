@@ -113,4 +113,7 @@ public class BackUpDbService {
         task.setComment("recipients:" + recipients);
     }
 
+    public void backupOnExit() {
+        LOGGER.debug("Performing backup on exit");
+    }
 }

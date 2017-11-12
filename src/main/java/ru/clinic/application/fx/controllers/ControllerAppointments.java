@@ -162,7 +162,7 @@ public class ControllerAppointments extends ControllerClass {
 
     private boolean checkOnDeleteAppointment() {
         LOGGER.debug("Checking on delete appointment [{}]", selectedAppointment);
-        if (selectedAppointment != null && selectedAppointment.isAppointment() && AppAllerts.confirm(AlertType.UPDATE_TITLE, AlertHeader.CONFIRMATION_DELETE_APPOINTMENT, AlertMessage.CONFIRMATION_QUESTION)){
+        if (selectedAppointment != null && selectedAppointment.isAppointment() && AppAllerts.confirm(AlertType.CONFIRMATION_TITLE, AlertHeader.CONFIRMATION_DELETE_APPOINTMENT, AlertMessage.CONFIRMATION_QUESTION)){
             LOGGER.debug("Appointment can be deleted");
             return true;
         }

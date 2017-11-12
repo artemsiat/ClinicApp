@@ -4,10 +4,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -17,11 +14,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import ru.clinic.application.common.alerts.*;
+import ru.clinic.application.common.alerts.AlertType;
+import ru.clinic.application.common.alerts.AppAllerts;
+import ru.clinic.application.common.alerts.ConfirmationDialog;
 import ru.clinic.application.dao.entity.settings.Setting;
 import ru.clinic.application.fx.ControllerClass;
 import ru.clinic.application.fx.frames.FrameDbTables;
 import ru.clinic.application.model.settings.SettingGroup;
+import ru.clinic.application.model.settings.SettingValueType;
 import ru.clinic.application.service.setting.SettingsService;
 
 import java.util.List;
@@ -115,16 +115,16 @@ public class ControllerSettings extends ControllerClass {
     private void saveButtonClicked(ActionEvent event) {
         LOGGER.debug("SaveButton clicked");
         //Todo alert user
-        if (ConfirmationDialog.UPDATE_SETTINGS.confirm()){
+        if (ConfirmationDialog.UPDATE_SETTINGS.confirm()) {
             Map<Setting, List<String>> validationResult = settingsService.validateNewValues();
             if (validationResult.isEmpty()) {
                 settingsService.updateSettings();
                 postStart();// Redraw frame
-            }else {
+            } else {
                 LOGGER.debug("VALIDATION ERROR ");
 
                 String validationMsg = settingsService.generateValidationErrorMsg(validationResult);
-                LOGGER.debug("validationMessage \n" + validationMsg );
+                LOGGER.debug("validationMessage \n" + validationMsg);
                 AppAllerts.informationAlert(AlertType.VALIDATION_ERROR, validationMsg);
             }
         }
@@ -143,19 +143,49 @@ public class ControllerSettings extends ControllerClass {
         }
     }
 
+    private void checkBoxValueChanged(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue, Setting setting) {
+        setting.setNewValue(newValue ? "true" : "false");
+
+        boolean initialValue = StringUtils.equalsIgnoreCase("true", StringUtils.trim(setting.getValue()));
+
+        LOGGER.debug("Setting boolean value changed. initial value [{}]. changed from [{}] to [{}]", initialValue, oldValue, newValue);
+        saveButton.setDisable(newValue == initialValue);
+    }
+
     private GridPane createSettingGroup(List<Setting> groupSettings) {
         GridPane gridPane = new GridPane();
         gridPane.setHgap(5);
         gridPane.setVgap(5);
         for (int index = 0; index < groupSettings.size(); index++) {
             Setting setting = groupSettings.get(index);
-            TextField settingValue = createValueTextField(setting);
+
 
             gridPane.add(getLable(setting.getName()), 0, index);
-            gridPane.add(settingValue, 1, index);
+
+            if (setting.getType() == SettingValueType.BOOLEAN) {
+                CheckBox checkBox = createValueCheckBox(setting);
+                gridPane.add(checkBox, 1, index);
+            } else {
+                TextField settingValue = createValueTextField(setting);
+                gridPane.add(settingValue, 1, index);
+            }
+
             gridPane.add(getLable(setting.getHint()), 2, index);
         }
         return gridPane;
+    }
+
+    private CheckBox createValueCheckBox(Setting setting) {
+        CheckBox checkBox = new CheckBox();
+        if (StringUtils.equalsIgnoreCase("true", StringUtils.trim(setting.getValue()))) {
+            checkBox.setSelected(true);
+        } else {
+            checkBox.setSelected(false);
+        }
+        checkBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            checkBoxValueChanged(observable, oldValue, newValue, setting);
+        });
+        return checkBox;
     }
 
     private TextField createValueTextField(Setting setting) {

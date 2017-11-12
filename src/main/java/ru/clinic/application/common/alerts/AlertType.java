@@ -7,9 +7,10 @@ package ru.clinic.application.common.alerts;
 public enum AlertType {
 
     INFORMATION_TITLE("Информационное окно"),
-    UPDATE_TITLE("Подтверждение"),
+    CONFIRMATION_TITLE("Подтверждение"),
     INTERNAL_ERROR("Внутренняя ошибка"),
-    VALIDATION_ERROR("Ошибка влидации");
+    VALIDATION_ERROR("Ошибка влидации"),
+    BACK_UP_DATABASE_CONFIRM("Резервная копия базы данных");
 
     private final String value;
 
